@@ -23,8 +23,6 @@ FIELDS = [
     "year",
     "publicationDate",
     "citationCount",
-    # citationHistory is not always available; we fall back to citation data from
-    # citing papers (or zero series if no data is available)
 ]
 # ----------------------------------------------------------------------
 # Command‑line arguments
@@ -32,7 +30,7 @@ FIELDS = [
 parser = argparse.ArgumentParser(description="Citation Velocity Analyzer")
 parser.add_argument(
     "--query",
-    default="machine learning",
+    default="reinforcement learning large language model",
     help="Search query for Semantic Scholar",
 )
 parser.add_argument(
@@ -86,8 +84,7 @@ START_DATE = dt.date(args.start_year, args.start_month, 1)
 # Use the last day of the end month (approximate as 28‑31)
 END_DATE = dt.date(args.end_year, args.end_month, 28)
 # ----------------------------------------------------------------------
-# TOP_N_PLOTS is now controlled via the --top-n-plots command‑line argument
-REQUESTS_PER_MIN = 20  # reduced to respect rate limits and avoid 429 errors
+REQUESTS_PER_MIN = 20
 
 # ----------------------------------------------------------------------
 # Helper functions
@@ -186,6 +183,8 @@ def fetch_citing_papers(paper_id):
         while True:
             resp = requests.get(endpoint, params=params, timeout=30)
             if resp.status_code == 200:
+                # Respect rate limits
+                time.sleep(60 / REQUESTS_PER_MIN)
                 break
             if resp.status_code == 429 and retries < MAX_RETRIES:
                 # exponential back‑off for rate limiting
@@ -231,29 +230,20 @@ def build_time_series(paper):
     months = pd.date_range(
         start=paper["pub_date"], end=today, freq="MS"
     )  # month start frequency
-    if paper["citation_history"]:
-        # citation_history is a list of dicts: {"date": "YYYY-MM-DD", "citationCount": int}
-        hist = pd.DataFrame(paper["citation_history"])
-        hist["date"] = pd.to_datetime(hist["date"])
-        hist = hist.set_index("date").sort_index()
-        # Reindex to month start, forward‑fill, then fill missing with last known value
-        series = hist["citationCount"].reindex(months, method="ffill")
-        series = series.fillna(method="ffill").fillna(0).astype(int)
+    # Build citation series from citing papers' publication dates
+    citing_papers = fetch_citing_papers(paper["paperId"])
+    if citing_papers:
+        # Count cumulative citations up to each month
+        counts = []
+        for month_start in months:
+            month_date = month_start.date()
+            count = sum(1 for c in citing_papers if c["publicationDate"] <= month_date)
+            counts.append(count)
+        series = pd.Series(counts, index=months)
     else:
-        # Build citation series from citing papers' publication dates
-        citing_papers = fetch_citing_papers(paper["paperId"])
-        if citing_papers:
-            # Count cumulative citations up to each month
-            counts = []
-            for month_start in months:
-                month_date = month_start.date()
-                count = sum(1 for c in citing_papers if c["publicationDate"] <= month_date)
-                counts.append(count)
-            series = pd.Series(counts, index=months)
-        else:
-            # Fallback to a series of zeros when no citation data is available
-            series = pd.Series([0] * len(months), index=months)
-            print("No citation data available – using zero series")
+        # Fallback to a series of zeros when no citation data is available
+        series = pd.Series([0] * len(months), index=months)
+        print("No citation data available – using zero series")
     # Ensure monotonicity (cumulative)
     series = series.cummax()
     return series
@@ -284,6 +274,25 @@ def fit_exponential(series):
         return float(a), float(b), float(r2)
     except Exception:
         # Fallback to zeros if fitting fails
+        return 0.0, 0.0, 0.0
+
+def fit_linear(series):
+    """Fit linear (c + m*t) to a citation series. Returns intercept (c), slope (m), R²."""
+    t = np.arange(len(series))
+    y = series.values.astype(float)
+    # Guard against all‑zero series
+    if np.all(y == 0):
+        return 0.0, 0.0, 0.0
+    try:
+        # np.polyfit returns [slope, intercept] for degree 1
+        m, c = np.polyfit(t, y, 1)
+        # Predictions
+        y_pred = m * t + c
+        ss_res = np.sum((y - y_pred) ** 2)
+        ss_tot = np.sum((y - np.mean(y)) ** 2)
+        r2 = 1 - ss_res / ss_tot if ss_tot != 0 else 0.0
+        return float(c), float(m), float(r2)
+    except Exception:
         return 0.0, 0.0, 0.0
 
 
@@ -361,7 +370,7 @@ def main():
     total_papers = len(papers)
     for idx, paper in enumerate(papers, start=1):
         series = build_time_series(paper)
-        a, b, r2 = fit_exponential(series)
+        a, b, r2 = fit_linear(series)
         # Extract citation timestamps and cumulative counts for CSV export
         citation_dates = [d.strftime("%Y-%m-%d") for d in series.index]
         citation_counts = series.tolist()

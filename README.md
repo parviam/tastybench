@@ -17,15 +17,7 @@ This repository provides a Python script, **`citation_velocity.py`**, that fetch
 git clone <repo-url>
 cd tastybench
 
-# (Optional) Create a virtual environment
-python3 -m venv venv
-source venv/bin/activate
-
-# Install required packages
-pip install -r requirements.txt   # if a requirements file is provided
-# Or install manually:
-pip install requests pandas numpy matplotlib scipy
-```
+Use `uv` to setup the environment.
 
 ## Usage
 
