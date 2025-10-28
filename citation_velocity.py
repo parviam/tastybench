@@ -11,6 +11,8 @@ import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 import random
 import argparse
+import tqdm
+from typing import List
 
 # ----------------------------------------------------------------------
 # Configuration
@@ -23,6 +25,8 @@ FIELDS = [
     "year",
     "publicationDate",
     "citationCount",
+    "authors",
+    "citations.publicationDate",
 ]
 # ----------------------------------------------------------------------
 # Command‑line arguments
@@ -30,7 +34,7 @@ FIELDS = [
 parser = argparse.ArgumentParser(description="Citation Velocity Analyzer")
 parser.add_argument(
     "--query",
-    default="reinforcement learning large language model",
+    default="reinforcement learning large language model llm rl",
     help="Search query for Semantic Scholar",
 )
 parser.add_argument(
@@ -80,12 +84,12 @@ parser.add_argument(
 args = parser.parse_args()
 
 # Compute date range based on arguments
-START_DATE = dt.date(args.start_year, args.start_month, 1)
+START_DATE = f"{args.start_year}-{args.start_month:02d}"
 # Use the last day of the end month (approximate as 28‑31)
-END_DATE = dt.date(args.end_year, args.end_month, 28)
+END_DATE = f"{args.end_year}-{args.end_month:02d}"
 # ----------------------------------------------------------------------
-REQUESTS_PER_MIN = 20
-
+REQUESTS_PER_MIN = 10
+MAX_RETRIES = 10
 # ----------------------------------------------------------------------
 # Helper functions
 # ----------------------------------------------------------------------
@@ -99,12 +103,11 @@ def fetch_papers():
     papers = []
     offset = 0
     limit = 100  # API max per request
-    MAX_RETRIES = 5
     total_fetched = 0
     while len(papers) < args.max_paper_size:
         params = {
             "query": args.query,
-            "year": args.start_year,
+            "publicationDateorYear": f"{START_DATE}:{END_DATE}",
             "offset": offset,
             "limit": limit,
             "fields": ",".join(FIELDS),
@@ -113,31 +116,32 @@ def fetch_papers():
             "publicationTypes": 'Conference,JournalArticle,Study'  
         }
         retries = 0
-        while True:
+        while retries < MAX_RETRIES:
             resp = requests.get(SEARCH_ENDPOINT, params=params, timeout=30)
             if resp.status_code == 200:
+                time.sleep(60 / REQUESTS_PER_MIN)
                 break
-            if resp.status_code == 429 and retries < MAX_RETRIES:
+            if resp.status_code == 429:
                 # exponential back‑off
                 wait = (2 ** retries) + (random.random())
+                print(f"Citations endpoint rate‑limited (429). Back‑off {wait:.2f}s and retry {retries+1}/{MAX_RETRIES}")
                 time.sleep(wait)
                 retries += 1
                 continue
             raise RuntimeError(
                 f"Semantic Scholar request failed ({resp.status_code}): {resp.text}"
             )
+        
         data = resp.json()
         batch_count = 0
         for entry in data.get("data", []):
-            # Filter by publication date range
             pub_date_str = entry.get("publicationDate")
-            if not pub_date_str:
+            citations = entry.get("citations", [])
+            if not pub_date_str or not citations:
                 continue
             try:
                 pub_date = dt.datetime.strptime(pub_date_str, "%Y-%m-%d").date()
             except ValueError:
-                continue
-            if not (START_DATE <= pub_date <= END_DATE):
                 continue
             papers.append(
                 {
@@ -145,7 +149,9 @@ def fetch_papers():
                     "title": entry.get("title", "").replace("\n", " ").strip(),
                     "pub_date": pub_date,
                     "total_citations": entry.get("citationCount", 0),
-                    "citation_history": entry.get("citationHistory", []),
+                    "lead_author_id": entry.get("authors", [{}])[0].get("authorId") if entry.get("authors") else None,
+                    "last_author_id": entry.get("authors", [{}])[-1].get("authorId") if entry.get("authors") else None,
+                    "citations": citations,
                 }
             )
             batch_count += 1
@@ -156,68 +162,55 @@ def fetch_papers():
         if not data.get("data"):
             break  # no more results
         offset += limit
-        # Respect rate limits
-        time.sleep(60 / REQUESTS_PER_MIN)
     print(f"Finished fetching papers. Total papers collected: {len(papers)}")
     return papers[:args.max_paper_size]
 
-def fetch_citing_papers(paper_id):
+def fetch_citing_papers(citations):
     """
     Fetch citing papers for a given paper ID using the Semantic Scholar
     citations endpoint. Returns a list of dicts with at least a
     ``publicationDate`` field (as ``datetime.date``). If the request fails
     or no citing papers are found, an empty list is returned.
     """
-    citations = []
-    offset = 0
-    limit = 1000
-    endpoint = f"{BASE_URL}/paper/{paper_id}/citations"
-    MAX_RETRIES = 5
-    while True:
-        params = {
-            "offset": offset,
-            "limit": limit,
-            "fields": "citingPaper.paperId,citingPaper.title,citingPaper.year,citingPaper.publicationDate",
-        }
-        retries = 0
-        while True:
-            resp = requests.get(endpoint, params=params, timeout=30)
-            if resp.status_code == 200:
-                # Respect rate limits
-                time.sleep(60 / REQUESTS_PER_MIN)
-                break
-            if resp.status_code == 429 and retries < MAX_RETRIES:
-                # exponential back‑off for rate limiting
-                wait = (2 ** retries) + random.random()
-                print(f"Citations endpoint rate‑limited (429). Back‑off {wait:.2f}s and retry {retries+1}/{MAX_RETRIES}")
-                time.sleep(wait)
-                retries += 1
-                continue
-            # Other errors – abort fetching citations for this paper
-            print(f"Failed to fetch citations for paper {paper_id}: HTTP {resp.status_code}")
-            return citations
-        data = resp.json()
-        batch_count = 0
-        for entry in data.get("data", []):
-            citing = entry.get("citingPaper", {})
-            pub_date_str = citing.get("publicationDate")
-            if not pub_date_str:
-                continue
-            try:
-                pub_date = dt.datetime.strptime(pub_date_str, "%Y-%m-%d").date()
-            except ValueError:
-                continue
-            citations.append({"publicationDate": pub_date})
-            batch_count += 1
-        print(f"Fetched {batch_count} citing papers for {paper_id} (offset {offset})")
-        # If fewer results than the limit, we are at the last page
-        if len(data.get("data", [])) < limit:
-            break
-        offset += limit
-        # Respect rate limits
-        time.sleep(60 / REQUESTS_PER_MIN)
-    return citations
+    citations_dict = []
+    for entry in citations:
+        pub_date_str = entry.get("publicationDate")
+        if not pub_date_str:
+            continue
+        try:
+            pub_date = dt.datetime.strptime(pub_date_str, "%Y-%m-%d").date()
+        except ValueError:
+            continue
+        citations_dict.append({"publicationDate": pub_date})
+    return citations_dict
 
+def fetch_all_author_h_index(author_id: pd.Series) -> pd.Series:
+    """
+    Retrieve the h‑index for a given author ID via the Semantic Scholar API.
+    Returns an integer h‑index or None if unavailable.
+    """
+    if author_id is None:
+        return None
+    endpoint = f"{BASE_URL}/author/batch"
+    params = {"fields": "hIndex"}
+    data = {
+        "ids": author_id.tolist()
+    }
+    retries = 0
+    while True:
+        resp = requests.post(endpoint, params=params, json=data)
+        if resp.status_code == 200:
+            resp = resp.json()
+            return pd.Series([entry.get('hIndex') if entry else None for entry in resp])
+        if resp.status_code == 429 and retries < MAX_RETRIES:
+            wait = (2 ** retries) + random.random()
+            time.sleep(wait)
+            print(f"Authors endpoint rate‑limited (429). Back‑off {wait:.2f}s and retry {retries+1}/{MAX_RETRIES}")
+            retries += 1
+            continue
+        # On other errors, give up and return None
+        print(data)
+        raise Exception(f"Failed to fetch h‑index for authors: HTTP {resp.status_code}")
 
 def build_time_series(paper):
     """
@@ -231,7 +224,7 @@ def build_time_series(paper):
         start=paper["pub_date"], end=today, freq="MS"
     )  # month start frequency
     # Build citation series from citing papers' publication dates
-    citing_papers = fetch_citing_papers(paper["paperId"])
+    citing_papers = fetch_citing_papers(paper["citations"])
     if citing_papers:
         # Count cumulative citations up to each month
         counts = []
@@ -297,11 +290,11 @@ def fit_linear(series):
 
 
 def plot_citations(papers_series, top_n):
-    """Plot cumulative citation curves for the top_n papers by total citations."""
+    """Plot cumulative citation curves for the top_n papers by velocity."""
     # Determine top papers
     sorted_papers = sorted(
         papers_series,
-        key=lambda x: x["total_citations"],
+        key=lambda x: x["b"],
         reverse=True,
     )[:top_n]
 
@@ -316,34 +309,22 @@ def plot_citations(papers_series, top_n):
         )
     plt.xlabel("Date")
     plt.ylabel("Cumulative Citations")
-    plt.title(f"Citation Velocity (Top {top_n} Papers \"{args.query}\", {START_DATE:%b %Y}–{END_DATE:%b %Y})")
+    plt.title(f"Citation Velocity (Top {top_n} Papers \"{args.query}\", {START_DATE}:{END_DATE})")
     plt.legend(loc="upper left", fontsize="small", ncol=2)
     plt.tight_layout()
     plt.savefig("citation_velocity.png")
     plt.close()
 
 
-def save_ranking(results):
-    """Write ranking CSV ordered by exponent b (descending)."""
-    df = pd.DataFrame(results)
-    df = df.sort_values(by="b", ascending=False).reset_index(drop=True)
+def save_ranking(results: pd.DataFrame) -> None:
+    """Write ranking CSV ordered by b (descending)."""
+    df = results.sort_values(by="b", ascending=False).reset_index(drop=True)
     df["rank"] = df.index + 1
-    # Serialize citation timestamps and counts as JSON strings for CSV storage
-    cols = [
-        "rank",
-        "paperId",
-        "title",
-        "a",
-        "b",
-        "R2",
-        "total_citations",
-        "citation_dates",
-        "citation_counts",
-    ]
     # Convert list columns to JSON strings before writing
     df["citation_dates"] = df["citation_dates"].apply(json.dumps)
     df["citation_counts"] = df["citation_counts"].apply(json.dumps)
-    df[cols].to_csv("citation_ranking.csv", index=False)
+    df.to_csv("citation_ranking.csv")
+    return None
 
 
 def main():
@@ -352,7 +333,7 @@ def main():
     The function orchestrates the workflow:
     1. Fetch papers matching the query and date range.
     2. Build cumulative citation time‑series for each paper.
-    3. Fit an exponential growth model to each series.
+    3. Fit a linear growth model to each series.
     4. Plot the top‑N citation trajectories.
     5. Save a ranking CSV with model parameters and full time‑series data.
 
@@ -367,8 +348,7 @@ def main():
         sys.exit(1)
 
     results = []
-    total_papers = len(papers)
-    for idx, paper in enumerate(papers, start=1):
+    for paper in tqdm.tqdm(papers[1:], desc="Processing papers"):
         series = build_time_series(paper)
         a, b, r2 = fit_linear(series)
         # Extract citation timestamps and cumulative counts for CSV export
@@ -382,18 +362,26 @@ def main():
                 "a": a,
                 "b": b,
                 "R2": r2,
+                "lead_author_id": paper.get("lead_author_id"),
+                "last_author_id": paper.get("last_author_id"),
                 "series": series,
                 "citation_dates": citation_dates,
                 "citation_counts": citation_counts,
             }
         )
-        print(f"Processed paper {idx}/{total_papers}")
+    
+    print("Running stupid proxies...")
+    df = pd.DataFrame(results)
+    df["lead_author_h_index"] = fetch_all_author_h_index(df["lead_author_id"])
+    df["last_author_h_index"] = fetch_all_author_h_index(df["last_author_id"])
 
     print("Plotting citation trajectories …")
-    plot_citations(results, top_n=args.top_n_plots)
+    results_dict = df.to_dict(orient="records")
+    plot_citations(results_dict, top_n=args.top_n_plots)
 
     print("Saving ranking CSV …")
-    save_ranking(results)
+    df.drop(columns=["series"], inplace=True)
+    save_ranking(df)
 
     print("Done. Files generated:")
     print(" - citation_velocity.png")

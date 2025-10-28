@@ -1,0 +1,39 @@
+Pearson correlation of rankings:
+                     lead_author_h_index  ...  last_author_h_index
+lead_author_h_index             1.000000  ...             0.423834
+total_citations                 0.259005  ...             0.257975
+b                               0.070841  ...             0.004963
+a                              -0.116576  ...            -0.139194
+last_author_h_index             0.423834  ...             1.000000
+
+[5 rows x 5 columns]
+
+Pearson p-values:
+                     lead_author_h_index  ...  last_author_h_index
+lead_author_h_index                  0.0  ...                  NaN
+total_citations                      NaN  ...                  NaN
+b                                    NaN  ...                  NaN
+a                                    NaN  ...                  NaN
+last_author_h_index                  NaN  ...                  0.0
+
+[5 rows x 5 columns]
+
+Spearman correlation of original values:
+                     lead_author_h_index  ...  last_author_h_index
+lead_author_h_index             1.000000  ...             0.424566
+total_citations                 0.259488  ...             0.257799
+b                               0.070193  ...             0.004474
+a                              -0.116711  ...            -0.138682
+last_author_h_index             0.424566  ...             1.000000
+
+[5 rows x 5 columns]
+
+Spearman p-values:
+                     lead_author_h_index  ...  last_author_h_index
+lead_author_h_index                  0.0  ...                  NaN
+total_citations                      NaN  ...                  NaN
+b                                    NaN  ...                  NaN
+a                                    NaN  ...                  NaN
+last_author_h_index                  NaN  ...                  0.0
+
+[5 rows x 5 columns]
