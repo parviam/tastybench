@@ -73,10 +73,10 @@ def main():
     plot_heatmap(pearson_corr, pearson_pvals, "Pearson correlation of rankings", "pearson_heatmap.png")
     plot_heatmap(spearman_corr, spearman_pvals, "Spearman correlation of original values", "spearman_heatmap.png")
 
-    pearson_corr.to_csv('pearson_correlation.csv')
-    pearson_pvals.to_csv('pearson_pvalues.csv')
-    spearman_corr.to_csv('spearman_correlation.csv')
-    spearman_pvals.to_csv('spearman_pvalues.csv')
+    pearson_corr.to_csv('stupid_proxies/pearson_correlation.csv')
+    pearson_pvals.to_csv('stupid_proxies/pearson_pvalues.csv')
+    spearman_corr.to_csv('stupid_proxies/spearman_correlation.csv')
+    spearman_pvals.to_csv('stupid_proxies/spearman_pvalues.csv')
 
 if __name__ == "__main__":
     main()

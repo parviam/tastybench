@@ -65,7 +65,7 @@ parser.add_argument(
 parser.add_argument(
     "--max-paper-size",
     type=int,
-    default=100,
+    default=200,
     help="Maximum number of papers to retrieve (default: 100)",
 )
 
@@ -78,8 +78,14 @@ parser.add_argument(
 parser.add_argument(
     "--min-citations",
     type=int,
-    default=10,
+    default=20,
     help="The minimum number of citations a paper needs to be considered.",
+)
+parser.add_argument(
+    "--max-months-cited",
+    type=int,
+    default=15,
+    help="How many months to consider for citation history.",
 )
 args = parser.parse_args()
 
@@ -141,6 +147,8 @@ def fetch_papers():
                 continue
             try:
                 pub_date = dt.datetime.strptime(pub_date_str, "%Y-%m-%d").date()
+                if pub_date.month == 1 and pub_date.day == 1:
+                    continue # Skip papers with only year known
             except ValueError:
                 continue
             papers.append(
@@ -221,7 +229,7 @@ def build_time_series(paper):
     """
     today = dt.date.today()
     months = pd.date_range(
-        start=paper["pub_date"], end=today, freq="MS"
+        start=paper["pub_date"], end=paper["pub_date"] + dt.timedelta(weeks=4*args.max_months_cited), freq="MS"
     )  # month start frequency
     # Build citation series from citing papers' publication dates
     citing_papers = fetch_citing_papers(paper["citations"])
@@ -242,11 +250,6 @@ def build_time_series(paper):
     return series
 
 
-def exponential(t, a, b):
-    """C(t) = a * exp(b * t)"""
-    return a * np.exp(b * t)
-
-
 def fit_exponential(series):
     """Fit exponential to a citation series. Returns a, b, R²."""
     t = np.arange(len(series))
@@ -256,6 +259,9 @@ def fit_exponential(series):
         return 0.0, 0.0, 0.0
     # Initial guess: a = first value (or 1), b = small positive
     p0 = [max(y[0], 1.0), 0.1]
+    def exponential(t, a, b):
+        """C(t) = a * exp(b * t)"""
+        return a * np.exp(b * t)
     try:
         popt, pcov = curve_fit(exponential, t, y, p0=p0, maxfev=10000)
         a, b = popt
@@ -289,7 +295,7 @@ def fit_linear(series):
         return 0.0, 0.0, 0.0
 
 
-def plot_citations(papers_series, top_n):
+def plot_citations(papers_series, top_n, output_file):
     """Plot cumulative citation curves for the top_n papers by velocity."""
     # Determine top papers
     sorted_papers = sorted(
@@ -312,22 +318,22 @@ def plot_citations(papers_series, top_n):
     plt.title(f"Citation Velocity (Top {top_n} Papers \"{args.query}\", {START_DATE}:{END_DATE})")
     plt.legend(loc="upper left", fontsize="small", ncol=2)
     plt.tight_layout()
-    plt.savefig("citation_velocity.png")
+    plt.savefig(fname=output_file, dpi=500)
     plt.close()
 
 
-def save_ranking(results: pd.DataFrame) -> None:
+def save_ranking(results: pd.DataFrame, output_file: str) -> None:
     """Write ranking CSV ordered by b (descending)."""
     df = results.sort_values(by="b", ascending=False).reset_index(drop=True)
     df["rank"] = df.index + 1
     # Convert list columns to JSON strings before writing
     df["citation_dates"] = df["citation_dates"].apply(json.dumps)
     df["citation_counts"] = df["citation_counts"].apply(json.dumps)
-    df.to_csv("citation_ranking.csv")
+    df.to_csv(output_file, index=False)
     return None
 
 
-def main():
+def main(output_dir: str='results/'):
     """Entry point for the citation velocity analysis script.
 
     The function orchestrates the workflow:
@@ -341,6 +347,11 @@ def main():
     - ``citation_velocity.png`` – the plot of citation trajectories.
     - ``citation_ranking.csv`` – the ranking of papers by growth rate.
     """
+    output_dir += dt.datetime.now().strftime("%Y%m%d_%H%M%S") + '/'
+    print("Starting citation velocity analysis in", output_dir)
+    Path(output_dir).mkdir(parents=True, exist_ok=True)
+    json.dump(vars(args), open(output_dir + "config.json", "w"), indent=2)
+
     print("Fetching papers from Semantic Scholar …")
     papers = fetch_papers()
     if not papers:
@@ -358,6 +369,7 @@ def main():
             {
                 "paperId": paper["paperId"],
                 "title": paper["title"],
+                "pub_date": paper["pub_date"].strftime("%Y-%m-%d"),
                 "total_citations": paper["total_citations"],
                 "a": a,
                 "b": b,
@@ -377,15 +389,15 @@ def main():
 
     print("Plotting citation trajectories …")
     results_dict = df.to_dict(orient="records")
-    plot_citations(results_dict, top_n=args.top_n_plots)
+    plot_citations(results_dict, top_n=args.top_n_plots, output_file=output_dir+"citation_velocity.png")
 
     print("Saving ranking CSV …")
     df.drop(columns=["series"], inplace=True)
-    save_ranking(df)
+    save_ranking(df, output_file=output_dir+"citation_ranking.csv")
 
     print("Done. Files generated:")
-    print(" - citation_velocity.png")
-    print(" - citation_ranking.csv")
+    print(output_dir + "citation_velocity.png")
+    print(output_dir + "citation_ranking.csv")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,11 @@
+{
+  "query": "reinforcement learning large language model llm rl",
+  "start_year": 2024,
+  "end_year": 2024,
+  "start_month": 1,
+  "end_month": 3,
+  "max_paper_size": 200,
+  "top_n_plots": 10,
+  "min_citations": 20,
+  "max_months_cited": 15
+}
