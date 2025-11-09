@@ -87,7 +87,16 @@ def compare_ranking_correlation(df1, df2, label1, target1, label2, target2, outp
     
     return results
 
-for model_dir in ['model-elicitation/data/gpt-oss-120b/', 'model-elicitation/data/gpt-oss-20b/', 'model-elicitation/data/llama-3-70b/']:
+model_dirs = [
+    'model-elicitation/data/goodhart-10-epochs/gpt-oss-120b/',
+    'model-elicitation/data/goodhart-10-epochs/gpt-oss-20b/',
+    'model-elicitation/data/goodhart-10-epochs/llama-3-70b/',
+    'model-elicitation/data/goodhart-30-epochs/gpt-oss-120b/',
+    'model-elicitation/data/goodhart-30-epochs/gpt-oss-20b/',
+    'model-elicitation/data/goodhart-30-epochs/llama-3-70b/',
+]
+
+for model_dir in model_dirs:
     compare_ranking_correlation(
         df1=pd.read_csv(model_dir + 'elo.csv'),
         df2=pd.read_csv('model-elicitation/data/llm_rl.csv'),

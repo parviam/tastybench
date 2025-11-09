@@ -7,14 +7,36 @@ from tqdm import tqdm
 import asyncio
 
 class PaperDataset():
-    def __init__(self, paper_ids: List[str], model: str, client: ollama.Client|None=None):
+    def __init__(self, paper_ids: List[str], model: str, client: ollama.Client|None=None, tdlr: bool=False):
         self.model: str = model
         self.client: ollama.Client | None = client
         self.paper_data: Dict[str, List[str]] = {
             'paper_id' : paper_ids,
         }
-        self.get_abstracts()
+        if not tdlr:
+            self.get_abstracts()
+        else:
+            self.get_tldrs_as_abstracts()
         self.extract_ideas()
+    
+    def get_tldrs_as_abstracts(self) -> None:
+        r = requests.post(
+            'https://api.semanticscholar.org/graph/v1/paper/batch',
+            params={'fields': ['tldr', 'title']},
+            json={"ids": self.paper_data["paper_id"]}
+        ).json()
+        papers_with_tldrs_ids = []
+        abstracts = []
+        titles = []
+        for paper in r:
+            if 'tldr' in paper and paper['tldr'] is not None and paper['tldr']['text'] is not None and paper['tldr']['text'].strip() != "":
+                abstracts.append(paper['tldr']['text'].strip())
+                titles.append(paper['title'].strip())
+                papers_with_tldrs_ids.append(paper['paperId'])
+       
+        self.paper_data['paper_id'] = papers_with_tldrs_ids
+        self.paper_data['abstract'] = abstracts
+        self.paper_data['title'] = titles
     
     def get_abstracts(self) -> None:
         r = requests.post(
@@ -81,23 +103,27 @@ class RankingDataset():
         rankings: List[Tuple[str, str]] = []
         unclear = 0
         df = pd.DataFrame(self.paper_dataset.paper_data)
-        for epoch in range(self.epochs):
-            epoch_dataset = df.sample(frac=1).reset_index(drop=True)
-            for i in tqdm(range(0, len(epoch_dataset['idea']) - 1), desc=f"Getting {self.model}, epoch {epoch+1}"):
-                idea1 = epoch_dataset['idea'][i]
-                idea2 = epoch_dataset['idea'][i+1]
-                prompt = ranking_prompt_template.replace('[PROJECT 1]', idea1).replace('[PROJECT 2]', idea2)
-                __, response = inference(prompt, model=self.model, client=self.client)
+        total_comparisons = self.epochs * (len(df['idea']) - 1)
+        with tqdm(total=total_comparisons, desc=f"Getting {self.model} choices") as pbar:
+            for epoch in range(self.epochs):
+                epoch_dataset = df.sample(frac=1).reset_index(drop=True)
+                for i in range(0, len(epoch_dataset['idea']) - 1):
+                    idea1 = epoch_dataset['idea'][i]
+                    idea2 = epoch_dataset['idea'][i+1]
+                    prompt = ranking_prompt_template.replace('[PROJECT 1]', idea1).replace('[PROJECT 2]', idea2)
+                    __, response = inference(prompt, model=self.model, client=self.client)
 
-                prompt = extract_choice_template.replace('[TRANSCRIPT]', response)
-                __, response = inference(prompt, model=self.model, client=self.client)
-                if "UNCLEAR" in response:
-                    print(prompt)
-                    continue
-                elif "PROJECT 1" in response:
-                    rankings.append((epoch_dataset['paper_id'][i], epoch_dataset['paper_id'][i+1]))
-                elif "PROJECT 2" in response:
-                    rankings.append((epoch_dataset['paper_id'][i+1], epoch_dataset['paper_id'][i]))
+                    prompt = extract_choice_template.replace('[TRANSCRIPT]', response)
+                    __, response = inference(prompt, model=self.model, client=self.client)
+                    if "UNCLEAR" in response:
+                        print(prompt)
+                        pbar.update(1)
+                        continue
+                    elif "PROJECT 1" in response:
+                        rankings.append((epoch_dataset['paper_id'][i], epoch_dataset['paper_id'][i+1]))
+                    elif "PROJECT 2" in response:
+                        rankings.append((epoch_dataset['paper_id'][i+1], epoch_dataset['paper_id'][i]))
+                    pbar.update(1)
         self.ranking_data = pd.DataFrame(rankings, columns=['better_paper_id', 'worse_paper_id'])
     
     def export_to_csv(self, filename: str) -> None:
@@ -161,23 +187,26 @@ def get_elo_rankings(ranking_dataset: RankingDataset, k_factor: float = 32.0, in
     return elo_df
 
 async def get_elo_rankings_for_model(model: str, paper_dataset: PaperDataset, output_dir: str, epochs: int=10, client: ollama.Client|None=None) -> None:
-    print(f"Starting ELO rankings for model: {model}")
-    ranking_dataset = RankingDataset(paper_dataset, model=model, epochs=epochs, client=client)
-    ranking_dataset.export_to_csv(output_dir + 'rankings.csv')
-    print(f"Ending ELO rankings for model: {model}")
-    get_elo_rankings(ranking_dataset=ranking_dataset).to_csv(output_dir + 'elo.csv', index=False)
+    # Run the blocking operations in a separate thread
+    def _run_blocking():
+        ranking_dataset = RankingDataset(paper_dataset, model=model, epochs=epochs, client=client)
+        ranking_dataset.export_to_csv(output_dir + 'rankings.csv')
+        return ranking_dataset
+    
+    ranking_dataset = await asyncio.to_thread(_run_blocking)
+    await asyncio.to_thread(lambda: get_elo_rankings(ranking_dataset=ranking_dataset).to_csv(output_dir + 'elo.csv', index=False))
 
 async def main():
     rl_csv = 'model-elicitation/data/llm_rl.csv'
     paper_ids = pd.read_csv(rl_csv)
-    paper_ids = paper_ids['paperId'].to_list()[:10]
+    paper_ids = paper_ids['paperId'].to_list()
     dataset = PaperDataset(paper_ids, model='openai/gpt-oss-120b')
     models = [
         ('openai/gpt-oss-120b', 'gpt-oss-120b'),
         ('openai/gpt-oss-20b', 'gpt-oss-20b'),
         ('meta-llama/Llama-3.3-70B-Instruct', 'llama-3-70b'),
     ]
-    experiments = ['goodhart-10-epochs', 'goodhart-100-epochs']
+    experiments = ['goodhart-10-epochs', 'goodhart-30-epochs']
     for exp in experiments:
         pathlib.Path(f"model-elicitation/data/{exp}/").mkdir(parents=True, exist_ok=True)
         for model, name in models:
@@ -186,9 +215,8 @@ async def main():
     async with asyncio.TaskGroup() as tg:
         for exp in experiments:
             for model, name in models:
-                print("\nProcessing model:", model)
                 output_dir = f"model-elicitation/data/{exp}/{name}/"
-                epochs = 10 if exp == 'goodhart-10-epochs' else 100
+                epochs = 10 if exp == 'goodhart-10-epochs' else 30
                 tg.create_task(get_elo_rankings_for_model(
                     model=model,
                     paper_dataset=dataset,
@@ -197,4 +225,9 @@ async def main():
                 ))
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    rl_csv = 'model-elicitation/data/llm_rl.csv'
+    paper_ids = pd.read_csv(rl_csv)
+    paper_ids = paper_ids['paperId'].to_list()
+    dataset = PaperDataset(paper_ids, model='openai/gpt-oss-120b', tdlr=True)
+    dataset.export_to_csv('model-elicitation/data/llm_rl_with_ideas.csv')
+    #asyncio.run(main())
