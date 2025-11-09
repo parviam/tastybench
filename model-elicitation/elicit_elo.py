@@ -1,24 +1,26 @@
 from util import inference, extract_str
 import ollama
 from typing import List, Tuple, Dict
-import requests, pathlib, re
+import requests, pathlib, re, json
 import pandas as pd
 from tqdm import tqdm
 import asyncio
 
 class PaperDataset():
-    def __init__(self, paper_ids: List[str], model: str, client: ollama.Client|None=None, tdlr: bool=False):
+    def __init__(self, name: str, paper_ids: List[str], model: str, client: ollama.Client|None=None, extract_prompt: str='model-elicitation/prompts/extract_idea.md', tldr: bool=False):
         self.model: str = model
+        self.name: str = name
         self.client: ollama.Client | None = client
         self.paper_data: Dict[str, List[str]] = {
             'paper_id' : paper_ids,
         }
-        if not tdlr:
+        self.tldr = tldr
+        if not tldr:
             self.get_abstracts()
+            self.extract_ideas(extract_prompt=extract_prompt)
         else:
             self.get_tldrs_as_abstracts()
-        self.extract_ideas()
-    
+
     def get_tldrs_as_abstracts(self) -> None:
         r = requests.post(
             'https://api.semanticscholar.org/graph/v1/paper/batch',
@@ -36,6 +38,7 @@ class PaperDataset():
        
         self.paper_data['paper_id'] = papers_with_tldrs_ids
         self.paper_data['abstract'] = abstracts
+        self.paper_data['idea'] = abstracts  # Use tldr as idea directly
         self.paper_data['title'] = titles
     
     def get_abstracts(self) -> None:
@@ -57,8 +60,8 @@ class PaperDataset():
         self.paper_data['abstract'] = abstracts
         self.paper_data['title'] = titles
     
-    def extract_ideas(self) -> None:
-        prompt_template = extract_str('model-elicitation/prompts/extract_idea.md')
+    def extract_ideas(self, extract_prompt: str) -> None:
+        prompt_template = extract_str(extract_prompt)
         ideas = []
         for abstract in tqdm(self.paper_data['abstract'], desc="Extracting ideas"):
             prompt = prompt_template.replace('[ABSTRACT]', abstract)
@@ -78,7 +81,8 @@ class PaperDataset():
         dataset = cls(
             paper_ids = df['paper_id'].tolist(),
             model = model,
-            client = client
+            client = client,
+            name = filename.split('/')[-1].replace('.csv', '')
         )
         dataset.paper_data = {
             'paper_id': df['paper_id'].tolist(),
@@ -89,19 +93,19 @@ class PaperDataset():
         return dataset
 
 class RankingDataset():
-    def __init__(self, paper_dataset: PaperDataset, model: str, client: ollama.Client|None=None, epochs: int=1):
+    def __init__(self, paper_dataset: PaperDataset, model: str, client: ollama.Client|None=None, epochs: int=1, 
+                 ranking_prompt: str='model-elicitation/prompts/judge_ideas_goodhart.md', extract_prompt: str='model-elicitation/prompts/extract_choice.md'):
         self.model: str = model
         self.client: ollama.Client | None = client
         self.paper_dataset: PaperDataset = paper_dataset
         self.ranking_data: pd.DataFrame = pd.DataFrame()
         self.epochs = epochs
-        self.judge_rankings()
+        self.judge_rankings(ranking_prompt, extract_prompt)
     
-    def judge_rankings(self) -> None:
-        ranking_prompt_template = extract_str('model-elicitation/prompts/judge_ideas_goodhart.md')
-        extract_choice_template = extract_str('model-elicitation/prompts/extract_choice.md')
+    def judge_rankings(self, ranking_prompt, extract_prompt) -> None:
+        ranking_prompt_template = extract_str(ranking_prompt)
+        extract_choice_template = extract_str(extract_prompt)
         rankings: List[Tuple[str, str]] = []
-        unclear = 0
         df = pd.DataFrame(self.paper_dataset.paper_data)
         total_comparisons = self.epochs * (len(df['idea']) - 1)
         with tqdm(total=total_comparisons, desc=f"Getting {self.model} choices") as pbar:
@@ -186,27 +190,78 @@ def get_elo_rankings(ranking_dataset: RankingDataset, k_factor: float = 32.0, in
     
     return elo_df
 
-async def get_elo_rankings_for_model(model: str, paper_dataset: PaperDataset, output_dir: str, epochs: int=10, client: ollama.Client|None=None) -> None:
+async def get_elo_rankings_for_model(model: str, paper_dataset: PaperDataset, output_dir: str, epochs: int=10, client: ollama.Client|None=None,
+                                     ranking_prompt: str='model-elicitation', extract_choice_prompt: str='model-elicitation/prompts/extract_choice.md') -> None:
     # Run the blocking operations in a separate thread
     def _run_blocking():
-        ranking_dataset = RankingDataset(paper_dataset, model=model, epochs=epochs, client=client)
+        ranking_dataset = RankingDataset(paper_dataset, model=model, epochs=epochs, client=client, 
+                                         ranking_prompt=ranking_prompt, extract_prompt=extract_choice_prompt)
         ranking_dataset.export_to_csv(output_dir + 'rankings.csv')
         return ranking_dataset
     
     ranking_dataset = await asyncio.to_thread(_run_blocking)
     await asyncio.to_thread(lambda: get_elo_rankings(ranking_dataset=ranking_dataset).to_csv(output_dir + 'elo.csv', index=False))
 
+class Experiment:
+    def __init__(self, name: str, paper_dataset: PaperDataset, models: List[Tuple[str, str]], epochs: List[int]=[10], client: ollama.Client|None=None,
+                 ranking_prompt: str='model-elicitation/prompts/judge_ideas_goodhart.md', extract_choice_prompt: str='model-elicitation/prompts/extract_choice.md'):
+        self.name = name
+        self.paper_dataset = paper_dataset
+        self.models = models
+        self.epochs = epochs
+        self.client = client
+        self.ranking_prompt = ranking_prompt
+        self.extract_choice_prompt = extract_choice_prompt
+        self.output_dir = f"model-elicitation/data/{name}/{models}/"
+        pathlib.Path(f"model-elicitation/data/{self.name}/").mkdir(parents=True, exist_ok=True)
+        for model, model_name in models:
+            pathlib.Path(f"model-elicitation/data/{self.name}/{model_name}/").mkdir(parents=True, exist_ok=True)
+            for epoch in epochs:
+                pathlib.Path(f"model-elicitation/data/{self.name}/{model_name}/{epoch}-epochs/").mkdir(parents=True, exist_ok=True)
+        self.save_metadata()
+    
+    def save_metadata(self) -> None:
+        metadata = {
+            'name': self.name,
+            'models': [model for model, _ in self.models],
+            'epochs': self.epochs,
+            'paper_ids': self.paper_dataset.paper_data['paper_id'],
+            'tldr_used': self.paper_dataset.tldr,
+
+        }
+        with open(f"model-elicitation/data/{self.name}/metadata.json", 'w') as f:
+            json.dump(metadata, f, indent=4)
+    
+    async def run(self, tg: asyncio.TaskGroup) -> None:
+        for model, model_name in self.models:
+            for epoch in self.epochs:
+                output_dir = f"model-elicitation/data/{self.name}/{model_name}/{epoch}-epochs/"
+                print("Created task: ", model, epoch, self.name)
+                tg.create_task(get_elo_rankings_for_model(
+                    model=model,
+                    paper_dataset=self.paper_dataset,
+                    output_dir=output_dir,
+                    epochs=epoch,
+                    client=self.client,
+                    ranking_prompt=self.ranking_prompt,
+                    extract_choice_prompt=self.extract_choice_prompt
+                ))
+
 async def main():
     rl_csv = 'model-elicitation/data/llm_rl.csv'
     paper_ids = pd.read_csv(rl_csv)
     paper_ids = paper_ids['paperId'].to_list()
-    dataset = PaperDataset(paper_ids, model='openai/gpt-oss-120b')
+    tldr_dataset = PaperDataset(paper_ids, model='openai/gpt-oss-120b', tldr=True)
+    tldr_dataset.export_to_csv('model-elicitation/data/llm_rl_with_tldrs.csv')
+    max_goodhart_dataset = PaperDataset(paper_ids, model='openai/gpt-oss-120b', extract_prompt='model-elicitation/prompts/judge_ideas_goodhart_max.md')
+    max_goodhart_dataset.export_to_csv('model-elicitation/data/llm_rl_with_max_goodhart_ideas.csv')
+
     models = [
         ('openai/gpt-oss-120b', 'gpt-oss-120b'),
         ('openai/gpt-oss-20b', 'gpt-oss-20b'),
         ('meta-llama/Llama-3.3-70B-Instruct', 'llama-3-70b'),
     ]
-    experiments = ['goodhart-10-epochs', 'goodhart-30-epochs']
+    experiments = ['tldr-10-epochs', 'tldr-30-epochs', 'max-goodhart-10-epochs', 'max-goodhart-30-epochs']
     for exp in experiments:
         pathlib.Path(f"model-elicitation/data/{exp}/").mkdir(parents=True, exist_ok=True)
         for model, name in models:
@@ -216,7 +271,7 @@ async def main():
         for exp in experiments:
             for model, name in models:
                 output_dir = f"model-elicitation/data/{exp}/{name}/"
-                epochs = 10 if exp == 'goodhart-10-epochs' else 30
+                epochs = 10 if '10-epochs' in exp else 30
                 tg.create_task(get_elo_rankings_for_model(
                     model=model,
                     paper_dataset=dataset,
