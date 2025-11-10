@@ -25,3 +25,425 @@ PROJECT 1
 model: openai/gpt-oss-120b
 
 ================================================================================
+Epoch 2, Comparison 15:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+**Prediction:** *Project 1* (the RL‑driven unit‑test‑generation work) is likely to exhibit the higher citation velocity.
+
+**Why this is the most plausible outcome**
+
+| Aspect | Project 1 – Empirical RL for Unit‑Test Generation | Project 2 – Systematic Review of RL‑augmented LLMs |
+|--------|---------------------------------------------------|---------------------------------------------------|
+| **Content type** | Introduces a concrete algorithm, a new reward‑model design, and experimental results on benchmark code‑generation datasets. | Synthesizes existing literature without presenting new empirical findings. |
+| **Typical citation drivers** | • Novel method → immediate interest from researchers building on the technique.<br>• Benchmarks & code release → easy for others to reproduce and compare.<br>• “State‑of‑the‑art” claim in a hot sub‑area (LLM‑assisted software engineering). | • Serves as a background reference → cited when authors need a broad overview, but not as a primary methodological source. |
+| **Citation timeline** | Empirical papers in fast‑moving AI/ML venues (e.g., NeurIPS, ICML, ICLR, PLDI) often accrue dozens of citations within the first 6–12 months, especially when they provide code and datasets. | Review papers tend to accumulate citations more gradually; they become “go‑to” references after the field matures, which can take 1–2 years. |
+| **Community size & relevance** | The software‑engineering‑for‑LLMs community is expanding rapidly, and any method that improves test generation directly addresses a practical bottleneck. | The RL‑LLM alignment community is broader, but a review without new data competes with several existing surveys, diluting immediate impact. |
+| **Visibility factors** | • Likely to be presented as a poster/talk at a high‑profile conference.<br>• Code release on GitHub → stars, forks, and subsequent citations.<br>• Potential for industry uptake (e.g., CI/CD tooling). | • Usually published in a journal or as a workshop overview; less promotional push and fewer “ready‑to‑use” artifacts. |
+
+**Bottom‑line estimate**
+
+- **Project 1**: Expected citation velocity ≈ 10–20 citations per month in the first year (typical for a well‑executed RL‑based code‑generation paper at a top conference).
+- **Project 2**: Expected citation velocity ≈ 2–5 citations per month in the same period (typical for a systematic review in a rapidly evolving subfield).
+
+Therefore, the **unit‑test‑generation RL project (Project 1)** is the clear winner in terms of anticipated citation velocity.
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: openai/gpt-oss-120b
+
+================================================================================
+Epoch 3, Comparison 29:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+**Prediction:** *Project 2* is the one that would likely exhibit the higher citation velocity.
+
+**Why this is a reasonable guess**
+
+| Aspect | Project 1 | Project 2 |
+|--------|-----------|-----------|
+| **Scope of appeal** | Focuses on a very specific token‑level reward formulation and a minimum‑editing constraint. While technically interesting, its niche makes it most relevant to researchers working on fine‑grained RL‑based error correction. | Proposes a broad, self‑supervised “student‑teacher” loop that can be applied to *any* downstream NLP task (math, coding, QA, summarization, etc.). Such a general framework tends to attract attention from a wider community. |
+| **Alignment with current trends** | Token‑wise RL and imitation regularization are active topics, but they are often seen as incremental improvements on existing RL‑from‑human‑feedback pipelines. | Unsupervised self‑improvement of LLMs without external labels is a hot narrative (e.g., “self‑play”, “self‑distillation”, “bootstrapping”). Papers that claim to reduce reliance on human annotation have been especially popular in the last couple of years. |
+| **Potential for follow‑up work** | The method’s specificity may limit the number of direct extensions (e.g., applying the same token‑level reward to other domains would require substantial re‑engineering). | The dual student‑teacher paradigm can be combined with many other techniques (e.g., curriculum learning, multi‑modal data, domain adaptation), spawning a larger family of derivative studies. |
+| **Citation‑velocity drivers** | Citations would mainly come from a relatively small sub‑field (RL for error correction). | Citations would come from a broad set of sub‑fields (self‑supervised learning, RL, LLM evaluation, prompt engineering, etc.), accelerating the rate at which new papers reference it. |
+
+Given these considerations, the *unsupervised self‑improvement* concept in Project 2 is more likely to be picked up quickly by a diverse set of researchers, leading to a faster accumulation of citations shortly after publication. Hence, **Project 2 is predicted to have the higher citation velocity**.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: openai/gpt-oss-120b
+
+================================================================================
+Epoch 5, Comparison 7:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+**Prediction:** *Project 2* is likely to exhibit the higher citation velocity.
+
+**Why this is a reasonable guess**
+
+| Factor | Project 1 (ProRL with KL‑regularization & curriculum) | Project 2 (Offline RL “reinforced self‑training”) |
+|--------|------------------------------------------------------|---------------------------------------------------|
+| **Alignment with current hot topics** | Reinforcement‑learning‑augmented LLMs are of interest, but the focus on KL‑regularization and periodic policy resets is relatively niche. | Offline RL and self‑training loops have been a major focus in the past few years (e.g., “offline RL for language models,” “self‑training for alignment”), attracting a broad audience. |
+| **Ease of reproducibility & adoption** | Requires a multi‑task curriculum and careful schedule for resetting the reference policy, which can be a higher barrier for other groups. | The pipeline (generate data → offline RL update → repeat) is conceptually simple and can be slotted into existing generation‑and‑fine‑tune workflows, encouraging rapid uptake. |
+| **Potential for immediate impact** | Offers a principled way to explore new solution spaces, but the benefits are more incremental and may need extensive experiments to demonstrate. | Directly promises faster alignment with human preferences without any online interaction, a clear practical win for industry and research labs. |
+| **Citation‑driving buzzwords** | “KL‑divergence regularization,” “multi‑task curriculum,” “reference‑policy resetting.” | “Offline reinforcement learning,” “reinforced self‑training,” “sample reuse,” “alignment without online interaction.” |
+| **Historical precedent** | Papers that introduce new regularization tricks tend to accrue citations more slowly, as the community first validates the technique. | Works that propose a new training loop that can be applied to many existing models (e.g., “Self‑Training for LLMs”) have historically seen rapid citation spikes. |
+
+Given these considerations, the community is likely to cite Project 2 more quickly after its release, leading to a higher **citation velocity** (citations per month in the first year). Of course, the actual numbers would depend on factors such as venue prestige, author reputation, and subsequent empirical results, but based on the thematic and practical appeal of the two ideas, Project 2 is the stronger candidate for faster citation accrual.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: openai/gpt-oss-120b
+
+================================================================================
+Epoch 6, Comparison 21:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+**Prediction:** The hierarchical multi‑turn reinforcement‑learning framework (Project 1) is likely to have the higher citation velocity.
+
+**Why this is plausible**
+
+| Factor | Project 1 – Hierarchical Multi‑Turn RL | Project 2 – Inference‑Aware BoN Fine‑Tuning |
+|--------|----------------------------------------|--------------------------------------------|
+| **Novelty of the core idea** | Combines two RL layers (high‑level off‑policy value aggregation + low‑level token‑policy) to address *both* long‑horizon credit assignment and token‑level control. This “dual‑level” architecture is relatively rare in the LLM literature. | Treats Best‑of‑N generation as an imitation‑learning/RL problem, which builds on a growing but already well‑populated line of work on decoding‑time strategies. |
+| **Breadth of applicability** | Directly targets *agentic* LLM use‑cases (dialogue agents, tool‑use, planning) that are a hot focus for both academia and industry. Multi‑turn credit assignment is a bottleneck that many groups are trying to solve. | Improves *inference* efficiency and quality, which is important but often seen as an engineering optimization rather than a new learning paradigm. |
+| **Potential for follow‑up work** | The hierarchical design opens many research directions (different high‑level value functions, alternative low‑level policies, curriculum learning across turns, etc.), encouraging rapid downstream citations. | Follow‑ups are more likely to be incremental (e.g., applying the same BoN‑RL trick to other tasks) rather than spawning entirely new sub‑fields. |
+| **Community buzz (based on recent conference trends)** | Papers on “LLM agents,” “long‑horizon planning,” and “hierarchical RL” have been among the most discussed topics at major venues (NeurIPS, ICML, ICLR) in the last 12 months. | Decoding‑strategy papers (e.g., “Self‑Consistency,” “Best‑of‑N”) have also been popular, but the incremental nature of the fine‑tuning angle tends to generate a steadier, slower citation curve. |
+| **Citation‑velocity proxies** (early‑access downloads, pre‑print mentions, social‑media buzz) | Early pre‑print versions of hierarchical RL for LLMs have shown spikes in Twitter/Reddit discussions and have been highlighted in “paper‑of‑the‑week” newsletters. | BoN‑related works have a solid baseline of citations but typically grow more linearly over time. |
+
+**Bottom line:**  
+Because Project 1 introduces a *structurally new* learning paradigm that directly tackles a widely recognized bottleneck (credit assignment across many dialogue turns) and because the community is actively seeking solutions for LLM agents, it is expected to be cited more rapidly after publication. Consequently, its citation velocity should surpass that of Project 2.
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: openai/gpt-oss-120b
+
+================================================================================
+Epoch 7, Comparison 35:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+**Prediction:** *Project 1 (VeriFree) is likely to exhibit the higher citation velocity.*
+
+**Why this project is expected to be cited more quickly and frequently**
+
+| Factor | Project 1 (VeriFree) | Project 2 (Self‑Improving Dual Student‑Teacher) | Impact on Citation Velocity |
+|--------|----------------------|--------------------------------------------------|-----------------------------|
+| **Clear, catchy name** | “VeriFree” immediately signals a concrete benefit (free of a separate verifier) and is easy to remember. | The description uses generic terms (“dual student‑teacher”) that are less distinctive. | Papers with memorable acronyms or names tend to be discovered and referenced faster. |
+| **Strong novelty claim** | Claims to *eliminate the need for a separate verifier* by embedding verification inside the policy model—a clear departure from the dominant “verifier‑generator” paradigm. | Proposes *unsupervised self‑improvement* using the same model as both generator and evaluator, which is conceptually similar to several existing self‑training or self‑distillation works. | A bold, clearly differentiated contribution usually draws early attention and rapid citations. |
+| **Alignment with hot research trends** | Reinforcement learning for *implicit verification* directly tackles the “hallucination” problem that has been a focal point of LLM safety and reliability workshops (e.g., NeurIPS 2023‑2024). | Self‑training via RL is also trendy, but many recent papers already explore “student‑teacher” loops, making the space more crowded. | Being the first to propose a new angle on a hot problem accelerates citation uptake. |
+| **Potential for broad applicability** | The method can be plugged into any LLM pipeline that currently uses a separate verifier (e.g., code generation, factual QA, math reasoning). | While broadly applicable, the dual‑role framework is more naturally suited to *unsupervised* settings, which may limit immediate adoption in domains that still rely on labeled data. | Wider immediate applicability → more early citations. |
+| **Ease of reproducibility** | Training a *single* model (no extra verifier) reduces computational overhead, making the approach attractive for labs with limited resources. | Requires careful balancing of two roles (generator & evaluator) within the same model, which can be more fragile and harder to reproduce. | Simpler pipelines tend to be adopted and cited more quickly. |
+| **Pre‑print and conference exposure** | If the authors released a pre‑print on arXiv with the “VeriFree” acronym and presented at a high‑visibility venue (e.g., ICLR, NeurIPS), the buzz would translate into rapid citation accrual. | The description is more generic; unless paired with a striking demo or benchmark, it may receive a slower citation ramp‑up. | Early visibility → higher citation velocity. |
+
+### Bottom‑line estimate
+- **Project 1 (VeriFree)** – Expected citation velocity: **high** (steep early citation curve, likely reaching >30 citations within the first 6 months for a typical top‑tier conference paper).
+- **Project 2 (Self‑Improving Dual Student‑Teacher)** – Expected citation velocity: **moderate** (steady but slower growth, perhaps 10–15 citations in the same period).
+
+Thus, based on naming, novelty, alignment with current research priorities, and practical adoption considerations, **Project 1 is predicted to achieve the higher citation velocity**.
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: openai/gpt-oss-120b
+
+================================================================================
+Epoch 9, Comparison 13:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+**Prediction:** Project 2 is likely to have the higher citation velocity.
+
+**Rationale**
+
+| Aspect | Project 1 – Vulnerability‑focused RL | Project 2 – General RL‑training framework |
+|--------|--------------------------------------|-------------------------------------------|
+| **Breadth of applicability** | Targets a specific niche (security‑oriented code analysis & remediation). | Provides a generic training algorithm (decoupled clipping, dynamic sampling) that can be applied to any large‑scale LLM fine‑tuning effort. |
+| **Community size** | Primarily security researchers and a subset of software‑engineering practitioners. | The entire LLM research community (NLP, RL, AI‑systems, industry labs) is interested in more efficient RL‑based fine‑tuning. |
+| **Trendiness** | Security remains important, but the “LLM‑RL training at scale” problem is a current hot‑topic across conferences (NeurIPS, ICML, ICLR, ACL, etc.). | The need for scalable, reproducible RL pipelines for LLMs is a recurring theme in recent high‑impact papers and workshops. |
+| **Potential for follow‑up work** | Follow‑up work would likely stay within the security‑tooling domain. | The techniques (clipping decoupling, dynamic sampling) can be recombined with other RL advances, spawning many derivative studies. |
+| **Citation dynamics** | Niche papers often see a modest, steady citation rate. | Broad‑impact methodological papers tend to experience an early “citation burst” as many groups adopt the new training recipe, leading to a higher citation velocity. |
+
+Given these factors, the methodological contribution of **Project 2**—a scalable, reproducible RL training framework for LLMs—should attract citations more rapidly after publication than the more specialized security‑oriented application of Project 1.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: openai/gpt-oss-120b
+
+================================================================================
+Epoch 10, Comparison 27:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+**Prediction:** *Project 1* (the “soft‑Bellman offline‑RL for multi‑step reasoning” approach) is likely to achieve a higher citation velocity than Project 2 (the “Long‑to‑Short (L2S) model‑merging” approach).
+
+**Why Project 1 is expected to be cited more quickly**
+
+| Factor | Project 1 (Soft‑Bellman RL) | Project 2 (L2S Model‑Merging) | Impact on Citation Velocity |
+|--------|-----------------------------|-------------------------------|-----------------------------|
+| **Alignment with hot research trends** | Offline reinforcement learning, value‑function learning, and tree‑search for LLMs have been central topics in the past 2‑3 years (e.g., AlphaCode, ReAct, Tree‑of‑Thoughts). Papers that combine RL with reasoning tend to attract immediate attention. | Model‑merging and “System 1 / System 2” analogies are interesting, but they sit more in the niche of model‑fusion rather than the mainstream RL‑for‑reasoning wave. |
+| **Clear methodological novelty** | Introducing a *soft Bellman equation* for LLM reasoning and showing how the learned value function can be reused for test‑time search provides two concrete contributions (training + inference). Such dual‑use results are easy to highlight in abstracts and talks, prompting rapid citations. | The L2S idea hinges on a suite of engineering tricks (task‑vector alignment, SVD blending, weight interpolation). While technically clever, the contribution is perceived as a “tricks‑bundle” rather than a single, clean theoretical advance, which often slows early citation uptake. |
+| **Ease of reproducibility & benchmarking** | Offline RL pipelines can be built on existing RL libraries (e.g., d3rlpy, RL‑lib) and evaluated on standard reasoning benchmarks (MathQA, GSM‑8K, Codeforces). The community can quickly reproduce results, leading to early citations in follow‑up work. | Model‑merging requires careful weight‑space manipulation and often depends on the exact architecture and training regime of the constituent models. Reproducing the exact L2S behavior can be more involved, which tends to dampen immediate citation rates. |
+| **Potential for downstream impact** | A learned value function that can be plugged into any test‑time search (e.g., beam search, Monte‑Carlo tree search) opens a whole line of research on “value‑guided decoding.” This broad applicability fuels rapid cross‑disciplinary citations (NLP, RL, AI safety). | The L2S framework primarily targets efficiency (fast‑slow reasoning trade‑off). While valuable, its downstream impact is more limited to speed‑optimisation studies, which typically accrue citations more slowly. |
+| **Community buzz & media coverage** | RL‑based reasoning papers often receive coverage in high‑visibility venues (NeurIPS, ICML) and popular AI newsletters, creating a citation “burst” shortly after release. | Model‑merging papers, though occasionally highlighted, usually appear in more specialized workshops or arXiv submissions, generating a steadier but slower citation curve. |
+
+**Bottom line:** Because Project 1 sits at the intersection of two high‑visibility research streams (offline RL and multi‑step LLM reasoning), offers a clean, dual‑purpose contribution (training + inference), and is easier for other groups to adopt and extend, it is expected to be cited more rapidly after publication. Project 2, while innovative, is likely to see a more gradual accumulation of citations.
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: openai/gpt-oss-120b
+
+================================================================================
+Epoch 12, Comparison 5:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+**Prediction:** *Project 1* is the more likely candidate to achieve the higher citation velocity.
+
+**Why this is plausible**
+
+| Factor | Project 1 | Project 2 |
+|--------|-----------|-----------|
+| **Core buzzwords** | *multimodal LLMs, reinforcement learning, long‑context scaling, policy optimization* – all hot topics in the last 12‑18 months. | *model merging, System 1/System 2, SVD‑based blending* – interesting but less frequently highlighted in recent conference calls. |
+| **Methodological novelty** | Introduces a “long‑to‑short” distillation pipeline that explicitly tackles the long‑context problem, a pain point for many researchers. | Proposes a weight‑interpolation scheme that, while clever, builds on already‑explored model‑merging ideas. |
+| **Community appetite** | The community is actively seeking ways to combine RL‑based alignment with multimodal reasoning; papers that promise “RL‑free” yet performant alternatives tend to attract rapid attention. | Model‑merging work is valuable, but it often appeals to a narrower subset of researchers focused on efficiency rather than reasoning depth. |
+| **Potential for follow‑up work** | The omission of Monte‑Carlo tree search, explicit value functions, and separate reward models opens a clear research agenda (e.g., “what else can be omitted?”). | The blending technique is more of a “one‑shot” engineering solution; fewer obvious extensions are evident. |
+| **Citation‑velocity drivers** | • Strong alignment with recent “long‑context” and “RL‑from‑human‑feedback” trends.<br>• Likely to be highlighted in workshops on multimodal reasoning.<br>• Easy to benchmark against existing RL‑based baselines, encouraging rapid comparative citations. | • May be cited in niche efficiency surveys, but less likely to become a central reference for reasoning‑oriented work. |
+
+**Bottom line:**  
+Because Project 1 sits at the intersection of two of the most rapidly expanding research fronts—multimodal LLMs and reinforcement‑learning‑inspired alignment—its publication would probably be picked up quickly by a broad swath of the community, leading to a higher citation velocity than the more specialized model‑merging approach of Project 2.
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: openai/gpt-oss-120b
+
+================================================================================
+Epoch 13, Comparison 19:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+**Prediction:** *Project 2* is likely to achieve the higher citation velocity.
+
+---
+
+### Why Project 2 should be cited more quickly
+
+| Factor | Project 1 | Project 2 | Why it matters for citation velocity |
+|--------|-----------|-----------|--------------------------------------|
+| **Breadth of audience** | Focuses on a specific multimodal‑reflection pipeline. Appeals mainly to researchers working on self‑reflection, multimodal LLMs, and a niche RL variant (GRPO). | Surveys a whole family of RL‑from‑feedback (RLHF) algorithms (EI, PPO, Return‑Conditioned RL) and evaluates them across model scales, reward types, and fine‑tuning regimes. This touches virtually every group that trains or uses LLMs with RL. |
+| **Methodological novelty vs. systematic study** | Introduces a novel two‑stage training regime with a custom reward for “concise, cognitively meaningful reflections.” While innovative, the contribution is a single pipeline. | Provides a *systematic benchmark* that many researchers can reuse as a reference point for their own RL‑HF experiments. Benchmarks tend to be cited repeatedly because they become a standard comparison baseline. |
+| **Reproducibility & tooling** | Requires a sophisticated multimodal LLM to generate reflections, plus a custom GRPO implementation. Replicating the exact pipeline is non‑trivial, limiting immediate uptake. | Uses well‑known algorithms (EI, PPO, RCRL) and standard reward‑signal setups (sparse vs. dense, heuristic vs. learned). The code and data are easier to adopt, encouraging rapid downstream citations. |
+| **Alignment with current community priorities** | Self‑reflection is an emerging theme, but the community is still coalescing around it. | RL‑from‑feedback (RLHF) is the *dominant* research thrust for improving LLM reasoning, safety, and alignment. Papers that map out the performance landscape of RLHF variants are in high demand. |
+| **Potential for “survey‑style” citations** | Likely to be cited when discussing reflection‑oriented training or multimodal reasoning. | Likely to be cited in any work that mentions RLHF, algorithmic comparisons, or the effect of supervised pre‑training on RL fine‑tuning—i.e., a far larger set of papers. |
+| **Citation‑velocity drivers** | Novel architecture → occasional “breakthrough” citations, but slower diffusion. | Benchmark + comparative analysis → rapid “baseline” citations, often within weeks of release. |
+
+
+### Quantitative intuition (back‑of‑the‑envelope)
+
+If we assume a typical high‑impact RLHF benchmark paper receives **≈30 citations in the first 6 months**, while a specialized multimodal‑reflection paper receives **≈10–12 citations** in the same period, the *citation velocity* (citations per month) would be:
+
+- **Project 2:** 30 citations / 6 months ≈ 5 citations/month  
+- **Project 1:** 12 citations / 6 months ≈ 2 citations/month  
+
+Thus, Project 2’s citation velocity would be **more than double** that of Project 1.
+
+---
+
+## Bottom line
+Because Project 2 offers a broad, reproducible, and immediately useful comparative study of the most widely adopted RL‑from‑feedback methods, it is poised to be referenced far more frequently and more quickly after publication. Consequently, **Project 2 is predicted to have the higher citation velocity**.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: openai/gpt-oss-120b
+
+================================================================================
+Epoch 14, Comparison 33:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+**Prediction:** *Project 2* (the hierarchical reinforcement‑learning framework for multi‑turn LLM interactions) is the one that would exhibit the higher citation velocity.
+
+**Why this is the more “citable” work**
+
+| Aspect | Project 1 – RLVR (single‑example, verifiable reward) | Project 2 – Hierarchical RL for multi‑turn LLMs |
+|--------|------------------------------------------------------|-------------------------------------------------|
+| **Scope of impact** | Focused on a very specific training trick (single‑example, entropy‑regularized policy gradient). Useful for researchers interested in minimal‑supervision proofs of concept, but the technique is narrow. | Addresses a broad, pressing problem: how to train LLMs that act over many turns, handle delayed rewards, and behave like agents. This touches dialogue systems, tool‑use agents, planning, and any downstream application that requires interaction. |
+| **Novelty vs. familiarity** | The idea of “training on a single example” is striking, but many readers will view it as a curiosity rather than a generalizable method. | Hierarchical RL is a well‑established paradigm in robotics and control; transplanting it to LLMs feels like a natural, high‑impact extension that many communities (NLP, RL, AI‑agents) can immediately adopt. |
+| **Ease of adoption** | Requires a carefully curated “verifiable” example and a specific loss‑augmentation pipeline—potentially a higher barrier for replication. | Provides a modular recipe (high‑level off‑policy value estimator + low‑level token policy) that can be slotted into existing RL‑fine‑tuning pipelines, making it easier for labs to experiment. |
+| **Community interest trends (2023‑2025)** | Growing interest in “few‑shot” and “self‑verification” methods, but citation spikes tend to be modest compared to agent‑oriented work. | Explosive growth in papers on LLM agents, tool‑use, and multi‑turn planning (e.g., ReAct, Reflexion, Auto‑GPT). Anything that promises a principled RL backbone for these systems is likely to be referenced quickly. |
+| **Potential for follow‑up work** | Mostly incremental extensions (different entropy schedules, more examples). | Opens many research directions: alternative high‑level value learners, curriculum‑based low‑level token policies, hierarchical credit assignment, safety‑aware value functions, etc. Each of these spawns its own citation stream. |
+
+Given these factors, the hierarchical RL framework (Project 2) aligns with the current “agent‑centric” research wave and offers a versatile, extensible architecture. Papers that provide such a generalizable scaffold tend to be cited repeatedly and rapidly as other groups build on them, leading to a higher citation velocity than a more narrowly scoped, proof‑of‑concept study like Project 1.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: openai/gpt-oss-120b
+
+================================================================================
+Epoch 16, Comparison 11:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+**Prediction: Project 2 (Recursive Critique‑and‑Improve, “RCI”) is likely to have the higher citation velocity.**
+
+### Why Project 2 is expected to be cited more quickly
+
+| Factor | Project 1 – Reinforced Self‑Training | Project 2 – Recursive Critique‑and‑Improve (RCI) |
+|--------|--------------------------------------|---------------------------------------------------|
+| **Alignment with current research hot‑topics** | Offline RL for LLM alignment is a niche sub‑area; most recent high‑impact papers focus on prompting, chain‑of‑thought, or tool‑use. | Self‑critique, iterative prompting, and “self‑debugging” have become buzzwords (e.g., “self‑refine”, “self‑critiquing LLMs”, “self‑consistency”). Many recent workshops and conferences feature papers on prompting strategies. |
+| **Ease of reproducibility** | Requires a full RL pipeline (reward model, offline dataset, policy updates). The barrier to entry is relatively high, limiting rapid adoption. | Only needs a pre‑trained LLM and a prompting template. Researchers can try the method with any publicly available model (GPT‑3, LLaMA, etc.) without extra training, encouraging quick experimentation and citation. |
+| **Synergy with existing tool‑use literature** | Primarily an alignment technique; less direct overlap with the booming “LLM‑as‑programmer” literature. | Directly tackles code generation and tool use, which are among the most cited sub‑fields (e.g., “Codex”, “AlphaCode”, “Toolformer”). Papers that improve code‑generation pipelines are frequently referenced in both NLP and software‑engineering venues. |
+| **Potential for immediate performance gains** | Gains are often modest unless the offline RL loop is run for many iterations, which can be computationally expensive. | Even a single recursion of critique → improvement can yield noticeable accuracy jumps on benchmark coding tasks (e.g., HumanEval, MBPP), making the method attractive for quick “state‑of‑the‑art” claims. |
+| **Community enthusiasm for prompting tricks** | Prompt engineering is a well‑studied area, but the community is currently gravitating toward *iterative* prompting rather than static RL‑based data augmentation. | The “critique‑and‑revise” paradigm aligns with the current wave of “self‑consistency”, “self‑refine”, and “self‑debugging” papers, which have seen rapid citation growth (e.g., Self‑Consistency (2022) → >1,200 citations in <2 years). |
+| **Venue and timing** | If published in a specialized RL or alignment workshop, the audience is narrower. | A paper on RCI could appear at a major NLP conference (ACL, EMNLP, NeurIPS) or a cross‑disciplinary venue (ICLR, ICLR‑Workshop on Code Generation), exposing it to a broader readership. |
+| **Citation‑velocity precedents** | Offline RL for LLMs (e.g., “RLHF with offline data”) has historically shown slower early citation curves (≈30–50 citations in the first year). | Prompt‑based self‑critique methods have historically shown steep early citation curves (≈150–200 citations in the first year for comparable works). |
+
+### Qualitative intuition
+
+- **“Fast‑track” adoption:** Researchers looking to boost their own code‑generation baselines can plug the RCI prompting loop into existing pipelines with a few lines of code. This low friction leads to rapid “copy‑and‑paste” citations.
+- **Media and blog coverage:** Iterative prompting schemes are easy to explain to a non‑technical audience (“the model talks to itself to fix its mistakes”), which tends to generate more buzz on social media, pre‑print servers, and blog posts—factors that correlate with early citation spikes.
+- **Cross‑disciplinary appeal:** Because RCI directly addresses *program synthesis* and *tool use*, it attracts citations not only from NLP researchers but also from software‑engineering, AI‑for‑science, and education communities, expanding the citation pool.
+
+### Caveats
+
+- The prediction assumes both projects are released around the same time (e.g., within a few months of each other) and are published in venues of comparable prestige.
+- If Project 1 were accompanied by a large open‑source codebase and a benchmark showing dramatic alignment improvements, its citation velocity could surpass Project 2. However, based on current trends, the iterative‑prompting approach is more likely to generate rapid, widespread citations.
+
+**Bottom line:** Given the present research climate, the *Recursive Critique‑and‑Improve* (Project 2) approach is expected to achieve a higher citation velocity than the *Reinforced Self‑Training* (Project 1) approach.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: openai/gpt-oss-120b
+
+================================================================================
+Epoch 17, Comparison 25:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+**Prediction:** Project 2 is likely to achieve the higher citation velocity.
+
+**Rationale**
+
+| Aspect | Project 1 – Masked Diffusion + Critic‑Free GRPO | Project 2 – Systematic RL‑from‑Feedback Benchmark |
+|--------|-----------------------------------------------|---------------------------------------------------|
+| **Breadth of appeal** | Focuses on a specific model family (masked diffusion) and a single novel RL algorithm. Interest is strong but relatively specialized. | Covers a wide range of RL‑from‑feedback methods (EI, PPO, Return‑Conditioned RL), multiple reward regimes, and several model scales. Serves as a reference point for many research groups. |
+| **Benchmark value** | Introduces a new training paradigm but provides limited comparative data. | Provides a comprehensive, reproducible evaluation suite that can be reused for future work, a classic driver of rapid citations. |
+| **Community relevance** | Attractive to researchers working on diffusion‑based LLMs and non‑autoregressive generation. | Directly relevant to the broader LLM community interested in RL‑HF, RL‑from‑feedback, and the interplay with supervised fine‑tuning—topics that have seen explosive growth. |
+| **Novelty vs. Utility** | High novelty (critic‑free policy gradient) but utility depends on adoption of diffusion LLMs. | Moderate novelty (systematic comparison) but high utility as a “go‑to” empirical study. |
+| **Historical precedent** | Papers that introduce a single new algorithm often see a slower initial citation curve, unless the algorithm quickly becomes a de‑facto standard. | Benchmark/empirical survey papers (e.g., “Scaling Laws for Neural Language Models,” “RLHF for LLMs”) typically enjoy rapid citation accrual because they become the default citation for related work. |
+
+Given these factors, the systematic, multi‑algorithm evaluation in **Project 2** is expected to be referenced by a larger and more diverse set of subsequent studies, leading to a faster accumulation of citations shortly after publication. Consequently, its **citation velocity** should surpass that of **Project 1**.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: openai/gpt-oss-120b
+
+================================================================================
+Epoch 19, Comparison 3:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+**Prediction:** Project 1 (the multi‑agent reinforcement‑learning framework for collaborative LLM problem solving) is likely to achieve the higher citation velocity.
+
+**Why this project is expected to be cited more quickly**
+
+| Factor | Project 1 – Multi‑Agent Collaboration | Project 2 – Curated RL Reasoning Corpus (Guru) |
+|--------|--------------------------------------|-----------------------------------------------|
+| **Novelty & buzz‑factor** | Multi‑agent RL for LLMs taps into two hot trends simultaneously (LLM alignment + emergent multi‑agent behavior). Papers that combine these themes tend to generate a lot of early excitement and media coverage. | A curated dataset is valuable, but many “large‑scale corpus” papers already exist; the novelty is more incremental. |
+| **Broad applicability** | The approach can be applied to any downstream task that benefits from iterative refinement (math, coding, reasoning, dialogue, planning). This cross‑task relevance encourages citations from many sub‑communities. | The corpus is domain‑specific (six reasoning areas). While useful, it primarily attracts work that needs that exact data, limiting the immediate audience. |
+| **Ease of reuse** | The method produces a reusable training pipeline (agents + verifier) that other groups can adopt or extend with their own LLMs, prompting rapid follow‑up work. | The dataset itself is reusable, but the impact depends on how many groups adopt the exact reward‑design framework; adoption can be slower. |
+| **Community trends (2023‑2025)** | Recent conferences (NeurIPS, ICML, ICLR) have seen a surge of papers on “LLM agents,” “self‑play,” and “collaborative reasoning,” indicating a high citation propensity for work in this space. | Dataset‑centric papers still receive citations, but they typically accrue more steadily rather than in a sharp early spike. |
+| **Potential for benchmark creation** | The verifier and discussion logs can serve as a new benchmark for “collaborative reasoning,” which often drives rapid citation as the community adopts the benchmark. | The corpus can become a benchmark, but it competes with several existing reasoning datasets, diluting its immediate impact. |
+
+**Overall assessment**
+
+Because Project 1 aligns with a rapidly growing research frontier (LLM agents that interact and self‑correct) and offers a versatile, easily extensible framework, it is expected to be referenced quickly by a wide array of follow‑up studies, workshops, and benchmark papers. Project 2, while valuable, is more of a resource contribution that typically sees a steadier, longer‑term citation curve.
+
+**Conclusion:** Project 1 is predicted to have the higher citation velocity.
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: openai/gpt-oss-120b
+
+================================================================================
+Epoch 20, Comparison 17:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+**Prediction:** Project 1 (the entropy‑minimization approach) is likely to exhibit the higher citation velocity.
+
+**Rationale**
+
+| Factor | Project 1 – Entropy Minimization | Project 2 – VeriFree |
+|--------|----------------------------------|----------------------|
+| **Breadth of applicability** | Low‑entropy training, inference‑time logit shaping, and self‑distillation can be plugged into virtually any LLM pipeline (e.g., chatbots, code generators, scientific assistants). This broad relevance tends to generate many follow‑up works. | The VeriFree framework is focused specifically on “verification‑free” answer generation, which is a narrower niche within the larger verification‑oriented literature. |
+| **Conceptual novelty vs. incremental improvement** | Introducing entropy as an explicit RL reward and as a fine‑tuning objective is a fresh angle on model confidence and reasoning, sparking interest across both the RL‑for‑LLM and model‑calibration communities. | While the idea of merging a verifier into the generator is clever, it can be seen as an incremental reformulation of existing RL‑from‑human‑feedback or self‑critique methods. |
+| **Ease of adoption** | The three techniques (self‑distillation, entropy‑reward RL, inference‑time logit scaling) are relatively low‑cost to try, encouraging rapid experimental replication and citation. | Implementing VeriFree requires a carefully crafted reference‑answer dataset and a variational‑optimization setup, which may pose a higher barrier to entry. |
+| **Alignment with current research trends** | There is a strong, ongoing focus on model calibration, confidence estimation, and “confidence‑driven” prompting—areas directly served by entropy reduction. | Verification‑free generation is interesting but competes with a crowded space of verification‑or‑self‑critique methods that already have established baselines. |
+| **Potential for cross‑disciplinary impact** | Low‑entropy outputs are valuable for safety, interpretability, and downstream tasks like math or code synthesis, attracting citations from diverse sub‑fields. | The primary impact is on the specific problem of answer verification, limiting cross‑disciplinary reach. |
+
+Given these considerations, the community is expected to cite Project 1 more frequently and more quickly after its release, resulting in a higher citation velocity.
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: openai/gpt-oss-120b
+
+================================================================================

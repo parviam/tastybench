@@ -75,3 +75,922 @@ PROJECT 1
 model: openai/gpt-oss-20b
 
 ================================================================================
+Epoch 2, Comparison 15:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+**Recommendation: Pursue Project 1 (the systematic RL‑from‑feedback benchmark).**
+
+Below is a concise, evidence‑based rationale that weighs the two ideas against the single goal of *maximizing citation velocity*.
+
+| Criterion | Project 1 | Project 2 |
+|-----------|-----------|-----------|
+| **Novelty** | Moderate – many RL‑from‑feedback papers exist, but a *comprehensive, cross‑algorithm, cross‑scale, cross‑initialization* study is still scarce. | High – entropy‑minimization as a stand‑alone RL reward is a fresh angle, but the idea of “low‑entropy outputs unlock reasoning” is still unproven. |
+| **Community Size** | Large – RLHF, RL‑from‑feedback, and reasoning‑enhancement communities overlap (LLM researchers, RL researchers, math‑coding benchmarks). | Smaller – the low‑entropy trick appeals mainly to those looking for simple, data‑free methods; the audience is narrower. |
+| **Reproducibility / Benchmarking** | High – a benchmark paper is naturally cited as a reference point for future work. | Low – if the method works, it may be adopted, but if it fails or only gives marginal gains, it will be ignored. |
+| **Risk of Low Impact** | Low – even a negative result (e.g., “none of the RL‑from‑feedback algorithms help reasoning”) is a useful, citable finding. | High – the method could fail to produce any noticeable improvement, leading to a paper that is quickly forgotten. |
+| **Speed to Publication** | Medium – requires training many models, but the pipeline is straightforward and can be parallelized. | Medium‑High – the entropy‑minimization experiments are simpler, but the novelty may require more careful framing and validation. |
+| **Citation Velocity** | High – benchmark papers are routinely cited by subsequent RLHF, RL‑from‑feedback, and reasoning papers. | Variable – if the method works spectacularly, it could become a “quick‑win” paper; otherwise, citations will be sparse. |
+
+### Why Project 1 Wins for Citation Velocity
+
+1. **Benchmarking is a proven citation engine.**  
+   Papers that provide a systematic comparison of algorithms (e.g., *OpenAI’s RLHF paper*, *DeepMind’s RL‑from‑feedback survey*) become go‑to references. Researchers routinely cite such works when they adopt or extend a particular algorithm.
+
+2. **Cross‑disciplinary appeal.**  
+   The study touches on RL, supervised fine‑tuning, scaling laws, and reasoning benchmarks (math, coding). This breadth increases the number of potential citing communities.
+
+3. **Low risk of “no‑impact” outcome.**  
+   Even if the results show that none of the algorithms improve reasoning, the paper still offers a valuable negative result that will be cited by future work that seeks to explain why RLHF fails in this domain.
+
+4. **Reproducibility and open‑source data.**  
+   By releasing code, checkpoints, and evaluation scripts, you create a resource that others will reuse and cite. The “citation velocity” is amplified by the fact that many researchers will build on your benchmark.
+
+5. **Alignment with current research trends.**  
+   RLHF and RL‑from‑feedback are hot topics. A systematic study that clarifies the interaction between supervised fine‑tuning and RL fine‑tuning will be immediately relevant to the community.
+
+### How to Maximize Impact Within Project 1
+
+| Action | Why it Helps |
+|--------|--------------|
+| **Release a public benchmark suite** (code, data, evaluation scripts) | Increases reuse and citations. |
+| **Include a wide range of model scales** (from 125M to 13B+). | Attracts both small‑lab and large‑lab researchers. |
+| **Provide ablation studies on reward sparsity, reward type, and initialization** | Gives fine‑grained insights that others can cite. |
+| **Publish a concise, high‑level summary** (e.g., a 2‑page “RL‑from‑feedback for reasoning” paper) | Enables quick uptake and citation. |
+| **Engage with the community early** (preprints, workshops, demos). | Builds anticipation and early citations. |
+
+### Caveats for Project 2
+
+- **Uncertain payoff.** If the entropy‑minimization trick yields only marginal gains, the paper will likely be ignored.  
+- **Potential for “quick‑win” citations** if the method works spectacularly, but this is a high‑variance outcome.  
+- **Less community overlap.** The method may not attract the broader RLHF audience, limiting citation velocity.
+
+---
+
+**Bottom line:** For a research project whose sole metric is *how fast and how many* citations you receive, a systematic benchmark of RL‑from‑feedback algorithms (Project 1) offers the most reliable, high‑velocity path. It balances novelty with community demand, reduces the risk of a low‑impact result, and provides a reusable resource that will be cited repeatedly by future work. If you still want to keep a “high‑risk, high‑reward” side project, you could run a small pilot of the entropy‑minimization idea in parallel, but the main effort should focus on Project 1.
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: openai/gpt-oss-20b
+
+================================================================================
+Epoch 3, Comparison 29:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+**Recommendation: Pursue Project 2 – the reverse‑curriculum reinforcement‑learning framework.**
+
+Below is a concise, evidence‑based comparison that shows why Project 2 is more likely to generate a high *citation velocity* (i.e., a large number of citations in a short time).
+
+| Criterion | Project 1 (Self‑Evolving Web‑Task Curriculum) | Project 2 (Reverse‑Curriculum RL for Outcome‑Only Supervision) |
+|-----------|----------------------------------------------|--------------------------------------------------------------|
+| **Scope & Generality** | Focused on web‑interaction tasks (click‑through, form‑filling, etc.).  | Applies to *any* reasoning task that can be framed as a sequence of states, including math, coding, planning, and even web tasks. |
+| **Novelty** | Novel idea of generating new tasks from failures, but similar “self‑play” or “task‑generation” work already exists in RL (e.g., AlphaGo’s self‑play, OpenAI’s DALL‑E 2 training). | Reverse curriculum is a fresh twist on curriculum learning that directly tackles the *sparse‑reward* problem for LLMs, a major bottleneck in the field. |
+| **Data & Engineering Overhead** | Requires building a large, continuously evolving web‑task dataset (web scraping, task validation, safety filtering).  | No new dataset needed; works on existing demonstration data and can be evaluated on standard benchmarks (MATH, GSM‑8K, Code‑X, etc.). |
+| **Reproducibility & Adoption** | Harder to reproduce because of the custom web‑task pipeline; other labs would need to replicate the entire task‑generation loop. | Straightforward to implement on top of any RL‑fine‑tuned LLM; can be demonstrated on public datasets, making it attractive for quick replication. |
+| **Potential Impact** | Improves LLM performance on web‑tasks, a niche but growing area.  | Provides a general method for turning *any* outcome‑only supervision into rich intermediate signals, directly addressing a core limitation of current RL‑LLM pipelines. |
+| **Citation Drivers** | • Novel dataset generation <br>• Web‑interaction benchmarks (e.g., WebArena, Multi‑Task Web Interaction) | • General RL‑LLM framework <br>• Immediate applicability to high‑profile benchmarks <br>• Strong theoretical framing (reverse curriculum, error localization) |
+| **Risk Profile** | Medium‑high: dataset engineering risk, potential safety concerns with web‑interaction. | Low‑medium: algorithmic risk only; no new data collection. |
+| **Time to Publication** | Longer (data pipeline + experiments). | Shorter (algorithmic development + benchmark evaluation). |
+
+### Why Project 2 Maximizes Citation Velocity
+
+1. **Broad Applicability** – The reverse‑curriculum idea can be applied to *any* LLM‑based reasoning task. Papers that provide a general, reusable technique tend to attract more citations than niche, task‑specific work.
+
+2. **Low Barrier to Adoption** – Researchers can plug the method into their existing RL‑LLM pipelines without building new datasets. This encourages quick replication and extension, which is a key driver of citations.
+
+3. **Addressing a Core Bottleneck** – Sparse rewards are a well‑known obstacle in RL‑LLM research. A method that decomposes final‑result rewards into informative intermediate signals directly tackles this pain point, making the work highly relevant to the community.
+
+4. **Theoretical Novelty + Practical Impact** – The reverse‑curriculum concept is theoretically interesting (moving the initial state backward, creating a curriculum that starts from the end) and practically powerful (error localization without manual annotations). Papers that combine theory and practice tend to be cited more.
+
+5. **Speed to Publication** – With fewer engineering hurdles, you can get the core algorithm, experiments on standard benchmarks, and a solid paper out in a shorter time frame. Faster publication means earlier visibility and a higher chance of early citations.
+
+### Quick Action Plan for Project 2
+
+| Step | Action | Expected Outcome |
+|------|--------|------------------|
+| 1 | Formalize the reverse‑curriculum algorithm (state‑shift, reward decomposition, error localization). | Clear theoretical contribution. |
+| 2 | Implement on a popular RL‑LLM framework (e.g., RLHF with PPO on LLaMA or GPT‑Neo). | Reproducible codebase. |
+| 3 | Evaluate on high‑profile benchmarks: MATH, GSM‑8K, Code‑X, and a few web‑interaction tasks (to show versatility). | Demonstrated performance gains. |
+| 4 | Release code, data, and a lightweight demo notebook. | Lower adoption barrier. |
+| 5 | Submit to a top venue (ICLR, NeurIPS, ICLR‑Workshop on RL‑LLMs). | Rapid visibility. |
+
+### Bottom Line
+
+Project 2 offers a **general, low‑overhead, high‑impact** contribution that is likely to be adopted quickly by the community, leading to a higher *citation velocity*. Project 1, while interesting, is more niche, requires significant engineering effort, and has a higher risk of slower uptake. If your sole metric is how fast and how many citations you can accrue, go with Project 2.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: openai/gpt-oss-20b
+
+================================================================================
+Epoch 5, Comparison 7:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+**Recommendation: Pursue Project 1 – “Long‑to‑Short RL‑Driven Multimodal LLM with Distilled Chain‑of‑Thought.”**
+
+Below is a concise, evidence‑based rationale that focuses on the single outcome you care about: **maximizing citation velocity**.
+
+| Criterion | Project 1 | Project 2 |
+|-----------|-----------|-----------|
+| **Core Problem** | *Reasoning* – a perennial bottleneck for LLMs (math, coding, logic). | *Privacy & deployment* – important but more peripheral to the core LLM research agenda. |
+| **Novelty & Gap** | Combines long‑context RL, multimodality, and a *long‑to‑short* distillation pipeline—no existing work jointly tackles all three. | Federated PEFT pipelines exist, but a fully automated, resource‑efficient, end‑to‑end system is still nascent; however, the novelty is more incremental. |
+| **Community Size** | Large, active communities (LLM reasoning, chain‑of‑thought, RL‑HF, multimodal research). | Smaller niche (federated learning, privacy‑preserving ML). |
+| **Follow‑up Potential** | Distilled short models can be reused in countless downstream tasks; the RL framework can be extended to new modalities or longer contexts. | The pipeline can be adapted to specific industries, but fewer generic research directions emerge. |
+| **Publication Venues** | Top NLP/ML conferences (NeurIPS, ICML, ICLR, ACL, EMNLP) routinely publish high‑impact reasoning papers. | More likely to land in specialized venues (FedML, privacy‑ML tracks) with lower overall citation rates. |
+| **Citation Velocity Drivers** | 1. **High visibility** – reasoning papers attract broad attention. 2. **Methodological novelty** – RL + multimodality + distillation is a “new recipe.” 3. **Reproducibility** – distilled short models are easy to benchmark. | 1. **Niche audience** – fewer researchers actively cite federated‑learning papers. 2. **Implementation focus** – often viewed as engineering rather than scientific contribution. |
+
+### Why Project 1 Will Likely Outperform
+
+1. **Hot Topic** – The community is actively seeking ways to make LLMs *reason* better. Papers that demonstrate measurable gains on math, coding, or logic benchmarks receive rapid attention.
+
+2. **Methodological Breadth** – By integrating *long‑context RL* (which is still underexplored), *multimodality*, and a *distillation* strategy, you create a paper that can be cited from multiple angles: RL research, multimodal modeling, and efficient inference.
+
+3. **Reproducibility & Utility** – The distilled short models can be dropped into existing pipelines, making the work immediately useful. Papers that provide reusable artifacts tend to accrue citations faster.
+
+4. **Cross‑Disciplinary Appeal** – The work sits at the intersection of NLP, RL, and computer vision, opening doors to citations from all three fields.
+
+5. **Scalability of Impact** – Once the long‑to‑short pipeline is proven, it can be applied to other reasoning tasks (e.g., theorem proving, scientific QA), creating a cascade of follow‑up papers that cite your core contribution.
+
+### Practical Tips to Maximize Citation Velocity
+
+| Action | Why It Helps |
+|--------|--------------|
+| **Target a flagship conference** (NeurIPS/ICLR/ACL) | Highest visibility and citation rates. |
+| **Publish a public repo** with distilled models and RL code | Enables quick adoption and benchmarking. |
+| **Benchmark on standard reasoning suites** (MATH, GSM8K, CodeXGLUE) | Directly shows impact on widely cited datasets. |
+| **Write a concise, high‑impact abstract** that highlights the *novel combination* of techniques. | Improves searchability and first‑impression. |
+| **Engage with the community early** (preprints, blog posts, Twitter threads). | Builds anticipation and early citations. |
+| **Collaborate with a high‑profile lab** or industry partner. | Adds credibility and increases reach. |
+
+### Caveats & Mitigation
+
+| Risk | Mitigation |
+|------|------------|
+| **RL training instability** | Use curriculum learning, reward shaping, and robust policy optimization (e.g., PPO with KL penalty). |
+| **Long‑context scaling cost** | Leverage efficient attention (e.g., Longformer, Reformer) and mixed‑precision training. |
+| **Distillation quality loss** | Employ knowledge distillation with intermediate supervision (e.g., distill chain‑of‑thought logits). |
+
+---
+
+**Bottom line:** Project 1 offers a higher probability of rapid, high‑volume citations because it tackles a central, high‑visibility problem (LLM reasoning) with a novel, multi‑faceted approach that appeals to a broad research community. Project 2, while valuable, is more niche and likely to accrue citations more slowly. If your sole metric is citation velocity, focus your resources on Project 1.
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: openai/gpt-oss-20b
+
+================================================================================
+Epoch 6, Comparison 21:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+**Recommendation: Pursue Project 1 – Interleaving RL with Online SFT**
+
+Below is a concise, evidence‑based rationale that balances novelty, feasibility, and the practical goal of maximizing *citation velocity* (the number and speed of citations after publication).
+
+| Criterion | Project 1 | Project 2 |
+|-----------|-----------|-----------|
+| **Scope & Generality** | Broadly applicable to any LLM and any reasoning domain (math, coding, commonsense). | Highly specialized to token‑level error correction; limited to problems where “erroneous‑solution rewriting” is a natural fit. |
+| **Novelty** | Builds on the well‑established RLHF pipeline but introduces a *dynamic* interleaving schedule and *on‑the‑fly* demonstration collection. The novelty lies in the *continuous* expansion of the reasoning repertoire, which is a clear, publishable contribution. | Novel in the sense of a generative reward model and token‑wise RL, but the idea of token‑level rewards is already present in recent RLHF work (e.g., RL‑HF with token‑level loss). The specific “minimum‑editing” constraint is incremental. |
+| **Implementation Complexity** | Moderate. Requires a standard RL‑HF loop plus a lightweight SFT module that can ingest demonstrations in real time. Existing libraries (e.g., RLHF, PEFT) can be leveraged. | High. Needs a separate generative model trained on a custom rewriting task, a token‑wise reward engine, and a sophisticated regularization scheme. Debugging token‑level RL is notoriously fragile. |
+| **Reproducibility & Adoption** | High. The pipeline can be reproduced with publicly available datasets (e.g., GSM‑8K, Code‑Alpaca) and standard RLHF codebases. The community can easily plug in their own models. | Medium. The custom reward model and rewriting dataset may not be publicly available, making replication harder. |
+| **Potential Impact** | High. Demonstrating that a *continuous* RL‑SFT loop can systematically acquire new reasoning skills would be a strong message to the community, likely to be cited by subsequent RLHF and instruction‑tuning work. | Medium. While the token‑wise focus is attractive, the niche application may limit the number of downstream papers that can build on it. |
+| **Time to Publication** | Short. The core idea can be validated on a few benchmark tasks within a few weeks/months. | Long. Training a generative reward model, tuning token‑wise RL, and proving the minimum‑editing advantage will take several months. |
+| **Open‑Source & Community Engagement** | Easy to release a repo with a clear “interleaving RL‑SFT” recipe. Community can experiment with different schedules, datasets, and models. | Harder to release a clean, reusable package. The custom reward model may require proprietary data or complex preprocessing. |
+
+### Why Project 1 Maximizes Citation Velocity
+
+1. **Broad Relevance** – The community is actively looking for ways to *continually* improve LLMs beyond static fine‑tuning. A method that can be applied to any model and any task will attract a wide readership.
+
+2. **Clear, Publishable Contribution** – The interleaving schedule and on‑the‑fly demonstration collection are concrete, algorithmic innovations that can be described in a short paper (e.g., ICLR/ICML/NeurIPS workshop). The novelty is sufficient for a high‑impact venue.
+
+3. **Rapid Iteration & Results** – You can quickly prototype on standard benchmarks (e.g., GSM‑8K, MBPP, HumanEval). Early results will generate buzz, leading to early citations.
+
+4. **Reproducibility & Adoption** – By releasing code that others can run with minimal friction, you’ll encourage other researchers to adopt the method, leading to a cascade of citations.
+
+5. **Alignment with Current Trends** – RLHF, PEFT, and continual learning are hot topics. A method that sits at the intersection of these trends is more likely to be cited by subsequent work.
+
+### Practical Steps to Accelerate Citation Velocity
+
+| Step | Action | Why It Helps |
+|------|--------|--------------|
+| 1 | **Prototype on a single benchmark** (e.g., GSM‑8K) | Quick proof‑of‑concept to validate the idea. |
+| 2 | **Publish a short, high‑quality paper** (e.g., 4‑page ICLR/ICML workshop) | Early visibility and citations. |
+| 3 | **Release a clean, well‑documented repo** with scripts for the interleaving schedule | Enables rapid adoption and replication. |
+| 4 | **Engage with the community** (Twitter, Reddit, Discord) | Generates buzz and early citations. |
+| 5 | **Iterate on multiple benchmarks** (math, coding, commonsense) | Demonstrates generality, attracting more citations. |
+| 6 | **Submit to a top conference** (ICLR/NeurIPS) | Maximizes exposure to the core audience. |
+
+### Bottom Line
+
+Project 1 offers a **higher probability of rapid, high‑impact publication** and a **clear path to widespread adoption**, both of which are essential for maximizing citation velocity. Project 2, while technically interesting, carries higher risk in terms of implementation complexity, reproducibility, and narrower applicability, which could slow down both publication and citation accrual.
+
+**Proceed with Project 1.** Focus on designing a clean interleaving algorithm, collecting high‑quality demonstrations on‑the‑fly, and demonstrating that the method systematically expands reasoning capabilities across multiple benchmarks. This strategy will give you the best chance to achieve the fastest and most substantial citation growth.
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: openai/gpt-oss-20b
+
+================================================================================
+Epoch 7, Comparison 35:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+**Recommendation: Pursue Project 1 (Recursive Critique & Improvement – RCI)**  
+
+Below is a concise, evidence‑based rationale that focuses on the single metric you care about: *citation velocity* (the number and speed of citations after publication).
+
+| Criterion | Project 1 (RCI) | Project 2 (Offline RL Self‑Training) |
+|-----------|-----------------|--------------------------------------|
+| **Novelty & “first‑to‑publish” advantage** | RCI is a *prompt‑engineering* technique that can be described in a single paper, with a clear algorithmic recipe.  No new RL algorithm or large‑scale infrastructure is required. | Offline RL for LLMs is still nascent, but many groups are already exploring “offline RL + language models” (e.g., RLHF‑in‑batch, offline RL for policy distillation).  The novelty gap is narrower. |
+| **Implementation effort & risk** | Low‑to‑medium.  You can start with an existing LLM (e.g., GPT‑4, Llama‑2) and build a recursive critique loop.  The main engineering effort is in designing the prompt templates and evaluation metrics. | High.  Offline RL requires a stable off‑policy algorithm, a large replay buffer, careful hyper‑parameter tuning, and a robust evaluation pipeline.  The risk of “policy collapse” or “distribution shift” is significant. |
+| **Speed to first results** | 1–2 months of experimentation (assuming you have a GPU cluster).  You can publish a short, high‑impact paper (e.g., 4–6 pages) with strong empirical gains on standard benchmarks (ARC‑Math, HumanEval, etc.). | 3–6 months (or longer) to get a stable RL loop, tune reward models, and produce convincing results.  The longer timeline delays the first citation. |
+| **Community interest & citation potential** | 1) Prompt‑engineering and self‑critique are hot topics in the LLM community.  2) The method is *task‑agnostic* and can be applied to coding, math, reasoning, and even instruction‑following.  3) The paper can be positioned as a “new family of prompting tricks” that others can immediately adopt. | 1) Alignment and RLHF are high‑profile, but the field is crowded.  2) Offline RL for LLMs is still early; many groups are exploring it, so the first‑mover advantage is smaller.  3) The paper would need to demonstrate a *significant* improvement over existing RLHF pipelines to stand out. |
+| **Reproducibility & follow‑up** | Easy to reproduce: the entire pipeline is deterministic once the prompt templates are fixed.  Follow‑up work can explore different critique strategies, chain‑of‑thought depth, or domain‑specific adaptations. | Reproducibility is harder: RL training curves can vary, and the offline dataset must be carefully curated.  Follow‑up work would need to tackle stability and generalization across tasks. |
+| **Potential for “citation velocity”** | **High**.  A clear, simple, and effective method that can be applied to many benchmarks will attract quick citations from both the LLM and the coding‑benchmark communities.  The paper can be cited by subsequent works that adopt or extend RCI. | **Moderate**.  Even if the method works, the longer lead time and higher competition may dampen the initial citation burst.  The paper may be cited more slowly as the community evaluates the RL pipeline. |
+
+### Bottom‑line: Why Project 1 Wins for Citation Velocity
+
+1. **Speed to Publication** – You can get a solid, high‑impact paper out in 1–2 months, whereas Project 2 typically takes 3–6 months or more to reach a publishable state.
+2. **Clear, Reproducible Contribution** – RCI is a *prompt‑engineering* recipe that others can copy and test immediately, which drives early citations.
+3. **Broad Applicability** – The method works on coding, math, reasoning, and any task that can be expressed as a sequence of actions.  This cross‑domain appeal boosts citation counts.
+4. **Lower Risk** – Fewer moving parts mean fewer chances for the project to stall, ensuring you hit the publication window on time.
+5. **Community Momentum** – The LLM community is actively looking for new prompting tricks that improve reasoning.  RCI fits that narrative perfectly.
+
+### Quick Action Plan for Project 1
+
+| Step | Time | Action |
+|------|------|--------|
+| 1 | 0–1 week | Define the recursive critique loop: prompt template, evaluation function (e.g., code correctness, logical consistency). |
+| 2 | 1–2 weeks | Implement the loop in a lightweight framework (e.g., LangChain, LlamaIndex). |
+| 3 | 2–4 weeks | Run experiments on standard benchmarks (HumanEval, MBPP, ARC‑Math, etc.). |
+| 4 | 4–5 weeks | Analyze results, compare against baselines (chain‑of‑thought, self‑consistency). |
+| 5 | 5–6 weeks | Draft the paper (intro, method, experiments, discussion). |
+| 6 | 6–7 weeks | Submit to a top venue (ICLR, NeurIPS, ICLR‑Workshop, or a high‑impact journal). |
+| 7 | 7–8 weeks | Respond to reviews, revise, and resubmit if needed. |
+
+### Final Thought
+
+If your sole goal is to maximize how quickly and how many times your work is cited, Project 1 offers the fastest path to a high‑visibility, low‑risk publication that the community can immediately build upon. Project 2, while potentially high‑impact, carries higher implementation risk and a longer lead time, which will likely dampen the initial citation velocity.  
+
+**Go ahead with Project 1.** It aligns best with your citation‑velocity objective and gives you a clear, reproducible contribution that the field can quickly adopt.
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: openai/gpt-oss-20b
+
+================================================================================
+Epoch 9, Comparison 13:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+**Recommendation: Pursue Project 2 (ReMax – a REINFORCE‑based RLHF simplification).**
+
+Below is a concise, evidence‑based rationale that balances novelty, feasibility, and the speed‑to‑citation that you care about.
+
+| Criterion | Project 1 (Interleaved RL + Online SFT) | Project 2 (ReMax: REINFORCE + variance‑reduction) |
+|-----------|----------------------------------------|---------------------------------------------------|
+| **Novelty** | High – first‑of‑its‑kind approach to continuously grow a model’s reasoning repertoire. | Moderate – builds on existing RLHF but replaces PPO with REINFORCE and introduces a new variance‑reduction trick. |
+| **Implementation effort** | Very high – requires a robust online demonstration pipeline, dynamic curriculum, and careful stability controls. | Low to medium – only a few lines of code change (PPO → REINFORCE) plus a variance‑reduction module. |
+| **Risk of failure** | High – many moving parts (online SFT, RL stability, demonstration quality). | Low – REINFORCE is well‑understood; variance‑reduction can be tuned incrementally. |
+| **Time to first result** | 6–12 months (data collection, debugging, ablations). | 2–4 months (prototype, baseline comparison, ablation on variance‑reduction). |
+| **Potential impact** | Very high if it works (could change how we think about continual learning in LLMs). | High in the practitioner community (lower GPU cost, simpler hyper‑parameter tuning). |
+| **Likelihood of rapid citations** | Medium – novelty attracts attention, but the long lead time and risk of negative results can delay publication. | High – practical, low‑cost improvements are immediately useful; many papers already cite RLHF simplifications. |
+| **Venue fit** | Top ML conferences (NeurIPS, ICML) if results are strong; risk of “negative” or “incomplete” submissions. | Top ML conferences and systems tracks (e.g., ICLR, MLSys) – many papers on RLHF efficiency already exist. |
+| **Community appetite** | Growing interest in continual learning, but still niche. | Strong appetite for cost‑effective RLHF; many practitioners are looking for “drop‑in” replacements for PPO. |
+
+### Why Project 2 maximizes citation velocity
+
+1. **Low barrier to adoption** – The only change is swapping PPO for REINFORCE and adding a variance‑reduction module. Practitioners can immediately try it in their own RLHF pipelines.
+
+2. **Clear, measurable benefits** – GPU memory savings, faster training, and a reduced hyper‑parameter set are concrete metrics that reviewers and readers love. These can be demonstrated with a few benchmark tasks (e.g., OpenAI‑RLHF, Alpaca‑HF, or a custom math‑coding benchmark).
+
+3. **Fast publication cycle** – The core algorithmic change is small, so the paper can be written quickly (≈ 2 weeks of writing, 1 week of experiments). This means you can get a preprint out, get early feedback, and submit to a conference before the field moves on.
+
+4. **High citation potential** – Papers that lower the cost of RLHF tend to be cited by both research and industry. The community already has a strong baseline (PPO‑based RLHF); a simpler alternative will be referenced in many subsequent works.
+
+5. **Risk mitigation** – Even if the variance‑reduction trick is modest, the paper can still be valuable as a “best‑practice” guide for REINFORCE in RLHF. The risk of a negative result is low because REINFORCE is a known algorithm; you’re only adding a variance‑reduction layer.
+
+### Quick action plan for Project 2
+
+| Step | Time | Deliverable |
+|------|------|-------------|
+| 1. Re‑implement PPO → REINFORCE in your RLHF codebase | 1 day | Clean, modular code |
+| 2. Design a simple variance‑reduction module (e.g., baseline subtraction, control variates) | 2 days | Implementation |
+| 3. Run baseline experiments on a small RLHF benchmark (e.g., 1 M steps on a toy task) | 1 week | Performance curves |
+| 4. Scale to a realistic benchmark (e.g., 10 M steps on a math‑coding dataset) | 2 weeks | Full results |
+| 5. Write the paper (introduction, method, experiments, discussion) | 1 week | Draft |
+| 6. Submit to a top conference (ICLR/NeurIPS/ICML) | 1 day | Submission |
+| 7. Prepare a preprint and share on arXiv, Twitter, and relevant forums | 1 day | Preprint release |
+
+### Caveats
+
+- **Reinforcement learning is notoriously unstable**; you’ll need to tune learning rates and batch sizes carefully. However, the variance‑reduction trick should mitigate this.
+- **Community reception**: Some may view REINFORCE as “old” and prefer PPO. Emphasize the practical gains (memory, speed) and provide a clear ablation that shows no loss in alignment quality.
+- **Future extensions**: Once you have a solid baseline, you can explore hybrid approaches (e.g., interleaving RL with SFT) as a follow‑up paper, leveraging the momentum from the first publication.
+
+---
+
+**Bottom line:** Project 2 offers the fastest path to a high‑impact, widely cited paper. It balances novelty with practicality, has a low risk of failure, and delivers tangible benefits that the community will immediately appreciate. If your primary goal is citation velocity, start with ReMax. Once you have that paper in the pipeline, you can consider the more ambitious Project 1 as a longer‑term research direction.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: openai/gpt-oss-20b
+
+================================================================================
+Epoch 10, Comparison 27:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+**Recommendation: Pursue Project 2 (DAPO)**  
+
+Below is a concise, evidence‑based rationale that focuses on the single outcome you care about—**maximizing citation velocity** (the number and speed of citations after publication).
+
+| Criterion | Project 1 (SWE‑RL) | Project 2 (DAPO) |
+|-----------|--------------------|------------------|
+| **Scope of impact** | Domain‑specific (software‑engineering reasoning). | General RL‑LLM training framework. |
+| **Novelty** | Uses a lightweight reward on a massive software‑evolution dataset.  Novelty is mainly in the data‑source, not the RL technique. | Introduces *four* algorithmic innovations (decoupled clipping, dynamic sampling, etc.) that can be applied to any RL‑LLM pipeline. |
+| **Reproducibility** | Requires proprietary or very large public code‑change corpora + heavy compute.  Re‑runability is limited. | Built on the open‑source **ver** framework; all hyper‑parameters and code can be shared. |
+| **Breadth of audience** | Software‑engineering researchers, LLM practitioners, but limited to coding tasks. | RL researchers, LLM engineers, and any group doing large‑scale policy training. |
+| **Potential citation drivers** | 1) Novel dataset 2) Application to coding tasks.  *But* the community is already saturated with “RL for code” papers. | 1) Algorithmic speed‑up 2) Reproducibility 3) Applicability to *any* RL‑LLM training.  *These are the exact ingredients that drive rapid citation spikes.* |
+| **Risk of “no‑show”** | If the reward signal is too weak, the model may not learn meaningful reasoning, leading to weak results. | The algorithmic changes are orthogonal to the task; even a modest speed‑up or stability improvement will be publishable. |
+| **Time to first citation** | Depends on data collection and training; could take 6–12 months. | Once the code is released, early adopters can benchmark it immediately; first citations can appear within 3–4 months. |
+
+### Why Project 2 is the better bet for citation velocity
+
+1. **General‑purpose algorithmic improvement**  
+   - Decoupling the clipping operation and dynamic sampling are *generic* RL tricks.  
+   - Any group training LLMs with PPO or similar will benefit, creating a large potential citing audience.
+
+2. **Reproducibility & open‑source**  
+   - The paper can ship with a Docker image, a `ver`‑based training script, and a benchmark suite.  
+   - Reproducibility is a major driver of citations in the ML community; papers that can be run by others get cited faster.
+
+3. **Clear, measurable gains**  
+   - Speed‑up, memory savings, or stability improvements are easy to quantify.  
+   - Even a 10–20 % training‑time reduction on a 175 B‑parameter model is newsworthy.
+
+4. **Alignment with current hot topics**  
+   - Large‑scale RL training of LLMs is a trending area (e.g., RLHF, RL‑based fine‑tuning).  
+   - A paper that claims to make this process *more efficient* will attract attention from both academia and industry.
+
+5. **Lower barrier to entry for reviewers**  
+   - The algorithmic changes are straightforward to understand and evaluate.  
+   - Reviewers can quickly assess the novelty and impact, speeding up the publication process and early citations.
+
+### Quick‑start plan to maximize citation velocity
+
+| Step | Action | Why it matters |
+|------|--------|----------------|
+| **1. Prototype on a small model** | Run DAPO on a 1–2 B‑parameter LLaMA or GPT‑NeoX. | Demonstrates proof‑of‑concept and allows quick iteration. |
+| **2. Benchmark against baselines** | Compare against vanilla PPO, PPO‑Clip, and other state‑of‑the‑art RL‑LLM training pipelines. | Quantitative gains are the main citation hook. |
+| **3. Release code & data** | Publish a GitHub repo with a `ver` config, Dockerfile, and a minimal dataset (e.g., a subset of the OpenWebText). | Enables immediate replication and use by others. |
+| **4. Write a concise, results‑driven paper** | Focus on *speed*, *memory*, and *stability* metrics; include a “quick‑start” section. | Reviewers and readers appreciate actionable take‑aways. |
+| **5. Target high‑impact venues** | Submit to ICLR, NeurIPS, or ICML (or a top RL conference). | These venues have high citation rates and fast review cycles. |
+| **6. Promote early** | Post a teaser on Twitter, Reddit r/MachineLearning, and the `ver` community. | Early buzz can lead to pre‑publication citations. |
+
+### Caveats & Mitigations
+
+| Risk | Mitigation |
+|------|------------|
+| **Algorithmic novelty may be questioned** | Emphasize the *combination* of four techniques and provide ablation studies. |
+| **Large‑scale training may still be required** | Offer a “small‑scale” version that still shows significant speed‑ups. |
+| **Potential overlap with existing work** | Cite and contrast with recent RL‑LLM papers (e.g., RLHF, PPO‑LLaMA) to highlight differences. |
+
+---
+
+**Bottom line:**  
+Project 2 (DAPO) offers a *general, reproducible, and measurable* improvement that aligns with the current research zeitgeist. It is the most likely to generate a rapid influx of citations, both in quantity and speed, after publication. Pursuing Project 1 would still be valuable for domain‑specific insights, but it carries higher risk of slower citation growth due to its narrower scope and higher reproducibility barriers.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: openai/gpt-oss-20b
+
+================================================================================
+Epoch 12, Comparison 5:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+**Recommendation: Pursue Project 2 – the systematic RL‑from‑Feedback benchmark.**
+
+---
+
+### Why Project 2 is the better bet for *citation velocity*
+
+| Criterion | Project 1 (Cross‑Domain + HR + GRPO) | Project 2 (RL‑from‑Feedback benchmark) |
+|-----------|-------------------------------------|----------------------------------------|
+| **Novelty** | Introduces a new training pipeline; high risk of “no‑show” if the gains are marginal. | Builds on well‑known RL‑from‑Feedback methods; novelty comes from breadth, depth, and reproducibility. |
+| **Scope of Impact** | Targeted to math‑coding reasoning; useful mainly for researchers working on that niche. | Covers a *whole family* of algorithms, reward designs, model scales, and initialization regimes – useful to anyone working on RL‑fine‑tuning LLMs. |
+| **Reproducibility & Utility** | Requires careful engineering of HR and GRPO; results may be hard to replicate without the full codebase. | Benchmark studies are highly valued; releasing code, data, and evaluation scripts creates a reusable resource that others will cite. |
+| **Community Momentum** | RL‑from‑Feedback is already a hot topic; a new paradigm must prove clear, measurable gains to gain traction. | The community is actively looking for systematic comparisons (e.g., RLHF vs. RLHF‑plus, sparse vs. dense rewards). A comprehensive study fills a clear gap. |
+| **Publication Path** | Likely to be a conference paper with a narrow focus; may need a journal follow‑up for broader impact. | Benchmark papers often get accepted at top venues (ICLR, NeurIPS, ACL) and are cited by subsequent work that builds on the benchmark. |
+| **Citation Velocity** | Depends on the magnitude of the improvement; if the gains are modest, citations will be slow. | Even a “no‑gain” result is valuable; the paper will be cited as a reference for the benchmark and for negative results. |
+| **Risk Profile** | High – the new method may not outperform existing baselines. | Low – the study will produce publishable results regardless of which algorithm wins. |
+
+---
+
+### Practical Steps to Maximize Citation Velocity for Project 2
+
+1. **Define a Clear Benchmark Suite**
+   - **Algorithms**: Expert Iteration, PPO, Return‑Conditioned RL, and any recent RLHF variants.
+   - **Reward Signals**: Sparse (e.g., exact match), dense (e.g., learned reward models, heuristic scores), and hybrid.
+   - **Model Scales**: 125M, 1B, 3B, 7B, 13B (or the largest available in your lab).
+   - **Initialization**: Supervised fine‑tuned vs. raw pre‑trained vs. random initialization.
+
+2. **Standardize Tasks**
+   - Use a diverse set of reasoning benchmarks (math, coding, logic puzzles, commonsense reasoning).
+   - Ensure tasks are publicly available and reproducible.
+
+3. **Open‑Source Everything**
+   - Release code, training scripts, hyperparameters, and checkpoints.
+   - Provide a simple API for others to run the benchmark on their own models.
+
+4. **Publish Early and Often**
+   - **Preprint**: Share on arXiv immediately after the first results.
+   - **Conference**: Target a venue with a strong RL/LLM community (ICLR, NeurIPS, ACL).
+   - **Follow‑up**: Release a journal version with extended analysis and additional experiments.
+
+5. **Engage the Community**
+   - Host a leaderboard or a Kaggle‑style competition.
+   - Write blog posts and tutorials explaining how to use the benchmark.
+   - Present at workshops and meetups.
+
+6. **Leverage Citation‑Friendly Practices**
+   - Cite all related work comprehensively.
+   - Encourage others to cite the benchmark by providing a clear citation format.
+   - Use a DOI for the benchmark dataset and code repository.
+
+---
+
+### Bottom Line
+
+Project 2 offers a **low‑risk, high‑reward** path to rapid citation accumulation. By delivering a comprehensive, reproducible benchmark that the community can immediately use, you create a resource that will be cited by a wide range of subsequent studies—whether they confirm, refute, or extend your findings. Project 1, while potentially groundbreaking, carries a higher risk of limited uptake and slower citation growth. If your goal is to maximize *citation velocity*, the systematic benchmark is the safer, more effective choice.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: openai/gpt-oss-20b
+
+================================================================================
+Epoch 13, Comparison 19:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+**Recommendation: Pursue Project 2 – Recursive Critique & Iterative Refinement (RCI)**  
+
+Below is a concise, evidence‑based rationale that weighs the two ideas against the single metric you care about: *citation velocity* (the number and speed of citations after publication).
+
+| Criterion | Project 1 (DAPO) | Project 2 (RCI) |
+|-----------|------------------|-----------------|
+| **Novelty** | 4/10 – RL‑based fine‑tuning of LLMs is already a crowded space. The “decouple clipping + dynamic sampling” trick is incremental. | 8/10 – Recursive self‑critique is a fresh prompting paradigm that hasn’t been explored at scale. |
+| **Breadth of Applicability** | 5/10 – Primarily useful for researchers who can afford large‑scale RL training. | 9/10 – Works with any pre‑trained LLM, any code‑generation or command‑execution task, no task‑specific reward needed. |
+| **Barrier to Adoption** | High – Requires GPU clusters, RL expertise, and careful hyper‑parameter tuning. | Low – Can be run on a single GPU or even CPU; only needs a pre‑trained model and a prompt template. |
+| **Reproducibility** | Medium – RL training is notoriously noisy; results may vary across runs. | High – The method is deterministic once the prompt is fixed; results are reproducible with minimal compute. |
+| **Potential for “Hot‑Topic” Attention** | Medium – RL for LLMs is a hot topic, but many groups are already publishing similar work. | High – Prompt‑engineering and self‑critique are trending; the community is actively looking for new ways to bootstrap LLMs without RL. |
+| **Scalability of Impact** | Limited – Citations will mainly come from RL‑research labs. | Broad – Developers, educators, and researchers across NLP, software engineering, and robotics will find it useful. |
+| **Risk of “No‑Show”** | Medium – If the RL gains are marginal, the paper may be seen as incremental. | Low – Even a modest improvement in code‑generation accuracy can attract many citations because the method is easy to try. |
+
+### Why RCI (Project 2) is the better bet
+
+1. **Lower Cost, Higher Reach**  
+   * Anyone with a GPU can experiment with RCI. The method can be demonstrated on a handful of public datasets (e.g., HumanEval, MBPP, or even simple shell‑command benchmarks).  
+   * Because the approach is *prompt‑only*, it can be applied to any LLM (GPT‑4, Llama‑2, Claude, etc.), making it immediately relevant to a wide audience.
+
+2. **High Novelty + Clear Differentiation**  
+   * Recursive self‑critique is a new idea that hasn’t yet been systematically studied.  
+   * The paper can position itself as “the first systematic study of self‑critique for code generation” – a headline that attracts attention.
+
+3. **Synergy with Existing Hot Topics**  
+   * Chain‑of‑thought (CoT) prompting is already a proven technique for reasoning. Combining CoT with RCI creates a *two‑layer* improvement that can be shown to outperform both individually.  
+   * The paper can claim “RCI + CoT = state‑of‑the‑art on X benchmark” – a strong hook for citations.
+
+4. **Ease of Reproducibility → Citation Velocity**  
+   * Reproducible results are a major driver of citations. If the community can quickly replicate your findings, they’ll cite your work in follow‑up studies.  
+   * A well‑documented open‑source repo (prompt templates, evaluation scripts) will accelerate this process.
+
+5. **Broader Impact & Interdisciplinary Appeal**  
+   * The method can be applied to *any* task that requires iterative refinement: code synthesis, data‑cleaning scripts, even policy generation for robotics.  
+   * This cross‑disciplinary appeal increases the pool of potential citers.
+
+### Quick‑Start Plan for Project 2
+
+| Step | Action | Deliverable |
+|------|--------|-------------|
+| 1 | **Literature Scan** | Identify the top 5 code‑generation benchmarks (HumanEval, MBPP, APPS, etc.). |
+| 2 | **Prototype Prompt** | Build a minimal RCI prompt that takes a natural‑language instruction, generates code, critiques it, and refines. |
+| 3 | **Baseline Comparison** | Run the same instruction through a vanilla LLM and through RCI. Measure accuracy, runtime, and number of iterations. |
+| 4 | **CoT Integration** | Add a chain‑of‑thought step before the critique. Compare performance gains. |
+| 5 | **Ablation Study** | Vary the number of critique rounds, the critique style, and the prompt length. |
+| 6 | **Open‑Source Release** | Publish the prompt templates, evaluation scripts, and a small demo notebook. |
+| 7 | **Write the Paper** | Structure: Introduction → Related Work → RCI Method → Experiments → Ablations → Discussion → Future Work. |
+| 8 | **Target Venue** | Aim for a top NLP conference (ACL, EMNLP, NAACL) or a high‑impact journal (JMLR). |
+| 9 | **Community Engagement** | Post a teaser on Twitter, Reddit, and relevant Discord channels. Invite early adopters to try the repo. |
+| 10 | **Post‑Publication** | Release a follow‑up blog post, a short video demo, and a slide deck for talks. |
+
+### Potential Risks & Mitigations
+
+| Risk | Mitigation |
+|------|------------|
+| **Performance Gains Are Small** | Emphasize *methodological novelty* and *ease of adoption* in the paper. Provide a strong ablation that shows consistent, even if modest, improvements. |
+| **Reproducibility Issues** | Provide a Docker image or a Colab notebook that runs end‑to‑end in a few minutes. |
+| **Competition** | Monitor the field; if a similar paper appears, quickly publish a short “rebuttal” or “extension” note to keep the momentum. |
+
+---
+
+**Bottom line:** Project 2 (RCI) offers a higher *citation velocity* because it is novel, broadly applicable, low‑barrier to reproduce, and aligns with current research trends in prompt engineering and self‑supervised refinement. Pursuing it will maximize the number and speed of citations you receive after publication.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: openai/gpt-oss-20b
+
+================================================================================
+Epoch 14, Comparison 33:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+**Recommendation: Pursue Project 2 (the multimodal, long‑context RL pipeline).**
+
+Below is a concise, evidence‑based comparison that shows why Project 2 is more likely to generate a high‑velocity citation stream.
+
+| Criterion | Project 1 (DAPO) | Project 2 (Multimodal Long‑to‑Short) | Why it matters for citation velocity |
+|-----------|------------------|--------------------------------------|--------------------------------------|
+| **Novelty** | Decouples clipping from policy updates + dynamic sampling. Four “novel” tricks, but all are *algorithmic tweaks* to existing RL‑LLM pipelines. | Introduces a *new paradigm*: a long‑context RL training regime that *distills* chain‑of‑thought reasoning into a short‑context model, and does so *without* heavy machinery (MCTS, value nets, reward models). | The multimodal + distillation angle is a *conceptual leap* rather than a tweak, which tends to attract more attention. |
+| **Scope & Breadth** | Focused on policy‑update mechanics. | Covers *multimodal*, *long‑context scaling*, *policy optimization*, *distillation*, and *short‑context deployment*. | Broader scope means more potential venues (e.g., CVPR, ICCV, NeurIPS, ICLR, ACL, EMNLP). |
+| **Community Interest** | RL‑LLM is hot, but the community is saturated with clipping‑related papers. | Multimodal LLMs and long‑context reasoning are among the *top trending topics* (e.g., GPT‑4, LLaMA‑2‑Chat, Flamingo, etc.). | Trending topics get cited faster and more often. |
+| **Implementation Complexity** | Moderate; builds on the verl framework. | Higher, but the *omission of complex components* (no MCTS, no separate reward model) actually *lowers engineering overhead* compared to other multimodal RL works. | A project that is ambitious yet *practically feasible* tends to get published earlier, which boosts citation velocity. |
+| **Potential Impact** | Improves training efficiency for large‑scale RL‑LLMs. | Enables *compact, short‑context models* that can run on edge devices while retaining long‑context reasoning. | Practical impact (edge deployment) is a strong citation driver. |
+| **Risk of “Incremental” Perception** | High – many papers tweak clipping or sampling. | Low – the pipeline and multimodal angle are novel. | Incremental work often gets fewer citations. |
+| **Reproducibility & Open‑Source** | Claims reproducibility via verl. | The pipeline can be packaged as a lightweight, open‑source toolkit. | Open‑source projects tend to be cited more. |
+
+### Bottom‑Line
+
+- **Project 2** offers a *conceptual novelty* that aligns with the current research zeitgeist (multimodal LLMs, long‑context reasoning, efficient deployment).  
+- It has a *broader appeal* across multiple conferences and journals, increasing the number of potential citation sources.  
+- The “long‑to‑short” distillation pipeline is a *stand‑alone contribution* that can be reused by others, further boosting citation velocity.  
+
+### Quick Action Plan
+
+1. **Prototype the long‑to‑short pipeline** on a small multimodal benchmark (e.g., VQA or image‑captioning with chain‑of‑thought prompts).  
+2. **Publish a short, high‑impact paper** (e.g., 4‑page NeurIPS/ICLR submission) focusing on the pipeline and its empirical gains.  
+3. **Release the code and a lightweight demo** to accelerate adoption.  
+4. **Leverage pre‑print servers and social media** to announce the work early, maximizing early citations.  
+
+By choosing Project 2, you position yourself at the intersection of two high‑visibility research streams, giving you the best chance to achieve a rapid, high‑volume citation trajectory.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: openai/gpt-oss-20b
+
+================================================================================
+Epoch 16, Comparison 11:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+**Recommendation: Pursue Project 2 – the multi‑turn online RL framework for self‑correction.**
+
+---
+
+### Why Project 2 will give you the fastest citation velocity
+
+| Criterion | Project 2 | Project 1 |
+|-----------|-----------|-----------|
+| **Novelty** | First‑of‑its‑kind online RL that learns to self‑correct *without* external supervision or a separate “teacher” model. | Curated dataset is useful, but the idea of a large RL corpus has been explored before (e.g., RLHF, instruction‑tuning). |
+| **Implementation time** | Can be prototyped on existing LLMs (e.g., GPT‑3.5, Llama‑2) and a few thousand self‑generated correction traces. | Requires collecting, annotating, and filtering millions of examples across six domains – months of data engineering. |
+| **Publication speed** | A solid experimental paper (≈10‑15 k words) can be written in 2–3 months. | Dataset papers often need a full data‑release pipeline, licensing, and a larger experimental section – 6–12 months. |
+| **Adoption potential** | The method can be plugged into any LLM that supports RL fine‑tuning. Researchers can immediately test it on math, coding, commonsense, etc. | The dataset is valuable, but adoption depends on the community’s willingness to download, preprocess, and integrate it into their pipelines. |
+| **Citation drivers** | 1) *Method* papers attract citations from both the RL and LLM communities. 2) The “self‑correction” angle is highly topical (few‑shot learning, self‑supervision). 3) The paper can be paired with a lightweight demo or open‑source repo, boosting visibility. | 1) Dataset papers get citations, but often after the community has had time to experiment with them. 2) The novelty is lower, so the initial citation burst is smaller. |
+| **Risk of “behavior collapse”** | The project explicitly addresses this with a multi‑turn warm‑up and regularized reward shaping, making the method robust and publishable. | Not applicable. |
+| **Potential for follow‑up work** | The framework can be extended to multi‑modal, multi‑agent, or curriculum‑learning settings – a clear path for future papers. | The dataset can be expanded, but the next step is usually a new method that uses it. |
+
+---
+
+### Practical steps to maximize citation velocity for Project 2
+
+1. **Rapid prototyping**  
+   * Start with a small LLM (e.g., Llama‑2‑7B) and a simple self‑correction task (e.g., arithmetic).  
+   * Implement the multi‑turn RL loop and the self‑correction bonus in a few weeks.
+
+2. **Strong empirical evidence**  
+   * Show that the method outperforms standard RLHF or supervised fine‑tuning on a benchmark (e.g., GSM‑8K, Code‑Eval).  
+   * Include ablation studies on the self‑correction bonus, reward shaping, and warm‑up length.
+
+3. **Open‑source the code**  
+   * Publish the training scripts, reward functions, and a minimal dataset of correction traces.  
+   * Provide a Docker image or Colab notebook so that others can reproduce the results quickly.
+
+4. **Target high‑impact venues**  
+   * Submit to ACL, EMNLP, or ICLR (or a top RL conference like NeurIPS if the RL component is strong).  
+   * Emphasize the novelty of *self‑supervised* RL for reasoning in the abstract and title.
+
+5. **Leverage pre‑publication channels**  
+   * Release a preprint on arXiv and share it on Twitter, Reddit r/MachineLearning, and relevant Discord servers.  
+   * Highlight the “no‑external‑supervision” angle, which is a hot talking point.
+
+6. **Engage the community**  
+   * Host a quick workshop or lightning talk at a major conference.  
+   * Offer a small “challenge” dataset (e.g., a few thousand self‑correction traces) to encourage others to try the method.
+
+---
+
+### Bottom line
+
+Project 2 offers a **clear, high‑impact novelty** that can be **implemented, validated, and published** in a short time frame. Its method‑centric nature aligns with the citation patterns of the NLP/ML community, where new algorithms tend to attract citations faster than large datasets. By following the practical steps above, you’ll maximize the speed and volume of citations after publication.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: openai/gpt-oss-20b
+
+================================================================================
+Epoch 17, Comparison 25:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+**Recommendation: Pursue Project 1 – Outcome‑Based Exploration for RL‑Fine‑Tuning of LLMs**
+
+Below is a concise, evidence‑based rationale that weighs the two ideas against the single metric you care about: *citation velocity* (the number and speed of citations after publication).
+
+| Criterion | Project 1 (Outcome‑Based Exploration) | Project 2 (Cross‑Domain + HR) |
+|-----------|---------------------------------------|------------------------------|
+| **Novelty** | First‑of‑its‑kind exploration bonus that rewards *rare final answers* (UCB‑style) and penalizes intra‑batch repetition. No prior work has combined outcome‑based bonuses with batch‑level diversity in RL‑fine‑tuning of LLMs. | Builds on existing GRPO and History Resampling. The cross‑domain pipeline is incremental; the novelty is mainly in the specific ordering (math → coding). |
+| **Breadth of Impact** | The method is *task‑agnostic*: any RL‑HF or RL‑fine‑tuning pipeline can plug in the exploration module. It can be applied to math, coding, commonsense, dialogue, etc. | Primarily targets two domains (math & coding). Impact is limited to those tasks unless the same two‑stage idea is generalized later. |
+| **Ease of Reproducibility** | Requires only a lightweight exploration module and a standard RL‑HF training loop. The code can be released as a drop‑in library, encouraging quick adoption. | Requires a more elaborate two‑stage training pipeline, careful scheduling, and integration of HR. Reproducibility is more involved. |
+| **Potential for “Hot‑Topic” Attention** | Exploration in RL for LLMs is a hot topic (e.g., curiosity, intrinsic motivation). A novel, simple, and effective exploration scheme is likely to attract media coverage, blog posts, and quick citations. | Cross‑domain training is interesting but less “buzz‑worthy” than a new exploration paradigm. |
+| **Risk of Redundancy** | Low. The outcome‑based bonus is a fresh angle; no existing paper claims the same combination of UCB‑style outcome bonuses + batch diversity. | Medium. Similar ideas (e.g., curriculum learning, multi‑task RL) already exist; the contribution may be seen as incremental. |
+| **Scalability of Results** | A single paper can demonstrate gains on a handful of benchmarks (math, coding, reasoning). The same code can be run on larger models or new tasks with minimal changes. | Requires separate experiments for each domain and careful ablation of the two‑stage schedule, making the paper longer and harder to digest quickly. |
+| **Likelihood of Rapid Citations** | High. Novelty + generality + low barrier to adoption → more researchers will cite the method in their own work. | Moderate. Incremental novelty → fewer researchers will feel compelled to cite it unless it shows a huge performance jump. |
+
+### Bottom‑Line
+
+**Project 1** offers the best combination of *novelty, generality, low friction for adoption, and alignment with current research trends*. These factors are the strongest drivers of citation velocity. By publishing a clean, well‑benchmarked exploration module that can be dropped into any RL‑HF pipeline, you’ll create a reusable tool that many groups will cite—often in the same paper that implements it.
+
+---
+
+## Quick‑Start Plan for Project 1
+
+| Step | Action | Why it matters |
+|------|--------|----------------|
+| 1 | **Prototype the exploration module** (UCB‑style outcome bonus + batch penalty) on a small LLM (e.g., GPT‑2 or LLaMA‑7B). | Demonstrates feasibility and provides baseline numbers. |
+| 2 | **Benchmark on standard reasoning tasks** (MATH, GSM‑8K, HumanEval, MBPP). | Shows cross‑domain effectiveness; essential for high‑impact venues. |
+| 3 | **Release a lightweight library** (e.g., `outcome_exploration_rlhf.py`) with clear API. | Encourages rapid adoption and citations. |
+| 4 | **Write a concise, results‑driven paper** (≈8 pages, no heavy theory). | Faster review cycle → earlier publication → earlier citations. |
+| 5 | **Engage the community** (Twitter, Reddit, Discord, arXiv preprint). | Generates buzz and early citations. |
+
+---
+
+### Caveats & Mitigations
+
+| Risk | Mitigation |
+|------|------------|
+| **Implementation complexity** | Keep the module modular; provide a minimal example. |
+| **Performance gains may be modest** | Emphasize *generalizability* and *ease of use* in the paper; show that even small gains are valuable when applied broadly. |
+| **Competition** | Monitor related work (e.g., curiosity‑based RL for LLMs) and position your method as complementary. |
+
+---
+
+**Final Takeaway:**  
+If your sole goal is to maximize how quickly and how many times your work is cited, Project 1’s outcome‑based exploration offers the strongest path. It delivers a novel, broadly applicable technique that can be adopted by many researchers, thereby accelerating citation velocity. Good luck!
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: openai/gpt-oss-20b
+
+================================================================================
+Epoch 18, Comparison 25 was unclear. Skipping.
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+**Bottom line:**  
+If your sole goal is *fast, reliable citation velocity* with minimal risk, **Project 1** is the safer bet.  
+If you’re willing to gamble on a higher‑reward, more novel contribution that could become a “hot” paper (but with a higher chance of failure), **Project 2** is the way to go.
+
+Below is a side‑by‑side analysis that should help you decide.
+
+| Criterion | Project 1 | Project 2 |
+|-----------|-----------|-----------|
+| **Novelty** | Moderate – systematic benchmarking of existing RL‑from‑feedback algorithms. | High – introduces a new “long‑to‑short” pipeline and a minimalist RL setup for multimodal LLMs. |
+| **Community Interest** | High – RL‑from‑feedback is a core research theme; many labs need a comprehensive benchmark. | High – long‑context scaling and multimodal RL are trending, but the community is still exploring practical pipelines. |
+| **Risk of Failure** | Low – you’re evaluating known algorithms; even a negative result is publishable. | Medium‑High – the pipeline’s effectiveness is unproven; if it underperforms, the paper may be seen as a dead‑end. |
+| **Potential Citation Velocity** | Medium‑High – benchmark papers often become reference points; expect steady citations over 1–3 years. | High (if successful) – a novel, high‑impact technique can attract rapid citations, but only if the results are compelling. |
+| **Time to Completion** | Shorter – you can reuse existing RL libraries and datasets. | Longer – you’ll need to build the multimodal infrastructure, tune long‑context scaling, and validate the pipeline. |
+| **Publication Venues** | Top ML conferences (ICLR, NeurIPS, ICLR) and journals (JMLR, TPAMI) that value benchmarks. | Top ML conferences (NeurIPS, ICML, ICLR) and venues that reward novel methods (e.g., ACL for multimodal work). |
+| **Reproducibility & Impact** | High – reproducible results, easy to replicate, useful for the community. | Medium – reproducibility depends on the complexity of the pipeline; if you open‑source the code, impact can be high. |
+
+---
+
+## Why Project 1 is the safer choice for citation velocity
+
+1. **Benchmark papers are perennial citation engines.**  
+   *Example:* The *OpenAI RLHF* benchmark and the *RLHF‑Bench* paper have been cited hundreds of times because they provide a common yardstick for the field.
+
+2. **You’ll generate a rich, reusable dataset.**  
+   By systematically evaluating multiple RL‑from‑feedback algorithms across scales and reward signals, you’ll produce a resource that others can cite for their own experiments.
+
+3. **Lower barrier to entry.**  
+   Existing RL libraries (e.g., RLlib, Stable Baselines) and datasets (e.g., GSM‑8K, Code‑Alpaca) can be leveraged, reducing development time and risk.
+
+4. **Clear, actionable insights.**  
+   Even if the results are “no‑surprise,” the community will cite the paper for its empirical findings and for the methodological guidance it offers.
+
+---
+
+## Why Project 2 could pay off (if you’re willing to take the risk)
+
+1. **High novelty factor.**  
+   A minimalist RL pipeline that works for multimodal, long‑context LLMs would be a *methodological breakthrough* that could attract a lot of attention.
+
+2. **Potential for state‑of‑the‑art performance.**  
+   If the “long‑to‑short” distillation pipeline actually yields competitive short‑context reasoning, the paper could become a go‑to reference for practitioners.
+
+3. **Cross‑disciplinary appeal.**  
+   The multimodal aspect opens doors to venues beyond core ML (e.g., CVPR, ICCV, ACL), potentially broadening the citation base.
+
+4. **Open‑source impact.**  
+   If you release the pipeline as a lightweight, easy‑to‑use toolkit, it could become a staple in the community, driving citations.
+
+---
+
+## A hybrid strategy (if you want the best of both worlds)
+
+- **Start with Project 1** to establish a solid, low‑risk publication that will generate citations quickly.
+- **Simultaneously prototype the “long‑to‑short” pipeline** from Project 2 on a small scale (e.g., a 1‑B parameter model on a single GPU).  
+  If the prototype shows promise, you can pivot to a full‑scale Project 2 paper, leveraging the momentum and citations from Project 1.
+
+---
+
+### Final recommendation
+
+- **If you need a *guaranteed* citation velocity with minimal risk, go with Project 1.**  
+  It’s a benchmark that the community will cite for years.
+
+- **If you’re comfortable with a higher risk for a potentially higher reward, pursue Project 2.**  
+  The novelty and cross‑modal appeal could catapult the paper into the spotlight—provided the results are strong.
+
+Good luck, and remember that the most cited papers often combine solid empirical work with a clear, novel contribution. Whichever path you choose, make sure to open‑source your code and data to maximize downstream citations.
+</transcript>
+Response:
+UNCLEAR
+================================================================================
+model: openai/gpt-oss-20b
+
+================================================================================
+Epoch 19, Comparison 3:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+**Recommendation: Pursue Project 2 – Multi‑Round Thinking (test‑time scaling).**
+
+---
+
+### Why Project 2 is the faster, higher‑velocity path to citations
+
+| Criterion | Project 1 (Reflection + RL) | Project 2 (Multi‑Round Thinking) |
+|-----------|-----------------------------|----------------------------------|
+| **Novelty** | Builds on existing reflection‑generation and RL‑fine‑tuning pipelines.  The combination is interesting, but each component is already well‑studied. | A *single* prompting trick that can be applied to any LLM.  The idea of feeding a model’s own answer back as a prompt is fresh and immediately understandable. |
+| **Implementation effort** | Requires multimodal data generation, a sophisticated RL loop (Group Relative Policy Optimization), careful reward engineering, and extensive compute. | One‑liner loop: generate, feed back, repeat.  No extra training, no GPU‑heavy RL, trivial to prototype. |
+| **Reproducibility / adoption** | Heavy compute and complex pipeline make it hard for others to replicate quickly.  Adoption is limited to labs with similar resources. | Works out‑of‑the‑box on any open‑source or commercial LLM.  Researchers can test it on their own models with a few lines of code. |
+| **Speed to publication** | Development + hyper‑parameter tuning + RL training can take 3–6 months (or more). | A preprint can be ready in 1–2 months.  The method is simple enough to be accepted in a short‑track or workshop paper, then upgraded to a full conference submission. |
+| **Breadth of impact** | Primarily benefits the few who can run RL fine‑tuning on large multimodal models. | Applicable to every LLM (GPT‑4, Llama‑2, Claude, etc.) and every downstream task (math, coding, reasoning, translation).  The “plug‑and‑play” nature invites rapid uptake. |
+| **Citation velocity** | High‑impact venues (NeurIPS, ICLR) are competitive; the paper may take a long time to get accepted and cited. | The method is simple, surprising, and immediately useful.  It is likely to be cited by a wide range of follow‑up works (prompt engineering, test‑time scaling, iterative refinement, etc.) within weeks of release. |
+
+---
+
+### Practical steps to maximize citation velocity once you choose Project 2
+
+1. **Open‑source the code** (GitHub repo, Docker image, Colab notebook).  
+2. **Publish a preprint on arXiv** with a catchy title (“Multi‑Round Thinking: A One‑Line Prompting Trick that Improves LLM Reasoning”).  
+3. **Create a short demo video** and share it on Twitter, Reddit, and the LLM community forums.  
+4. **Engage with the community**: answer questions on StackExchange, Discord, and the LLM‑research Slack.  
+5. **Submit to a fast‑track or workshop** (e.g., EMNLP‑Workshop on Prompt Engineering) for early visibility.  
+6. **Leverage the “quick‑win” narrative** in your CV and grant proposals to attract collaborators who can extend the idea (e.g., combining with RL, multimodal prompts, or curriculum learning).  
+
+---
+
+### Bottom line
+
+If your sole metric is *how fast and how many* citations you can accrue, Project 2 offers the cleanest, quickest, and most broadly applicable path.  Project 1, while potentially more novel, carries higher risk, longer development time, and a narrower audience—factors that will slow down citation velocity.  
+
+**Go ahead with Project 2, publish it quickly, and then consider Project 1 as a follow‑up if you still want to push the frontier further.**
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: openai/gpt-oss-20b
+
+================================================================================
+Epoch 20, Comparison 17:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+**Recommendation: Pursue Project 2 (RLVR with a single example + entropy regularization).**
+
+Below is a concise, evidence‑based rationale that balances novelty, feasibility, and the likelihood of rapid, high‑impact citations.
+
+| Criterion | Project 1 (Entropy‑Minimization) | Project 2 (RLVR + 1‑shot) |
+|-----------|----------------------------------|---------------------------|
+| **Novelty** | Entropy as a loss has been used in temperature‑scaling, confidence‑calibration, and some “self‑distillation” works, but *directly* training a large LLM to minimize token‑level entropy as a *stand‑alone* objective is still relatively unexplored. | RL with verifiable reward (RLVR) is a brand‑new paradigm. The claim that *one* carefully chosen example can bootstrap substantial reasoning gains is a bold, testable hypothesis that has not yet been demonstrated. |
+| **Breadth of Impact** | General‑purpose technique that could be applied to any downstream task (text generation, summarization, etc.). | Focused on mathematical reasoning, but the methodology (RLVR + entropy regularization) is transferable to other verifiable domains (e.g., code synthesis, logic puzzles). |
+| **Ease of Implementation** | Requires only a fine‑tuning loop and a simple entropy loss; no RL infrastructure. | Requires a lightweight RL‑policy‑gradient loop, a verifiable reward engine, and careful example selection. Slightly more engineering, but still tractable with existing RL libraries. |
+| **Risk of “No‑Show”** | If entropy minimization only marginally improves reasoning, the paper may be seen as incremental. | The single‑example claim is high‑risk but high‑reward. If it works, the paper will be a *headline*; if it fails, the negative result still informs the community. |
+| **Citation Velocity Drivers** | • Broad applicability → many downstream papers can cite it. <br>• Low barrier to adoption → quick uptake. | • Novel paradigm → early‑adopter buzz. <br>• Strong empirical claim → attracts reviewers and conference chairs. <br>• Potential for a “one‑shot” recipe → many researchers will try it. |
+| **Venue Fit** | Good fit for *ACL*, *EMNLP*, *NAACL* (general NLP). | Strong fit for *ICLR*, *NeurIPS*, *ICML* (RL/ML), and *EMNLP* (reasoning). |
+| **Potential for Follow‑up Work** | Incremental extensions (entropy‑regularized decoding, temperature schedules). | Opens a new line of research: RLVR for other verifiable tasks, multi‑shot RLVR, curriculum design. |
+
+### Why Project 2 is the better bet for citation velocity
+
+1. **High‑Impact Claim**  
+   *“Minimal supervised signal (one example) can drive substantial reasoning gains.”*  
+   This is a clear, testable hypothesis that will attract attention from both the RL and NLP communities. Papers that overturn the “you need a lot of data” narrative tend to get cited quickly.
+
+2. **Novel Methodology**  
+   RLVR is a fresh concept that blends RL with a verifiable reward signal. The community is still exploring how to reward LLMs for *correctness* rather than *fluency*. A successful demonstration will likely be cited as a foundational work.
+
+3. **Transferability**  
+   Even if the primary focus is math reasoning, the RLVR framework can be applied to code generation, theorem proving, or any domain where correctness can be automatically verified. This cross‑domain appeal boosts citation potential.
+
+4. **Alignment with Current Trends**  
+   *Few‑shot learning*, *self‑supervised RL*, and *verifiable rewards* are hot topics. A paper that sits at the intersection of these trends is more likely to be highlighted in surveys, tutorials, and workshop talks.
+
+5. **Risk Mitigation**  
+   - **Pilot Experiments**: Run a quick proof‑of‑concept on a small LLM (e.g., GPT‑2 or LLaMA‑7B) to confirm that the single‑example RLVR signal improves a simple math benchmark (e.g., GSM‑8K).  
+   - **Ablation Studies**: Show that the entropy regularization is essential, and that the method works across multiple model sizes.  
+   - **Open‑Source Release**: Publish code, the single example, and a reproducible training recipe. Open‑source projects tend to accrue citations faster.
+
+### Quick Action Plan
+
+| Step | Time | Deliverable |
+|------|------|-------------|
+| 1 | 1–2 weeks | Implement RLVR loop (policy‑gradient + entropy regularization). |
+| 2 | 1 week | Curate a high‑quality single math example (e.g., a 5‑step algebra problem). |
+| 3 | 2 weeks | Run baseline (no RL) and RLVR experiments on a 7B model. |
+| 4 | 1 week | Perform ablations (entropy weight, reward scaling). |
+| 5 | 1 week | Draft paper (intro, method, experiments, discussion). |
+| 6 | 1 week | Release code & data on GitHub + HuggingFace. |
+| 7 | 1 week | Submit to a top venue (ICLR/NeurIPS/EMNLP). |
+
+### Bottom Line
+
+Project 2 offers a **clear, high‑visibility claim** that aligns with the research community’s appetite for *minimal supervision* and *verifiable rewards*. While it carries a slightly higher engineering risk, the potential payoff—in terms of rapid, high‑volume citations—is substantially greater than the more incremental Project 1. If you’re willing to invest a bit more effort upfront, Project 2 is the optimal choice for maximizing citation velocity.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: openai/gpt-oss-20b
+
+================================================================================

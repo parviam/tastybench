@@ -3,6 +3,7 @@ import pandas as pd
 import json
 from scipy import stats
 import matplotlib.pyplot as plt
+from tqdm import tqdm
 
 def compare_ranking_correlation(df1, df2, label1, target1, label2, target2, output_dir, title):
     """
@@ -88,17 +89,29 @@ def compare_ranking_correlation(df1, df2, label1, target1, label2, target2, outp
     return results
 
 model_dirs = [
-    'model-elicitation/data/goodhart-10-epochs/gpt-oss-120b/',
-    'model-elicitation/data/goodhart-10-epochs/gpt-oss-20b/',
-    'model-elicitation/data/goodhart-10-epochs/llama-3-70b/',
-    'model-elicitation/data/goodhart-30-epochs/gpt-oss-120b/',
-    'model-elicitation/data/goodhart-30-epochs/gpt-oss-20b/',
-    'model-elicitation/data/goodhart-30-epochs/llama-3-70b/',
+    'model-elicitation/data/curated/gpt-oss-20b/20-epochs',
+    'model-elicitation/data/curated/gpt-oss-20b/50-epochs',
+    'model-elicitation/data/curated/gpt-oss-120b/20-epochs',
+    'model-elicitation/data/curated/gpt-oss-120b/50-epochs',
+    'model-elicitation/data/curated/llama-3-70b/20-epochs',
+    'model-elicitation/data/curated/llama-3-70b/50-epochs',
+    'model-elicitation/data/goodhart-curated/gpt-oss-20b/20-epochs',
+    'model-elicitation/data/goodhart-curated/gpt-oss-20b/50-epochs',
+    'model-elicitation/data/goodhart-curated/gpt-oss-120b/20-epochs',
+    'model-elicitation/data/goodhart-curated/gpt-oss-120b/50-epochs',
+    'model-elicitation/data/goodhart-curated/llama-3-70b/20-epochs',
+    'model-elicitation/data/goodhart-curated/llama-3-70b/50-epochs',
+    'model-elicitation/data/max-goodhart-curated/gpt-oss-20b/20-epochs',
+    'model-elicitation/data/max-goodhart-curated/gpt-oss-20b/50-epochs',
+    'model-elicitation/data/max-goodhart-curated/gpt-oss-120b/20-epochs',
+    'model-elicitation/data/max-goodhart-curated/gpt-oss-120b/50-epochs',
+    'model-elicitation/data/max-goodhart-curated/llama-3-70b/20-epochs',
+    'model-elicitation/data/max-goodhart-curated/llama-3-70b/50-epochs',
 ]
 
-for model_dir in model_dirs:
+for model_dir in tqdm(model_dirs):
     compare_ranking_correlation(
-        df1=pd.read_csv(model_dir + 'elo.csv'),
+        df1=pd.read_csv(model_dir + '/elo.csv'),
         df2=pd.read_csv('model-elicitation/data/llm_rl.csv'),
         label1='paper_id',
         target1='elo_rating',
