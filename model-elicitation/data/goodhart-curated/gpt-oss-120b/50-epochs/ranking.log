@@ -1,0 +1,117 @@
+Epoch 1, Comparison 1:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+**TL;DR – Go with **Project 1** (the reverse‑curriculum RL framework).**  
+It aligns better with current “high‑impact” research trends (RL‑for‑LLMs, curriculum learning, and data‑efficient supervision), offers a clear technical novelty that can be turned into a conference‑worthy paper plus a public code release, and creates multiple “citable hooks” (algorithm, benchmark, analysis, and open‑source library). Project 2 is a nice engineering trick, but its incremental nature makes it harder to stand out in a crowded “prompt‑engineering” space and therefore slower to generate citations.
+
+Below is a more detailed breakdown of why Project 1 is the safer bet for **maximizing citation velocity**, followed by a quick “execution checklist” to help you move fast.
+
+---
+
+## 1. Landscape & Citation Drivers (2024‑2025)
+
+| Trend | Why it matters for citations | How each project maps |
+|-------|-----------------------------|-----------------------|
+| **RL‑for‑LLMs** – Papers like *Reinforcement Learning from Human Feedback (RLHF)*, *Self‑Play for Reasoning*, and *Tree‑of‑Thoughts* have dominated top‑tier venues (NeurIPS, ICML, ICLR) and have > 200 citations each within a year. | A new RL‑based training paradigm is automatically “high‑impact” because it promises *data‑efficiency* and *generalization* beyond prompt tricks. | **Project 1** introduces a *novel curriculum* that solves a known pain point (sparse rewards) without extra annotations → strong fit. |
+| **Curriculum / Self‑Supervised Learning** – Works on *progressive difficulty* (e.g., *Curriculum Learning for Transformers*, *Progressive Distillation*) are heavily cited because they provide a *principled* way to scale models. | A method that can be framed as “automatic curriculum generation from demonstrations” is a fresh angle that reviewers love. | **Project 1** is essentially a *reverse‑curriculum* algorithm → directly taps this trend. |
+| **Benchmark‑driven papers** – The community rewards new, well‑curated benchmark suites (e.g., *MATH*, *GSM8K*, *HumanEval*). Papers that release a benchmark + baseline get a citation boost from every subsequent work that uses it. | If you pair the algorithm with a **publicly released benchmark** (e.g., a set of “reverse‑curriculum” tasks), you create a *citable resource* that will be referenced repeatedly. | **Project 1** can naturally generate a benchmark of “curriculum‑ready” reasoning problems. |
+| **Prompt‑engineering / Test‑time tricks** – The “prompt‑only” wave (Chain‑of‑Thought, Self‑Consistency, ReAct) is still hot, but the bar for novelty is high; many papers are incremental and get *moderate* citations (30‑80) unless they show a dramatic gain on a flagship benchmark. | A simple test‑time loop is easy to implement, but it’s also easy to be “another CoT variant.” | **Project 2** falls into this crowded space; you’ll need a *massive* empirical win or a compelling theoretical justification to break out. |
+| **Open‑source libraries** – Code releases that are easy to plug into existing pipelines (e.g., *OpenAI‑Gym*, *RLHF‑Toolkit*) become citation magnets because they lower the barrier for replication. | If you ship a **plug‑and‑play RL curriculum library**, you’ll get citations from both the RL community and the LLM community. | **Project 1** naturally lends itself to a reusable library; **Project 2** is just a prompting wrapper, less compelling as a library. |
+
+**Bottom line:** The citation ecosystem currently rewards *new training paradigms* (especially RL‑based) and *public resources* more than *test‑time prompting tricks*.
+
+---
+
+## 2. Comparative Scoring (out of 10)
+
+| Dimension | Project 1 – Reverse‑Curriculum RL | Project 2 – Multi‑Round Thinking |
+|-----------|-----------------------------------|-----------------------------------|
+| **Technical novelty** | 9 – Introduces a new curriculum generation method that converts outcome‑only data into step‑wise rewards. | 5 – Extends existing “self‑refine” prompting ideas. |
+| **Potential impact on performance** | High (RL can change the model’s policy, not just its inference). | Moderate (improves inference but limited by base model capacity). |
+| **Ease of publishing in top venues** | Strong – fits RL, curriculum learning, and LLM tracks. | Moderate – would need a very strong empirical story to get into top 5% venues. |
+| **Citation hooks** (algorithm, benchmark, library, analysis) | 4 (algorithm + benchmark + library + ablation study) | 2 (algorithm only). |
+| **Implementation risk / timeline** | Medium – requires RL infrastructure, but many open‑source RL libraries exist. | Low – a few prompt‑loop scripts. |
+| **Community appetite** | Very high (RL‑for‑LLMs is a hot grant/funding area). | Saturated (many “CoT‑style” papers). |
+| **Overall citation‑velocity score** | **8.2** | **4.7** |
+
+*The scores are deliberately weighted toward “citable hooks” because that’s the metric you care about.*
+
+---
+
+## 3. Why Project 1 Wins for **Citation Velocity**
+
+1. **Multiple “citable units”** – You can publish **(a)** the algorithmic paper, **(b)** a benchmark suite of reverse‑curriculum tasks, **(c)** an open‑source library (e.g., `rcurriculum-rl`), and **(d)** a short “analysis” or “survey” note on why reverse curricula help sparse‑reward RL. Each of these can be cited independently, compounding the total citation count.
+
+2. **Higher “newsworthiness”** – A paper that claims “we can turn any outcome‑only dataset (e.g., MATH solutions) into a step‑wise curriculum without extra annotation” is a headline‑worthy claim. Press releases, blog posts, and social‑media threads tend to amplify such stories, accelerating early citations.
+
+3. **Cross‑disciplinary appeal** – The work sits at the intersection of **RL**, **curriculum learning**, and **LLM reasoning**. Researchers from any of those three sub‑communities can cite it, widening the citation pool.
+
+4. **Funding & collaboration leverage** – Many agencies (NSF, EU Horizon, industry labs) are explicitly looking for *data‑efficient RL* for LLMs. A strong proposal built around Project 1 can attract collaborators who will co‑author follow‑up papers, further inflating citations.
+
+5. **Long‑term relevance** – Even after the “prompt‑engineering” wave subsides, RL‑based training methods remain a core research direction. Your work will stay relevant as models scale, whereas a test‑time trick may become obsolete once newer architectures incorporate self‑refinement internally.
+
+---
+
+## 4. Fast‑Track Execution Plan for Project 1
+
+| Phase | Goal | Concrete Milestones (2‑week sprints) | Tips for Speed |
+|-------|------|--------------------------------------|----------------|
+| **0️⃣ Prep** | Set up reproducible environment | • Clone a RL library (e.g., `stable-baselines3` or `RLHF‑Toolkit`). <br>• Pull a base LLM (LLaMA‑2‑7B) via HuggingFace. | Use Docker + `requirements.txt` to avoid environment drift. |
+| **1️⃣ Data Mining** | Convert existing outcome‑only datasets into “reverse‑curriculum” seeds | • Pick 2 math datasets (MATH, GSM8K) and 2 coding datasets (HumanEval, MBPP). <br>• Write a script that extracts the final solution and runs a *reverse‑step* parser (e.g., backward token generation) to produce intermediate states. | Release the parser as a small open‑source tool; it becomes a citation hook itself. |
+| **2️⃣ Curriculum Engine** | Implement the backward‑state scheduler | • Define a schedule `t = 0 … T` where `t=0` = final answer, `t=T` = initial problem statement. <br>• At each RL episode, sample a start state `s_t` from the schedule and let the model generate forward until it reaches the goal. | Use *reward shaping*: +1 for reaching the exact next state, -0.1 per step. |
+| **3️⃣ RL Loop** | Train the policy | • Baseline: fine‑tune LLaMA‑2 with PPO using the curriculum. <br>• Ablations: (a) no curriculum, (b) random start states, (c) dense reward (if possible). | Log everything with `wandb` for quick visual checks; early plots are great for the paper’s “learning curves.” |
+| **4️⃣ Benchmark Suite** | Create a public “Reverse‑Curriculum Reasoning” benchmark | • Package 500 curated tasks (250 math, 250 code) with *ground‑truth intermediate steps*. <br>• Provide a simple evaluation script that measures (i) final accuracy, (ii) intermediate step accuracy, (iii) sample efficiency. | Host on HuggingFace Datasets + a GitHub repo; add a DOI via Zenodo. |
+| **5️⃣ Paper Draft** | Write the manuscript while you iterate | • Title: “Reverse‑Curriculum Reinforcement Learning for Sparse‑Reward Reasoning in Large Language Models.” <br>• Sections: (a) Motivation, (b) Method, (c) Benchmark, (d) Experiments, (e) Analysis, (f) Library. | Submit a pre‑print to arXiv **as soon as you have the first set of results** (even if incomplete). Early arXiv posting accelerates citations. |
+| **6️⃣ Open‑Source Release** | Publish code & data | • Repo: `github.com/yourname/rcurriculum-rl`. <br>• Include a Dockerfile, CI tests, and a “quick‑start” notebook. | Add a `CITATION.cff` file; many citation‑tracking tools pick it up automatically. |
+| **7️⃣ Outreach** | Boost visibility | • Write a 2‑page blog post (e.g., on Medium, Towards Data Science). <br>• Tweet a thread with a GIF of the curriculum schedule. <br>• Submit a short “system demo” to a workshop (e.g., ICLR Workshop on RL for LLMs). | Reach out to a few high‑profile labs (OpenAI, DeepMind) for a quick “blurb” or endorsement; that can double early citations. |
+
+**Estimated timeline:** ~3 months from start to a **conference‑ready** paper + public benchmark. This is fast enough to ride the current RL‑for‑LLM hype wave.
+
+---
+
+## 5. Mitigating Risks
+
+| Risk | Mitigation |
+|------|------------|
+| **RL training instability** (high variance, long wall‑time) | • Use *offline RL* on the reverse‑curriculum trajectories first (behavior cloning) to bootstrap. <br>• Leverage mixed‑precision training and gradient accumulation to fit on a single 8‑GPU node. |
+| **Insufficient novelty** (reviewers claim “curriculum learning is old”) | Emphasize the *reverse* aspect and the *automatic extraction* of intermediate states from outcome‑only data—no human annotation required. |
+| **Benchmark adoption** (others may not use your dataset) | Provide **baseline scores** for at least three strong LLMs (LLaMA‑2‑13B, GPT‑3.5‑Turbo via API, Claude‑2). Offer a **leaderboard** (e.g., on Papers With Code). |
+| **Citation lag** (papers take months to accrue citations) | Early arXiv + blog + social media + a **GitHub Stars** campaign can generate “pre‑citations” (e.g., mentions in other pre‑prints, blog posts). Track these as “alt‑metrics” to demonstrate early impact. |
+
+---
+
+## 6. Quick Verdict
+
+- **If your sole metric is “how fast and how many citations I can get,” go with **Project 1**.**  
+  It gives you a *novel algorithm*, a *public benchmark*, and a *reusable library*—three independent citation sources that compound quickly.  
+
+- **Project 2** can still be a useful side‑project or a “baseline” within the Project 1 paper (e.g., compare reverse‑curriculum RL against a simple Multi‑Round Thinking baseline). This way you capture any residual interest in test‑time tricks without sacrificing the main citation engine.
+
+---
+
+### Final Checklist (copy‑paste)
+
+```
+[ ] Set up RL env (Docker + stable-baselines3)
+[ ] Extract reverse curricula from MATH, GSM8K, HumanEval, MBPP
+[ ] Implement curriculum scheduler & reward shaping
+[ ] Train PPO on LLaMA‑2‑7B (baseline + ablations)
+[ ] Build public benchmark (500 tasks + eval script)
+[ ] Draft arXiv paper (title, abstract, intro, method, experiments)
+[ ] Release code (GitHub + Docker + CI + CITATION.cff)
+[ ] Publish blog + tweet thread + submit to workshop
+[ ] Track citations via Google Scholar alerts & alt‑metrics
+```
+
+Tick these off, and you’ll be on a fast track to a high‑impact, highly‑cited contribution. Good luck, and happy citing!
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: openai/gpt-oss-120b
+
+================================================================================

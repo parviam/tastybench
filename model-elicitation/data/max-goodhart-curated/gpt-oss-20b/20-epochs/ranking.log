@@ -1,0 +1,26 @@
+Epoch 1, Comparison 1:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+**Prediction:** Project 1 will exhibit a higher citation velocity than Project 2.
+
+**Why?**
+
+| Criterion | Project 1 | Project 2 | Likelihood of rapid citations |
+|-----------|-----------|-----------|------------------------------|
+| **Scope & Generality** | Tackles multimodal LLMs, long‑context scaling, and chain‑of‑thought distillation—issues that affect a wide range of downstream tasks (vision‑language, reasoning, dialogue). | Focuses on inference‑time best‑of‑N strategies, a more specialized optimization problem. | Project 1’s broader relevance attracts more researchers. |
+| **Novelty & Hotness** | Combines RL with long‑to‑short distillation, a fresh take on efficient reasoning that aligns with current trends in “efficient LLMs” and “chain‑of‑thought” research. | While innovative, inference‑time BoN is a narrower niche that has seen fewer high‑profile papers. | Project 1 aligns with more active research streams. |
+| **Potential Impact** | Enables compact models to perform long‑context reasoning, opening doors to deployment on edge devices and multimodal applications. | Improves inference efficiency and verification, valuable but less transformative for the broader community. | Greater perceived impact drives faster citation uptake. |
+| **Community Adoption** | Likely to be cited by works on multimodal reasoning, efficient inference, and RL‑based distillation. | Cited mainly by papers on inference optimization and verification pipelines. | Project 1’s cross‑cutting nature leads to a larger citation base. |
+
+**Conclusion:** Given its broader applicability, alignment with high‑interest research directions, and potential for transformative impact, Project 1 is expected to achieve a higher citation velocity than Project 2.
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: openai/gpt-oss-20b
+
+================================================================================

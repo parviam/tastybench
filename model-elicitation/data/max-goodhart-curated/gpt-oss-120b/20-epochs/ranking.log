@@ -1,0 +1,27 @@
+Epoch 1, Comparison 1:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+**Prediction:** Project 1 is likely to exhibit the higher citation velocity.
+
+**Rationale**
+
+| Aspect | Project 1 – Interleaved RL + Online SFT for General Reasoning | Project 2 – RL + Static‑Analysis Rewards for Unit‑Test Generation |
+|--------|--------------------------------------------------------------|-------------------------------------------------------------------|
+| **Scope of impact** | Broad – improves reasoning, math, coding, and knowledge acquisition across many downstream tasks and domains. | Narrow – focuses specifically on generating unit tests, a sub‑area of software engineering. |
+| **Potential audience** | Researchers in NLP, AI safety, cognitive modeling, education, and any field that uses LLMs for complex reasoning. | Researchers in software engineering, program synthesis, and test‑generation tooling. |
+| **Novelty & generality** | Introduces a new training paradigm (alternating RL & SFT with on‑the‑fly demonstrations) that can be applied to any LLM task. | Applies existing RL‑based fine‑tuning but with a specialized reward signal; the core idea (static‑analysis metrics) is more incremental. |
+| **Citation drivers** | – Method can be reused in many papers (e.g., “We fine‑tuned our model using the interleaved RL/SFT framework”).<br>– Benchmarks (math, code, commonsense) are high‑visibility. | – Citations mainly from papers on test generation or static analysis; fewer cross‑disciplinary references. |
+| **Historical precedent** | Similar “RL‑HF” or “self‑play + SFT” papers (e.g., OpenAI’s InstructGPT, DeepMind’s Gopher‑RL) have shown rapid citation accrual. | Niche RL‑for‑code‑generation works tend to accrue citations more slowly. |
+
+Because citation velocity is driven by how quickly a paper becomes a go‑to reference across multiple research communities, the broader, more generalizable contribution of Project 1 is expected to attract citations at a faster rate than the more specialized Project 2.
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: openai/gpt-oss-120b
+
+================================================================================

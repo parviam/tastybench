@@ -1,0 +1,286 @@
+Epoch 1, Comparison 1:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+**TL;DR – Go with **Project 1** if you want a higher‑impact, more novel contribution that pushes the frontier of non‑autoregressive reasoning and can be leveraged across many downstream tasks. Choose **Project 2** only if you need a quicker, lower‑risk experiment that focuses narrowly on diversity‑aware RL fine‑tuning.**
+
+Below is a detailed comparison that should help you decide which line of work best matches your goals, resources, and risk tolerance.
+
+---
+
+## 1. Core Scientific Question
+
+| Aspect | Project 1 – Masked Diffusion + Critic‑Free GRPO | Project 2 – Outcome‑Based Exploration |
+|--------|-----------------------------------------------|----------------------------------------|
+| **What problem is tackled?** | How to endow a *non‑autoregressive* diffusion language model (DM) with reasoning ability, using a *critic‑free* policy‑gradient that directly optimizes a reasoning loss. | How to keep LLM generations diverse while still improving correctness, by rewarding *rare* final answers (exploration bonuses). |
+| **Why is it interesting?** | • Diffusion LMs are still largely unexplored for reasoning. <br>• Removing the critic sidesteps instability of actor‑critic RL for LMs. <br>• Coarse‑to‑fine generation could dramatically reduce inference latency for math/coding. | • Diversity is a known failure mode of RL‑fine‑tuned LMs (mode collapse). <br>• Outcome‑based bonuses are a principled way to encourage “creative” solutions that may be correct but under‑explored. |
+| **Breadth of impact** | High – a new generation paradigm (non‑autoregressive) that could replace autoregressive decoding for many tasks (summarization, translation, code generation). | Moderate – improves a specific fine‑tuning pipeline; the idea can be transplanted to other RL‑LLM setups but does not change the underlying generation architecture. |
+
+**Takeaway:** If you want to push a *foundational* change in how LLMs reason, Project 1 is the more ambitious and potentially transformative direction.
+
+---
+
+## 2. Technical Novelty & Difficulty
+
+| Dimension | Project 1 | Project 2 |
+|-----------|-----------|-----------|
+| **Algorithmic novelty** | • Extends *masked diffusion* (still nascent) to reasoning. <br>• Introduces **diffu‑GRPO**, a critic‑free policy‑gradient that works with the diffusion denoising process. <br>• Joint masked SFT + RL is a new training schedule. | • Applies *UCB‑style* bonuses to final answer rarity (historical) and *batch‑level* anti‑repetition penalties. <br>• The exploration bonus formulation is novel for LLM RL, but the underlying RL machinery (PPO/GRPO) stays standard. |
+| **Implementation complexity** | • Requires a diffusion language model implementation (e.g., Diffusion‑LM, DiffuSeq). <br>• Must handle non‑autoregressive sampling, noise schedules, and gradient‑through‑sampling for policy‑gradient. <br>• Debugging a critic‑free RL loop is non‑trivial (high variance gradients). | • Can start from any existing autoregressive LLM fine‑tuned with PPO/GRPO. <br>• Adding bonuses is a relatively small change to the reward function and batch post‑processing. |
+| **Risk of dead‑ends** | Higher – diffusion LMs are less mature; stability of training and evaluation pipelines is still an open research question. | Lower – the baseline (RL‑fine‑tuned LLM) is well‑understood; the main risk is that bonuses do not translate into measurable performance gains. |
+| **Required expertise** | • Diffusion models (both vision and language). <br>• Advanced RL (policy gradients, variance reduction). <br>• Knowledge of masked SFT and non‑autoregressive decoding. | • Standard RL‑fine‑tuning (PPO/GRPO). <br>• Familiarity with exploration‑bonus literature (UCB, intrinsic motivation). <br>• Ability to design evaluation metrics for diversity. |
+
+**Takeaway:** Project 1 is technically riskier but also more novel. Project 2 is a safer “add‑on” to existing pipelines.
+
+---
+
+## 3. Data & Evaluation
+
+| Factor | Project 1 | Project 2 |
+|--------|-----------|-----------|
+| **Training data** | • Same reasoning datasets used for SFT (e.g., GSM‑8K, MATH, CodeContests). <br>• No extra data needed for the RL stage; the reward is derived from the same evaluation scripts. | • Same datasets, but you also need a *historical answer buffer* to compute rarity. <br>• Requires a large enough pool of generated answers to estimate frequencies reliably. |
+| **Evaluation metrics** | • Exact match / numerical accuracy. <br>• *Diffusion‑specific* metrics: number of denoising steps, latency, token‑level perplexity of the denoised output. <br>• Potential to evaluate *coarse‑to‑fine* generation quality (e.g., partial correctness after early steps). | • Accuracy + *diversity* metrics (entropy of answer distribution, pairwise BLEU/Levenshtein distance). <br>• Standard RL‑LLM metrics (reward per step, KL‑divergence from the base policy). |
+| **Benchmark coverage** | Can be tested on *both* math and code reasoning, and the non‑autoregressive nature allows you to benchmark speed‑vs‑accuracy trade‑offs. | Primarily focused on *answer correctness*; diversity metrics are secondary and may be harder to publish as a primary contribution. |
+
+**Takeaway:** Project 1 gives you a richer set of evaluation angles (accuracy, speed, generation quality) that can make a stronger paper.
+
+---
+
+## 4. Publication Landscape (2024‑2025)
+
+| Venue | Project 1 Fit | Project 2 Fit |
+|------|----------------|----------------|
+| **NeurIPS / ICML** | High – novelty in diffusion + RL, strong theoretical component (critic‑free GRPO). | Moderate – RL‑LLM fine‑tuning is a hot topic, but the contribution may be seen as incremental unless you demonstrate a substantial empirical gain. |
+| **ICLR** | Very good – diffusion models are a core ICLR theme; the paper can combine theory (policy‑gradient derivation) and experiments. | Acceptable – could fit under “RL for language” tracks, but needs a compelling analysis of exploration bonuses. |
+| **ACL / EMNLP** | Good – if you emphasize reasoning and generation speed, plus a thorough linguistic analysis of diffusion outputs. | Strong – if you focus on *diversity* and *robustness* of LLM outputs, which are hot in NLP. |
+| **AAAI / IJCAI** | Good – interdisciplinary (RL + generative modeling). | Good – more applied RL for language. |
+| **Specialized workshops** (e.g., *LLM Reasoning*, *Diffusion Models*, *RL for NLP*) | Excellent – you can target a niche audience that appreciates the novelty. | Also suitable – especially workshops on *Exploration in RL* or *LLM Safety*. |
+
+**Takeaway:** Project 1 opens doors to top‑tier ML conferences (NeurIPS/ICLR) where diffusion work is highly visible. Project 2 is more likely to land in top NLP venues but may need stronger empirical results to stand out.
+
+---
+
+## 5. Resource Requirements
+
+| Resource | Project 1 | Project 2 |
+|----------|-----------|-----------|
+| **Compute** | • Training a diffusion LM from scratch (or fine‑tuning a large pre‑trained diffusion model) can cost **several thousand GPU‑hours** (e.g., 8×A100 for 2‑3 weeks). <br>• RL stage adds extra passes over the dataset. | • Fine‑tuning an existing autoregressive LLM (e.g., LLaMA‑7B) with PPO/GRPO is **much cheaper** (few hundred GPU‑hours). <br>• Bonus computation is cheap. |
+| **Memory** | Diffusion models often need **larger activation memory** because of the denoising steps; you may need gradient checkpointing or model parallelism. | Standard RL‑fine‑tuning memory footprint (model + optimizer). |
+| **Engineering** | • Implement or adapt a diffusion sampling loop that is differentiable for policy‑gradient. <br>• Build a custom loss that mixes masked SFT and RL. <br>• Debug high‑variance gradients. | • Extend existing PPO/GRPO codebase with a reward‑shaping module. <br>• Maintain a rolling buffer of answer frequencies. |
+| **Team expertise** | Requires at least one member comfortable with diffusion models and another with RL theory. | Can be done by a single researcher familiar with RL‑LLM pipelines. |
+
+**Takeaway:** If you have access to a sizable GPU cluster and team members with diffusion experience, Project 1 is feasible. If you are constrained to a modest budget or a single‑person effort, Project 2 is more realistic.
+
+---
+
+## 6. Potential Risks & Mitigations
+
+| Risk | Project 1 | Mitigation |
+|------|-----------|------------|
+| **Training instability** (diffusion + RL) | High | • Start with a *pre‑trained* diffusion LM (e.g., Diffusion‑LM‑7B) and only fine‑tune. <br>• Use variance‑reduction tricks: baseline subtraction, reward normalization, gradient clipping. <br>• Run ablations: first train with masked SFT only, then add RL. |
+| **Evaluation ambiguity** (non‑autoregressive outputs may be hard to compare with autoregressive baselines) | Medium | • Define a *step‑wise* accuracy metric (e.g., after each denoising step). <br>• Report both final answer accuracy and *latency* (steps × inference time). |
+| **Limited community familiarity** (diffusion LMs are still niche) | Medium | • Include a thorough tutorial section and release code with clear documentation. <br>• Provide a small “toy” diffusion LM checkpoint for reproducibility. |
+| **Reward hacking** (policy learns to exploit the RL reward without genuine reasoning) | Low (critic‑free GRPO reduces this) | • Keep a held‑out test set that is never used for reward computation. <br>• Use *human‑in‑the‑loop* verification for a sample of outputs. |
+
+| Risk | Project 2 | Mitigation |
+|------|-----------|------------|
+| **Bonus sparsity** (rare answers may be noisy) | Medium | • Smooth the rarity estimate with a moving average or kernel density. <br>• Combine with a small *intrinsic* reward (e.g., self‑consistency) to avoid over‑penalizing common correct answers. |
+| **Mode collapse despite bonuses** | Low‑Medium | • Periodically reset the exploration buffer or anneal the bonus weight. |
+| **Evaluation of diversity** can be subjective | Medium | • Use multiple diversity metrics (entropy, pairwise distance, n‑gram overlap) and report correlation with human judgments. |
+
+---
+
+## 7. Timeline (Typical 6‑month research cycle)
+
+| Phase | Project 1 | Project 2 |
+|-------|-----------|-----------|
+| **Month 1‑2** | • Acquire/prepare a diffusion LM checkpoint. <br>• Implement masked SFT pipeline and baseline evaluation. | • Set up PPO/GRPO fine‑tuning baseline on a reasoning dataset. <br>• Implement answer‑frequency buffer and UCB bonus. |
+| **Month 3** | • Integrate diffu‑GRPO (policy‑gradient through diffusion). <br>• Run small‑scale sanity checks (e.g., 1‑B parameter model). | • Run full‑scale RL fine‑tuning with bonuses. <br>• Preliminary analysis of accuracy vs. diversity trade‑off. |
+| **Month 4‑5** | • Scale to larger model (7‑13 B). <br>• Hyper‑parameter sweep for bonus weight, noise schedule, SFT‑RL mixing ratio. | • Ablate bonus components (historical vs. batch). <br>• Test on both math and code benchmarks. |
+| **Month 6** | • Final experiments, write‑up, prepare code release. | • Final experiments, write‑up, prepare code release. |
+
+**Overall:** Project 2 can reach a publishable result **~2 months** earlier, while Project 1 may need **~4 months** to stabilize the diffusion‑RL loop.
+
+---
+
+## 8. Decision Matrix (Weighted Scoring)
+
+| Criterion (weight) | Project 1 Score (1‑5) | Weighted | Project 2 Score (1‑5) | Weighted |
+|--------------------|----------------------|----------|----------------------|----------|
+| Scientific novelty | 5 | 0.25 → **1.25** | 3 | 0.25 → **0.75** |
+| Feasibility / risk | 3 | 0.20 → **0.60** | 4 | 0.20 → **0.80** |
+| Potential impact (speed, breadth) | 5 | 0.20 → **1.00** | 3 | 0.20 → **0.60** |
+| Publication venue strength | 4 | 0.15 → **0.60** | 4 | 0.15 → **0.60** |
+| Resource requirement (fit to typical lab) | 2 | 0.10 → **0.20** | 4 | 0.10 → **0.40** |
+| Timeline to first results | 3 | 0.10 → **0.30** | 4 | 0.10 → **0.40** |
+| **Total** | — | **3.95** | — | **3.55** |
+
+*Higher total = more aligned with a high‑impact, ambitious research agenda.*
+
+---
+
+## 9. Recommendation
+
+**Pursue Project 1 (Masked Diffusion + Critic‑Free GRPO)** if:  
+
+1. **Your goal is to make a *foundational* contribution** that could reshape how LLMs perform reasoning, especially for latency‑sensitive applications (e.g., on‑device code assistants).  
+2. You have **access to sufficient compute** (≥ 2 × A100‑40GB for a few weeks) and at least one team member comfortable with diffusion models.  
+3. You are comfortable with a **higher risk / longer development cycle** in exchange for the chance to publish at top ML conferences and open a new research line.
+
+**Pursue Project 2 (Outcome‑Based Exploration) only if**:  
+
+- You need **quick, low‑cost results** that can be turned into a conference paper within 3–4 months.  
+- Your lab’s expertise is centered on **RL‑fine‑tuning pipelines** rather than diffusion modeling.  
+- You are primarily interested in **improving answer diversity** for existing autoregressive LLMs rather than exploring a new generation paradigm.
+
+---
+
+### Suggested Next Steps (if you pick Project 1)
+
+1. **Prototype a tiny diffusion LM** (e.g., 125 M parameters) on a subset of GSM‑8K to verify that masked SFT + diffu‑GRPO yields any gain over SFT alone.  
+2. **Formalize the critic‑free gradient estimator**: write out the REINFORCE‑style derivation for the denoising process, include a baseline (e.g., moving‑average of rewards) to reduce variance.  
+3. **Set up a reproducible benchmark suite**: include both *accuracy* (exact match) and *latency* (average denoising steps × per‑step time).  
+4. **Plan a staged release**: open‑source the diffusion‑LLM checkpoint, the training script, and a small “toy” dataset to encourage community adoption.  
+
+If you later find the diffusion training too unstable, you can **fallback to a hybrid approach**: keep the diffusion backbone for fast coarse generation, but switch to an autoregressive decoder for the final refinement step—this still leverages the core novelty while reducing risk.
+
+---
+
+**Bottom line:** Project 1 offers a higher ceiling and a clearer path to a *breakthrough* paper, provided you’re ready to invest the compute and engineering effort. Project 2 is a solid, lower‑risk option that can still yield a respectable publication, but its impact will likely be more incremental. Choose the one that best matches your lab’s resources, timeline, and ambition. Good luck!
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: openai/gpt-oss-120b
+
+================================================================================
+Epoch 1, Comparison 3 was unclear. Skipping.
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+## TL;DR  
+**If you want a fast‑track, publishable paper that positions you as a “go‑to” expert on the state of the art, go with **Project 1** (systematic review).**  
+**If you want to build a tangible system, generate new empirical results, and potentially open a line of work that can be extended into math‑/code‑oriented agents, go with **Project 2** (web‑browsing RL agent).**  
+
+Below is a side‑by‑side comparison that explains why, together with a few practical tips to maximize the impact of whichever path you choose.
+
+---
+
+## 1. What the two projects actually deliver  
+
+| Aspect | Project 1 – Systematic Review | Project 2 – RL‑enhanced Web‑Browsing Agent |
+|--------|------------------------------|--------------------------------------------|
+| **Core output** | A comprehensive, citation‑rich survey (≈15–25 pages) that maps RL‑augmented LLM architectures, reward‑model techniques, and open challenges. | A working pipeline: (1) HTML‑simplification module, (2) curriculum‑generation framework, (3) LLM fine‑tuned with RL + rejection sampling, and (3) evaluation on navigation / information‑extraction benchmarks. |
+| **Empirical component** | None (purely analytical). | Substantial: training runs, ablation studies, benchmark scores (e.g., MiniWoB, WebShop, or custom math‑coding navigation tasks). |
+| **Time to first result** | 2–3 months (literature search, taxonomy, writing). | 4–9 months (data pipeline, model training, debugging, evaluation). |
+| **Publication venues** | *ACL‑Review, TACL, JMLR, AI Magazine, arXiv survey track.* | *NeurIPS, ICLR, ICML, EMNLP, CoRL, arXiv (empirical paper).* |
+| **Skill set showcased** | Broad knowledge synthesis, critical analysis, roadmap creation. | End‑to‑end system building, RL engineering, data curation, performance benchmarking. |
+| **Potential for follow‑up work** | Survey → “Open challenges” → grant proposals, collaborations, or a later empirical project. | The agent itself can be extended to math‑or‑code‑centric web tasks, integrated with tool‑use (e.g., code execution), or released as an open‑source benchmark. |
+| **Risk level** | Low (main risk is missing a key paper or producing a “dry” survey). | Medium‑high (training instability, data‑quality issues, compute budget). |
+
+---
+
+## 2. How the projects align with your stated goal  
+> *“Improving LLM reasoning capabilities such as math and coding tasks with reinforcement learning.”*
+
+| Project | Alignment |
+|--------|-----------|
+| **1 – Review** | Provides the *theoretical* foundation you need to understand which RL‑based reward models (RLHF, RLAIF, DPO, etc.) have already been shown to improve reasoning, especially on math‑or‑code datasets (e.g., MATH, Codeforces). The survey can explicitly highlight gaps (e.g., “RL for tool‑use in symbolic reasoning is under‑explored”). |
+| **2 – Agent** | Directly *tests* the hypothesis that RL‑fine‑tuned LLMs can better decompose and solve multi‑step tasks (navigation → information extraction → code generation). If you design the curriculum to include math‑or‑code‑centric webpages (e.g., StackOverflow, WolframAlpha), you’ll get concrete evidence of reasoning gains. |
+
+**Bottom line:** Project 2 gives you the empirical proof you need; Project 1 gives you the intellectual scaffolding and a “quick win” that can later be cited in Project 2.
+
+---
+
+## 3. Decision matrix (score out of 5)
+
+| Criterion | Project 1 | Project 2 |
+|-----------|-----------|-----------|
+| **Novelty** | 3 – surveys are common but a focused RL‑LLM taxonomy is still scarce. | 4 – few papers combine HTML simplification, curriculum generation, and RL for web agents. |
+| **Impact on community** | 4 – a well‑written survey becomes a go‑to reference for newcomers. | 3 – impact depends on benchmark performance and open‑source release. |
+| **Feasibility (given typical academic resources)** | 5 – mainly literature access and writing time. | 3 – needs GPU budget, data‑pipeline engineering, and RL expertise. |
+| **Skill development** | 3 – improves synthesis, writing, and critical thinking. | 5 – deepens RL, data engineering, and system integration skills. |
+| **Publishability (top conferences)** | 4 – many venues accept surveys; acceptance is high if well‑structured. | 4 – strong empirical results can get into top ML conferences, but acceptance is more competitive. |
+| **Time to first paper** | 2–3 months | 6–9 months |
+| **Overall score** | **4.2** | **4.0** |
+
+*The scores are close; the tie‑breaker is your personal risk tolerance and career stage.*
+
+---
+
+## 4. Recommendations based on common researcher profiles  
+
+| Profile | Recommended project | Why |
+|---------|---------------------|-----|
+| **Early‑career (PhD student, first‑author paper needed)** | **Project 1** | Faster turnaround, lower compute cost, builds a citation‑rich foundation you can later leverage in a second, more ambitious paper. |
+| **Mid‑career (post‑doc, looking to launch a new line of work)** | **Project 2** | Demonstrates you can deliver a system, attract collaborators, and possibly secure funding for a larger RL‑LLM program. |
+| **Resource‑constrained (no dedicated GPU cluster)** | **Project 1** | No heavy compute required. |
+| **Well‑funded lab with engineering support** | **Project 2** | You can parallelize data collection, training, and evaluation across multiple GPUs/TPUs. |
+| **Goal: become a “go‑to” expert on RL‑LLM alignment** | **Project 1** (as a first step) → then **Project 2** as a follow‑up. | The survey establishes authority; the system shows you can translate theory into practice. |
+
+---
+
+## 5. How to maximize impact for each project  
+
+### If you pick **Project 1** (Survey)
+
+1. **Scope the taxonomy tightly** – focus on *reasoning‑oriented* RL techniques (e.g., reward models that incorporate tool‑use, chain‑of‑thought supervision, or program synthesis).  
+2. **Create a living repository** – host a GitHub repo with a searchable table (model, RL method, reward source, reasoning benchmark, code link). This becomes a community resource.  
+3. **Identify “white‑spaces”** – explicitly list under‑explored combos (e.g., DPO + program‑execution feedback) and propose concrete experiments.  
+4. **Publish a companion “road‑map” blog** – increases visibility beyond the academic paper.  
+5. **Leverage the survey as a citation base** for any future empirical work you do (including Project 2).
+
+### If you pick **Project 2** (RL‑enhanced browsing agent)
+
+1. **Start with an existing open‑source stack** – e.g., LangChain + OpenAI/Claude API + MiniWoB or WebArena as a baseline. This cuts development time dramatically.  
+2. **Design the HTML‑simplification module as a *pre‑processor* that outputs a structured “page summary” (title, headings, key‑value pairs, code blocks).**  
+   - Use a lightweight transformer (e.g., DistilBERT) fine‑tuned on a small manually‑annotated dataset (≈2 k pages).  
+3. **Curriculum generation**  
+   - **Human‑generated seed tasks** (e.g., “Find the derivative of sin(x) on WolframAlpha”).  
+   - **AI‑generated variants** via a “self‑play” loop: the model proposes new navigation goals, a validator checks feasibility, and the pair is added to the training pool.  
+4. **RL formulation**  
+   - **State**: (simplified page representation, action history).  
+   - **Action space**: click‑link, fill‑form, execute‑code, scroll, stop.  
+   - **Reward**: sparse (task success) + dense (information‑gain proxy, e.g., increase in TF‑IDF similarity to target answer).  
+   - **Algorithm**: PPO or a newer off‑policy method (e.g., ReBRAC) for stability; optionally combine with **Direct Preference Optimization (DPO)** to fine‑tune on human‑ranked trajectories.  
+5. **Rejection sampling** – after each RL update, generate a batch of candidate trajectories, keep only the top‑k (by reward) for the next update. This reduces variance and encourages high‑quality behavior.  
+6. **Evaluation suite**  
+   - **Navigation**: MiniWoB, WebArena, or a custom “Math‑Web” benchmark (search for formulas, run a calculator, retrieve code snippets).  
+   - **Reasoning**: downstream tasks where the agent must *extract* a problem statement from a page and *solve* it with a code interpreter (e.g., “Find the Python implementation of quicksort on GeeksforGeeks and run it on a sample input”).  
+7. **Ablation checklist** – isolate the contribution of (a) HTML simplification, (b) curriculum bootstrapping, (c) RL vs. supervised fine‑tuning, (d) rejection sampling.  
+8. **Open‑source** – release the data pipeline, model checkpoints, and evaluation scripts. This dramatically improves citation potential and invites community extensions (e.g., adding math‑specific tools).  
+
+---
+
+## 6. A concrete short‑term plan (if you’re still undecided)
+
+| Week | Milestone | Decision Point |
+|------|-----------|----------------|
+| 1–2 | **Literature sprint** – collect 50+ recent papers on RL‑LLM alignment, especially those reporting reasoning gains. | If you find a *clear gap* (e.g., “no work on RL for web‑based math reasoning”), lean toward Project 2. |
+| 3–4 | Draft a **one‑page outline** for the survey (sections, taxonomy, key tables). | If the outline feels *complete* and you’re excited to write, commit to Project 1. |
+| 5–6 | Prototype a **tiny HTML‑simplifier** (e.g., using BeautifulSoup + a 2‑layer transformer) and run it on 100 pages. | If the prototype works and you can generate a *curriculum* automatically, you have a proof‑of‑concept for Project 2. |
+| 7 | **Resource check** – do you have ≥ 2 GPU‑months available? If not, you may need to scale back Project 2 or seek cloud credits. | If resources are insufficient, pivot to Project 1. |
+| 8 | **Decision** – pick the project that (a) aligns with your career timeline, (b) matches available compute, and (c) excites you the most. | — |
+
+---
+
+## 7. Bottom line
+
+- **Project 1** = *low risk, high visibility, fast paper.* Ideal if you need a solid publication quickly, want to become a reference point for RL‑LLM alignment, or lack heavy compute.
+- **Project 2** = *high risk, high reward, system‑building.* Ideal if you’re aiming for a flagship empirical contribution, have the engineering bandwidth, and want to directly demonstrate RL‑driven reasoning improvements on real‑world web tasks (including math and code).
+
+You can also **run them in sequence**: start with the survey to map the landscape, then use the identified gaps as the motivation for the web‑agent project. This gives you a “theory → practice” narrative that reviewers love.
+
+Good luck, and feel free to ping me if you need a deeper dive into any of the technical components!
+</transcript>
+Response:
+UNCLEAR
+================================================================================
+model: openai/gpt-oss-120b
+
+================================================================================

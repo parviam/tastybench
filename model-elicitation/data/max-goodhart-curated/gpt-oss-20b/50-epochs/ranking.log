@@ -1,0 +1,27 @@
+Epoch 1, Comparison 1:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+**Prediction:** Project 2 will exhibit a higher citation velocity than Project 1.
+
+**Why?**
+
+| Criterion | Project 1 | Project 2 | Likely Impact on Citation Velocity |
+|-----------|-----------|-----------|-------------------------------------|
+| **Scope & Generality** | Focused on HTML simplification and browser‑interaction – a niche but useful sub‑domain. | Addresses multimodal LLMs, long‑context scaling, and chain‑of‑thought distillation – core challenges for the broader LLM community. | Broader relevance → more researchers cite it. |
+| **Novelty & Hotness** | Novel curriculum design for browsing, but similar ideas already exist in web‑scraping and RL‑based navigation. | Combines several trending topics (long‑context, RL, distillation) while deliberately simplifying the architecture, which is attractive for reproducibility. | Higher novelty in hot areas → faster uptake. |
+| **Reproducibility & Accessibility** | Requires custom HTML‑simplification pipeline and a hybrid human‑AI curriculum – more engineering overhead. | Uses standard multimodal backbones and a clear “long‑to‑short” distillation pipeline, making it easier for others to replicate. | Easier to adopt → more citations. |
+| **Potential for Cross‑Domain Adoption** | Primarily useful for web‑interaction tasks. | Useful for any multimodal reasoning task (vision, text, audio) and for downstream applications that need short‑context inference. | Wider adoption → higher citation velocity. |
+| **Expected Citation Trajectory** | Steady but modest growth as niche communities adopt it. | Rapid spike as the community seeks efficient long‑context solutions and chain‑of‑thought distillation. | Faster growth → higher velocity. |
+
+**Bottom line:** Because Project 2 tackles a set of high‑profile, widely applicable challenges with a clean, reproducible approach, it is poised to attract citations more quickly and at a higher rate than the more specialized Project 1.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: openai/gpt-oss-20b
+
+================================================================================

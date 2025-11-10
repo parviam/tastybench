@@ -1,0 +1,25 @@
+Epoch 1, Comparison 1:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+After analyzing both project ideas, I recommend pursuing **Project 2: Developing a reverse-curriculum reinforcement learning framework**. Here's why:
+
+1. **Broader applicability**: Project 2's reverse-curriculum reinforcement learning framework can be applied to a wide range of tasks, including math and coding, as well as other areas where LLMs struggle with reasoning. In contrast, Project 1's focus on merging complementary language models might be more specific to certain types of tasks or domains.
+2. **Scalability**: The reverse-curriculum approach in Project 2 can handle complex tasks with sparse rewards, which is a common challenge in LLM training. By decomposing tasks into easier sub-tasks, the model can learn more efficiently and effectively. Project 1's approach, while efficient, might not scale as well to very complex tasks.
+3. **Flexibility**: Project 2's framework allows for the creation of a curriculum that can be adapted to different tasks and domains, without requiring manual process annotations. This flexibility is valuable, as it enables the model to learn from a variety of sources and adapt to new tasks.
+4. **Potential for improved generalization**: By learning from easier sub-tasks first, the model in Project 2 may develop a deeper understanding of the underlying reasoning processes, leading to improved generalization to new, unseen tasks. Project 1's approach, while producing concise responses, might not necessarily lead to better generalization.
+5. **Alignment with current research trends**: Reinforcement learning and curriculum learning are active areas of research in AI, and Project 2's approach aligns with these trends. By exploring this direction, you may be able to leverage existing research and tools, and contribute to the development of new methods and techniques.
+
+In contrast, while Project 1's approach is innovative, it may be more challenging to integrate multiple language models and ensure that they work together seamlessly. Additionally, the focus on merging models might limit the project's applicability to specific tasks or domains.
+
+Overall, I believe that Project 2 offers a more promising direction for improving LLM reasoning capabilities, with a broader range of potential applications and a more flexible framework for learning and adaptation.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: meta-llama/Llama-3.3-70B-Instruct
+
+================================================================================

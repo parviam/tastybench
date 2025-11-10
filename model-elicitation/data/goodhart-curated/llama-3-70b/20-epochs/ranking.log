@@ -1,0 +1,35 @@
+Epoch 1, Comparison 1:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+A very specific and citation-velocity-focused question!
+
+To maximize your citation velocity, I'll analyze both projects based on their potential impact, novelty, and relevance to the current research landscape.
+
+**Project 1: Simplifying HTML pages and training a large language model**
+
+While this project has some interesting aspects, such as creating concise webpage representations and using a hybrid human-AI generated curriculum, its focus on webpage comprehension and navigation tasks might be considered relatively niche. The project's impact might be limited to the specific domain of web browsing, which, although important, might not be as broadly appealing to the research community as other areas.
+
+Citation velocity potential: 6/10
+
+**Project 2: Decoupling clipping operation from policy updates and applying dynamic sampling (DAPO)**
+
+This project appears to be more broadly applicable and innovative, as it tackles the challenge of optimizing large language models via reinforcement learning at scale. The integration of four novel techniques within the VERL framework and the focus on efficient, reproducible large-scale RL training of LLMs are likely to resonate with the research community. The project's potential impact on the field of LLMs and reinforcement learning is significant, and its results could be widely applicable to various areas, such as natural language processing, computer vision, and decision-making.
+
+Citation velocity potential: 9/10
+
+**Recommendation**
+
+Based on the analysis, I strongly recommend pursuing **Project 2: DAPO**. Its broader applicability, novelty, and potential impact on the field of LLMs and reinforcement learning make it a more attractive choice for maximizing citation velocity. The project's focus on optimizing LLMs via reinforcement learning at scale is likely to generate significant interest and citations from the research community.
+
+By choosing Project 2, you'll be tackling a more fundamental and widely relevant problem, which will increase the project's visibility and appeal to a broader audience. This, in turn, should lead to a higher citation velocity and a greater impact on the research community.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: meta-llama/Llama-3.3-70B-Instruct
+
+================================================================================

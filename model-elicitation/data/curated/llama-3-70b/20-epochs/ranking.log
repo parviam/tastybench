@@ -1,0 +1,25 @@
+Epoch 1, Comparison 1:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+After analyzing both project ideas, I recommend pursuing **Project 2: Generating answers to unlabeled inputs and simultaneously using the same language model to evaluate those answers**. Here's why:
+
+1. **Broader applicability**: Project 2 has a more generalizable approach, as it can be applied to various NLP tasks, including math and coding tasks, without requiring a specific domain (e.g., webpages). This makes it a more versatile and widely applicable project.
+2. **Unsupervised learning**: The dual student-teacher framework in Project 2 enables unsupervised self-improvement of large language models, which is a significant advantage. This approach can lead to more efficient and autonomous learning, as it doesn't rely on external supervision or labeled data.
+3. **Reinforcement learning**: Both projects utilize reinforcement learning, but Project 2's self-assigned quality scores provide a more direct and intrinsic feedback mechanism. This can lead to more effective optimization of the model parameters and improved performance.
+4. **Flexibility and adaptability**: Project 2's framework can be easily adapted to different tasks and domains, as it doesn't require a custom algorithm or a specific data source (e.g., webpages). This flexibility makes it a more attractive project for exploring various applications and extensions.
+5. **Potential for self-improvement**: The self-evaluation and self-improvement aspects of Project 2's framework have the potential to lead to more significant and rapid progress in LLM reasoning capabilities, as the model can continuously learn and adapt without relying on external feedback.
+
+In contrast, Project 1 is more focused on a specific application (webpage comprehension and navigation) and requires a custom algorithm and a specific data source. While it's still a valuable project, its scope and applicability might be more limited compared to Project 2.
+
+Overall, I believe that Project 2 offers a more promising and generalizable approach to improving LLM reasoning capabilities, including math and coding tasks, using reinforcement learning.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: meta-llama/Llama-3.3-70B-Instruct
+
+================================================================================

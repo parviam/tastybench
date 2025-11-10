@@ -1,0 +1,27 @@
+Epoch 1, Comparison 1:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+**Prediction:** The second project – the large‑scale, multi‑domain RL‑reasoning corpus (Guru) – is the one that would achieve the higher citation velocity.
+
+**Why this is likely**
+
+| Aspect | Project 1 (Entropy‑Minimization) | Project 2 (Guru Corpus) |
+|--------|----------------------------------|--------------------------|
+| **Core contribution** | A methodological tweak (entropy‑based loss / RL reward) that can be applied to any existing model. | A new, publicly released dataset + a systematic RL‑fine‑tuning pipeline across six reasoning domains. |
+| **Typical citation drivers** | Method papers often get cited when the specific technique is adopted, which can be slower because researchers need to re‑implement the entropy loss or inference‑time logit adjustment. | Dataset papers tend to be cited immediately by anyone who uses the data, and the “benchmark‑plus‑RL‑pipeline” nature makes it a go‑to resource for many downstream works. |
+| **Community interest** | Niche interest (entropy control) and may be perceived as a “trick” rather than a fundamental advance. | Broad interest across math, coding, logic, commonsense, etc.; the multi‑domain scope invites cross‑disciplinary use. |
+| **Ease of reuse** | Requires fine‑tuning or custom inference code; not a plug‑and‑play resource. | Provides ready‑to‑use training data, reward specifications, and evaluation scripts – low barrier to adoption. |
+| **Historical precedent** | Similar entropy‑regularization papers (e.g., “Confidence‑Based Decoding”) have modest citation curves. | High‑impact RL‑or‑dataset releases (e.g., *WebGPT*, *OpenAI Codex*, *MATH* dataset) show steep early citation trajectories. |
+
+Given these factors, the Guru corpus is expected to be downloaded, benchmarked, and referenced by a larger and more diverse set of papers shortly after its release, leading to a faster accumulation of citations per unit time—i.e., a higher citation velocity.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: openai/gpt-oss-120b
+
+================================================================================

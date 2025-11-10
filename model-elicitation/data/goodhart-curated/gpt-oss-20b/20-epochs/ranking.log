@@ -1,0 +1,77 @@
+Epoch 1, Comparison 1:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+**Recommendation: Pursue Project 1 (Recursive Critique & Improvement – RCI)**  
+
+Below is a concise, evidence‑based rationale that weighs novelty, feasibility, community interest, and the practicalities that drive *citation velocity*.
+
+| Criterion | Project 1 (RCI) | Project 2 (Reflection‑RL) |
+|-----------|-----------------|---------------------------|
+| **Core Idea** | A single LLM repeatedly *self‑critics* its own output (code or command sequences) and refines it, optionally chaining with a chain‑of‑thought (CoT) reasoning step. | A two‑stage pipeline: (1) generate a reflection‑rich training set with a multimodal LLM; (2) fine‑tune a policy via Group Relative Policy Optimization (GRPO) that rewards concise, meaningful reflections. |
+| **Novelty** | Self‑critique is known, but *recursive* self‑critique combined with minimal demonstrations and no task‑specific reward is a fresh angle. | Multimodal reflection + GRPO is more exotic; the combination is novel but also more “outside the mainstream.” |
+| **Implementation Effort** | Moderate. Requires a few prompt templates, a loop that runs a few iterations, and standard evaluation on code‑generation benchmarks (e.g., HumanEval, MBPP). | High. Needs multimodal data generation, a reflection‑generation pipeline, a custom RL training loop, and careful reward engineering. |
+| **Time to Results** | 1–3 months (data prep → prompt design → experiments → paper). | 4–8 months (data generation → RL training → hyper‑parameter sweeps → paper). |
+| **Community Size & Interest** | Huge. Code‑generation, self‑reflection, and CoT are hot topics; many researchers are looking for “zero‑shot” or “few‑shot” methods that don’t require hand‑crafted rewards. | Smaller niche. Multimodal reasoning + RL is growing, but the audience is narrower and more specialized. |
+| **Reproducibility & Accessibility** | Easy to reproduce. Anyone with a GPT‑4‑like model can run the loop; no proprietary RL infrastructure needed. | Harder. Requires RL infrastructure, possibly GPU clusters, and a custom reward function that may be hard to replicate. |
+| **Potential Impact** | High. If RCI improves code‑generation accuracy by even a few percentage points, it will be cited by a wide range of downstream works (e.g., AutoML, program synthesis, instruction‑following). | Moderate. Impact is confined to multimodal reasoning and RL communities; broader adoption is less likely. |
+| **Citation Velocity Drivers** | 1) **Speed** – quick publication. 2) **Breadth** – large, active community. 3) **Practicality** – easy to adopt. 4) **Relevance** – directly addresses a pressing need (better code generation without hand‑crafted rewards). | 1) **Novelty** – high, but 2) **Niche** – limited audience. 3) **Complexity** – slower uptake. 4) **Reproducibility** – lower, which can dampen citations. |
+
+### Bottom‑Line
+
+**Project 1** offers the best balance of *speed*, *reach*, and *impact*, all of which are the key levers for maximizing citation velocity. The recursive self‑critique loop is a simple yet powerful idea that can be demonstrated on standard benchmarks in a matter of weeks. Because it requires no task‑specific reward engineering, it will attract researchers who want a plug‑and‑play improvement to their existing pipelines.
+
+### Quick‑Start Checklist for Project 1
+
+1. **Prompt Design**  
+   - Create a base prompt that asks the LLM to generate code for a given natural‑language instruction.  
+   - Add a *critique* prompt that asks the LLM to evaluate the code for correctness, style, and potential bugs.  
+   - Loop: feed the critique back as a new instruction to refine the code.
+
+2. **Iteration Strategy**  
+   - Limit to 2–3 refinement steps to keep inference cost reasonable.  
+   - Optionally interleave a CoT step before the critique to provide reasoning context.
+
+3. **Evaluation**  
+   - Use HumanEval, MBPP, or a custom set of coding challenges.  
+   - Measure pass@k, average runtime, and human‑rated quality.
+
+4. **Baselines**  
+   - Compare against vanilla GPT‑4, GPT‑4 with CoT, and existing self‑critique papers (e.g., “Self‑Critique for Code Generation”).
+
+5. **Paper Structure**  
+   - **Abstract**: Highlight the *recursive* self‑critique and minimal‑demo advantage.  
+   - **Related Work**: Position against self‑reflection, CoT, and RL‑based code generation.  
+   - **Method**: Detail the prompt loop, stopping criteria, and optional CoT integration.  
+   - **Experiments**: Show quantitative gains and ablation studies (iterations, CoT, prompt length).  
+   - **Discussion**: Emphasize zero‑shot applicability and potential for other domains (e.g., data‑analysis scripts).
+
+6. **Open‑Source Release**  
+   - Publish the prompt templates, code, and a small demo notebook.  
+   - Provide a simple API wrapper so others can plug the RCI loop into their own pipelines.
+
+7. **Target Venue**  
+   - **ICLR/NeurIPS/ICML** (short paper or workshop).  
+   - **ACL/EMNLP** (if framing as a language‑model technique).  
+   - **arXiv** first, then submit to a high‑impact conference.
+
+### Why Project 2 Is Less Optimal for Citation Velocity
+
+- **Longer Development Cycle**: Multimodal data generation + RL training is time‑consuming.  
+- **Smaller Audience**: Multimodal reasoning + RL is still a niche field; fewer researchers will cite it.  
+- **Reproducibility Hurdles**: Custom reward functions and GRPO are hard to replicate without significant engineering.  
+- **Risk of Over‑Engineering**: The novelty may be offset by the complexity, making the contribution less clear to reviewers.
+
+### Final Thought
+
+If your goal is *pure citation velocity*, choose Project 1. It delivers a clear, implementable improvement that taps into a massive, active research community. Project 2 could still be valuable for a longer‑term, high‑impact line of work, but it will likely lag behind in terms of rapid citations. Good luck!
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: openai/gpt-oss-20b
+
+================================================================================

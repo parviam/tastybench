@@ -1,0 +1,38 @@
+Epoch 1, Comparison 1:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+To predict which project has the higher citation velocity, let's analyze the key aspects of each project:
+
+**Project 1: Scaling Reinforcement Learning with Synthetic Chain-of-Thought Data**
+
+* This project focuses on improving the performance of large language models (LLMs) by generating synthetic chain-of-thought data, which combines trial-and-error exploration with self-verification.
+* The approach enables inference scaling, where larger inference budgets directly improve performance without additional verification steps.
+* The project's novelty lies in its ability to increase sampling diversity through oversampling during training.
+
+**Project 2: Recursive Critique and Iterative Improvement for Task Execution**
+
+* This project introduces a prompting scheme where a pre-trained LLM recursively critiques its own output (RCI) to solve computer tasks from natural language instructions.
+* The approach enables task execution with minimal demonstrations and without task-specific reward functions, making it more flexible and widely applicable.
+* The project's novelty lies in its ability to combine RCI with chain-of-thought reasoning to further enhance performance.
+
+Based on these analyses, I predict that **Project 2: Recursive Critique and Iterative Improvement for Task Execution** will have a higher citation velocity. Here's why:
+
+1. **Broader applicability**: Project 2's approach can be applied to a wide range of tasks, as it doesn't require task-specific reward functions. This makes it more versatile and attractive to researchers working on various applications.
+2. **Novelty and creativity**: The recursive critique and iterative improvement scheme is a unique and innovative approach, which is likely to generate significant interest and attention in the research community.
+3. **Potential for interdisciplinary research**: Project 2's focus on natural language instructions and task execution can lead to collaborations between NLP, computer vision, and robotics researchers, increasing its visibility and citation potential.
+4. **Building upon existing work**: By combining RCI with chain-of-thought reasoning, Project 2 builds upon existing research, making it more likely to be cited by researchers who have worked on related topics.
+
+In contrast, while Project 1's approach is also innovative, its focus on scaling reinforcement learning for large language models might be more niche, limiting its appeal to a broader audience.
+
+Overall, based on the novelty, applicability, and potential for interdisciplinary research, I predict that Project 2 will have a higher citation velocity than Project 1.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: meta-llama/Llama-3.3-70B-Instruct
+
+================================================================================
