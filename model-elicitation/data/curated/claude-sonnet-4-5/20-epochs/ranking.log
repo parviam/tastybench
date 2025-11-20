@@ -1,0 +1,258 @@
+Epoch 1, Comparison 1:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+# Recommendation: Pursue Project 2
+
+Here's my analysis:
+
+## Project 2 is the stronger choice because:
+
+### 1. **Novel and Interpretable Mechanism**
+- The error-rewriting reward model is conceptually elegant and addresses a fundamental problem: *identifying which tokens matter for correctness*
+- This provides interpretable signals about *where* reasoning breaks down, not just *that* it breaks down
+- The minimum-editing constraint is clever—it forces the model to learn surgical fixes rather than broad rewrites
+
+### 2. **Better Sample Efficiency**
+- By focusing compute on error-causing tokens, you're directly targeting the bottleneck in reasoning
+- This token-level precision should require fewer rollouts than full-trajectory methods
+- Particularly valuable given the cost of RL at LLM scale
+
+### 3. **Stronger Scientific Contribution**
+- Project 1 appears to be primarily an engineering optimization of existing methods (PPO improvements)
+- Project 2 introduces a fundamentally new reward paradigm that could generalize beyond math/coding
+
+### 4. **More Publishable**
+- The error-rewriting task is a contribution in itself—you could pre-publish this dataset/model
+- Token-level attribution for reasoning errors is an under-explored area with broad interest
+
+## Concerns about Project 1:
+- "Decoupling clipping from policy updates" sounds incremental
+- Adaptive sampling is well-studied; unclear what's novel here
+- Risk of being seen as "PPO hyperparameter tuning at scale"
+
+## Risks to mitigate in Project 2:
+- Need high-quality error-rewriting data—consider how you'll generate/validate this
+- Token-level credit assignment is hard; may need curriculum learning
+- Ensure your minimum-edit constraint doesn't create exploitable shortcuts
+
+**Bottom line:** Project 2 tackles the *what to learn* problem with a novel reward structure. Project 1 tackles the *how to learn efficiently* problem with engineering refinements. The former is more likely to yield lasting scientific impact.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: claude-sonnet-4-5-20250929
+
+================================================================================
+Epoch 2, Comparison 15:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+# Recommendation: Pursue Project 2
+
+## Clear Winner: Project 2 (Inference-Time Optimization)
+
+**Project 2 is the stronger choice** because it addresses a more fundamental and scalable problem in LLM reasoning with greater practical impact and research novelty.
+
+## Key Reasons:
+
+### 1. **Addresses Test-Time Compute Scaling** (Critical Trend)
+- Project 2 directly tackles inference-time optimization, which is becoming *the* frontier in AI reasoning (see: OpenAI's o1, Google's recent work)
+- Test-time compute is proving as important as training compute—your project would be timely and impactful
+- Project 1 is more traditional RL fine-tuning, which is increasingly well-explored territory
+
+### 2. **Superior Generalization Potential**
+- **Project 2**: Learning meta-strategies for verification and sampling generalizes across *any* domain where verification is possible
+- **Project 1**: 92K examples across six domains is actually quite limited—you're essentially training domain-specific skills that may not transfer
+
+### 3. **More Tractable Research Problem**
+- Project 2 has a clear technical innovation (differentiable BoN training) with measurable metrics
+- Project 1 requires massive infrastructure: generating 92K examples, six domain-specific reward models, deduplication pipelines—high risk of becoming an engineering project rather than research
+
+### 4. **Better ROI on Computational Resources**
+- Project 2 can show results with existing models + clever fine-tuning
+- Project 1 requires generating vast synthetic data AND training—2x the compute budget
+
+### 5. **Stronger Publication Potential**
+- The differentiable BoN formulation is technically novel and addresses a clear gap (argmax non-differentiability)
+- Cross-domain RL corpus work is more incremental—many similar datasets exist (MetaMath, CodeRL, etc.)
+
+## The One Caveat:
+
+Choose Project 1 **only if** you have:
+- Institutional access to massive compute for data generation
+- A team to handle the engineering complexity
+- Strong evidence that existing RL datasets are insufficient
+
+Otherwise, **Project 2 offers better research novelty, practical impact, and feasibility** for a single researcher or small team.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: claude-sonnet-4-5-20250929
+
+================================================================================
+Epoch 3, Comparison 29:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+# Clear Recommendation: Pursue **Project 1**
+
+Here's my analysis:
+
+## Why Project 1 is the Stronger Choice
+
+**1. Foundational & Broadly Applicable**
+- Addresses a core infrastructure problem (credit assignment in multi-step reasoning)
+- The soft Bellman equation framework is well-established theoretically
+- Reduces dependence on expensive preference data—a major practical bottleneck
+- Likely to generalize across math, coding, and other reasoning domains
+
+**2. More Tractable**
+- Offline RL with value functions is a mature area with known debugging paths
+- Clear success metrics: compare sample efficiency and performance vs. existing methods
+- Lower risk of instability during training
+
+**3. Clearer Path to Impact**
+- If successful, could meaningfully reduce data annotation costs
+- Better credit assignment directly tackles why current methods struggle with long reasoning chains
+
+## Why Project 2 is Riskier
+
+**1. Critical Assumption May Not Hold**
+- The correlation between entropy and "pivotal logical tokens" is unproven and potentially spurious
+- High entropy often indicates **uncertainty/confusion**, not necessarily productive exploration
+- Risk of rewarding verbose, meandering reasoning rather than insightful steps
+
+**2. Potential Failure Modes**
+- May encourage superficial lengthening of chains without quality improvement
+- Could interfere with the model's learned calibration
+- Harder to disentangle whether gains come from entropy bonus vs. other factors
+
+**3. Less Clear Novelty**
+- Entropy bonuses in RL are well-explored; application to token distributions is incremental
+- Would need very strong empirical evidence to demonstrate the entropy-reasoning correlation
+
+## Suggested Path Forward
+
+1. **Start with Project 1** as your primary focus
+2. Keep Project 2 as a potential *ablation study* or follow-up—test whether adding entropy-based rewards improves Project 1's baseline
+3. If you find Project 1's value function is struggling to encourage exploration, Project 2's ideas might address that specific weakness
+
+**Bottom line:** Project 1 solves a known, important problem with established tools. Project 2 is a more speculative bet on an unvalidated hypothesis.
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: claude-sonnet-4-5-20250929
+
+================================================================================
+Epoch 5, Comparison 7:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+# Clear Recommendation: Pursue Project 2 (VeriFree)
+
+## Why Project 2 is the better choice:
+
+**Project 2 offers novel research contribution**, while Project 1 is primarily a literature review. Here's the breakdown:
+
+### Project 1 Limitations:
+- **No original research output** - surveys are valuable but don't advance the field directly
+- **Quickly becomes outdated** in fast-moving RL×LLM space
+- **Lower impact** - won't produce models, benchmarks, or techniques others can build on
+- **Already covered ground** - recent surveys exist (e.g., Ouyang et al. 2022, Lambert et al. 2024)
+
+### Project 2 Advantages:
+
+**1. Novel Technical Contribution**
+- Eliminates the verifier bottleneck in RL training
+- Unified architecture is conceptually elegant and practically useful
+- Addresses real limitation: separate verifiers are expensive and error-prone
+
+**2. Clear Empirical Validation Path**
+- Test on GSM8K, MATH, HumanEval, MBPP
+- Compare against RLHF + explicit verifiers
+- Measure: accuracy, sample efficiency, computational cost
+
+**3. Practical Impact**
+- Simpler training pipeline = more accessible to researchers
+- Potentially faster iteration cycles
+- Could scale better than verifier-based approaches
+
+**4. Multiple Follow-up Directions**
+- Can analyze what implicit verification the model learns
+- Extend to other domains beyond math/coding
+- Combine with explicit verifiers for hybrid approaches
+
+## Key Risk to Mitigate:
+
+The main challenge with Project 2 is **proving the implicit verifier actually works**. You'll need strong baselines and ablations to show you're not just doing supervised learning with extra steps.
+
+## Bottom Line:
+
+If you want to be an AI *researcher* rather than an AI *historian*, choose Project 2. It will produce publishable results, advance the field, and open doors to future work.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: claude-sonnet-4-5-20250929
+
+================================================================================
+Epoch 6, Comparison 21:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+# Clear Recommendation: Pursue Project 2 (ProRL)
+
+## Why Project 2 is the stronger choice:
+
+**1. Fundamental Research Contribution**
+- Project 2 addresses a **core limitation in RL for reasoning**: how to enable genuine capability expansion beyond the base model's distribution
+- The periodic reference policy reset + KL control mechanism is a novel architectural insight with broad applicability
+- Project 1 is primarily an **application/engineering effort** (distillation + standard two-stage training)
+
+**2. Generalizability**
+- ProRL applies across **all reasoning domains** (math, coding, logic, planning)
+- Financial reasoning (Project 1) is a narrow vertical with limited academic interest
+- Your stated goal is "improving LLM reasoning capabilities" broadly—Project 2 directly targets this
+
+**3. Scientific Insight Potential**
+- Project 2 explores **when and how** RL can discover solutions beyond supervised learning
+- Understanding solution space expansion is a fundamental open problem
+- Project 1 essentially validates known techniques in a new domain
+
+**4. Publication & Impact Trajectory**
+- ProRL methodology: Top-tier venues (NeurIPS, ICML, ICLR)
+- Financial domain application: Domain-specific or applications-focused venues with lower impact
+
+**5. Risk Assessment**
+- Project 1: Lower risk but also lower ceiling—you'll get *something* working
+- Project 2: Higher technical risk, but the failure modes teach you something valuable about RL limitations
+
+## The decisive factor:
+If your goal is AI research (not fintech product development), Project 2 investigates a **mechanism** while Project 1 demonstrates an **application**. Mechanisms have compounding research value.
+
+**Pursue Project 2.**
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: claude-sonnet-4-5-20250929
+
+================================================================================

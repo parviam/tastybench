@@ -3,6 +3,7 @@ import numpy as np
 from scipy import stats
 import seaborn as sns
 import matplotlib.pyplot as plt
+import argparse
 
 def _pairwise_pvalues(df, method):
     """Calculate pairwise p-values for Pearson or Spearman correlation."""
@@ -38,9 +39,9 @@ def plot_heatmap(corr, pvals, title, filename):
     plt.savefig(filename, dpi=300, bbox_inches='tight')
     plt.close()
 
-def main():
+def main(csv_file='citation_ranking.csv'):
     # Load the CSV file
-    df = pd.read_csv('citation_ranking.csv')
+    df = pd.read_csv(csv_file)
 
     # Columns of interest
     cols = ['lead_author_h_index', 'total_citations', 'b', 'a', 'last_author_h_index']
@@ -79,4 +80,8 @@ def main():
     spearman_pvals.to_csv('stupid_proxies/spearman_pvalues.csv')
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description='Test stupid proxies with correlation analysis')
+    parser.add_argument('csv_file', nargs='?', default='citation_ranking.csv',
+                        help='Path to the CSV file to analyze (default: citation_ranking.csv)')
+    args = parser.parse_args()
+    main(args.csv_file)

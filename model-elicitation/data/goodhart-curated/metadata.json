@@ -6,7 +6,7 @@
         "gemini-2.5-pro"
     ],
     "epochs": [
-        1
+        20
     ],
     "paper_dataset": "llm-rl-yix-curate",
     "ranking_prompt": "model-elicitation/prompts/curated/judge_ideas_goodhart_curated.md",

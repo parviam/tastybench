@@ -1,0 +1,473 @@
+Epoch 1, Comparison 1:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+You should pursue **Project 2 (RL for unit test generation)**.
+
+Here’s a structured comparison and why I recommend it for your stated goal (improving LLM reasoning on math/coding via RL):
+
+---
+
+## 1. Alignment with your core research goal
+
+You care about: **reasoning capabilities (math, coding) + reinforcement learning**.
+
+### Project 1 – Vulnerability analysis + comment quality
+- Main signal: a **semantic reward on code comments** and vulnerability explanations.
+- This pushes models toward:
+  - Better natural language explanations of security issues.
+  - Some improvement in code reasoning (because it has to justify vulnerabilities), but the reward is one step removed from actual *code execution* or *formal properties*.
+- Risk: the model optimizes for *sounding* like a good security analyst rather than exhibiting deeper algorithmic/logic reasoning.
+- Stronger on **security & explainability**, weaker as a clean testbed for general reasoning.
+
+### Project 2 – Unit test generation + static-analysis reward
+- Main signal: **test quality via static analysis metrics** (coverage proxies, assertions, structure, smells).
+- Good tests require:
+  - Understanding function behavior, edge cases, invariants.
+  - Constructing logical conditions and assertions—this is very close to mathematical reasoning style.
+- You can treat each test case as a *mini math proof sketch*: preconditions → operation → postconditions.
+- The RL signal is closer to **formal/structural correctness** and “did I reason well about this code?” than “did I describe this nicely?”
+- Much more naturally extends to **math problem solving** (e.g., generating tests for symbolic functions, checking equivalences, etc.).
+
+For studying *reasoning*, Project 2 is better targeted.
+
+---
+
+## 2. Reward design & robustness
+
+### Project 1
+- Reward requires a **semantic model** of “high‑quality comments/explanations”.
+  - Needs another model (or pipeline) to score comment quality: relevance, accuracy, completeness, non-hallucination.
+  - Harder to ensure the reward is aligned: you risk “reward hacking” via fancy but shallow explanations.
+- Vulnerability correctness is nontrivial to verify automatically:
+  - True positive vs. false positive vulnerabilities.
+  - Correctness of the “fixed” code snippet generally needs compilation, tests, or security tools.
+- You may end up doing RL on a **proxy of a proxy**: LLM → comments → scored by another LLM / heuristic → RL. Noise is high.
+
+### Project 2
+- Static analysis metrics are **more direct and mechanizable**:
+  - Syntactic correctness.
+  - Presence and diversity of assertions.
+  - Coverage proxies (branches touched, parameter variations).
+  - Test smells (e.g., no assertions, overly long tests, duplicated logic).
+- Reward model can be relatively lightweight, reproducible, and interpretable:
+  - You can iterate quickly on reward design.
+  - Easier to run large-scale RL experiments (many code snippets, many tests) with limited compute.
+- Fewer layers of semantic ambiguity than comment quality; better for a clean RL benchmark.
+
+From an RL-methodology perspective, Project 2 gives you **cleaner, cheaper, more controllable rewards**, which is exactly what you want to study RL for reasoning.
+
+---
+
+## 3. Practicality, evaluation, and impact
+
+### Project 1 – Vulnerability analysis
+Pros:
+- High-impact: secure code and vulnerability detection/fixing are very hot topics.
+- Attractive for security/industry collaborations.
+
+Cons:
+- Hard evaluation:
+  - Need labeled vulnerable/non-vulnerable code datasets or real-world CVEs.
+  - Need security expertise to verify that “fixes” are actually correct and not introducing new issues.
+- Strong dependence on noisy signals (comment quality, vulnerability description quality).
+- Risk of tightly coupling your work to the quality of existing security tooling and datasets, which can dominate the research narrative.
+
+### Project 2 – Unit test generation
+Pros:
+- Evaluation is much easier and more quantitative:
+  - Compile rate, execution success.
+  - Dynamic metrics: coverage, mutation score, bug detection rate (if you add a dynamic phase).
+  - Static metrics: assertions per LOC, branch coverage proxies, smell detectors.
+- Clear baselines: 
+  - Existing LLM test generation (prompt-only, supervised fine-tuning).
+  - Existing automated test tools (e.g., EvoSuite, pytest-plugins).
+- Industrial relevance: automated test generation is already in many toolchains; your work can slot into CI/CD as a drop-in RL-improved component.
+
+Cons:
+- Slightly less “sexy” than vulnerability analysis at first glance, but:
+  - Good tests are a foundational enabler for **all** reliable code-generation systems, including security-sensitive ones.
+
+For publishability and repeatability, Project 2 has a cleaner story and more straightforward benchmarks.
+
+---
+
+## 4. Research extensibility toward math & more general reasoning
+
+Project 2 is a better platform to generalize beyond pure coding:
+
+- You can:
+  - Move from tests for imperative code to tests for **symbolic math functions** (property-based testing, QuickCheck-style).
+  - Use RL signals based on **theorem-prover checks** or symbolic execution results (true/false/unknown) as rewards.
+  - Treat test generation as “hypothesis generation” in math and use automated checkers as the reward source.
+- Your RL and reward design framework can naturally extend to:
+  - Program synthesis (reward = passes tests).
+  - Proof sketch generation (reward = passes checker).
+  - Formal verification pipelines.
+
+Project 1 can also extend (e.g., semantic explanations for math reasoning), but its core design is more entangled with **natural language quality** and less with formal verification-style signals.
+
+---
+
+## 5. Risk profile and likelihood of clean scientific contribution
+
+**Project 1 risks:**
+- Reward misalignment (verbose vs. accurate vulnerability analyses).
+- Very noisy labels on what constitutes “correct” fixes.
+- You may spend a lot of time wrestling with security-specific infrastructure and less time isolating pure RL-for-reasoning questions.
+
+**Project 2 advantages:**
+- Clear, controllable environment for RL:
+  - You own the reward shaping, can iterate quickly.
+  - Can run ablations on reward components (assertion count vs. branch coverage proxy vs. smells).
+- Clean experiments that will be interesting to the RL + LLM community even if the application is “just” testing:
+  - Does RL improve compositional reasoning about code under static rewards?
+  - How do different reward structures affect generalization to new APIs or languages?
+  - How does RL-based test generation compare to supervised fine-tuning on human tests?
+
+This makes it more likely that you can publish solid **methodological** work, not just an application demo.
+
+---
+
+## Recommendation
+
+Given your identity as an **AI researcher focused on improving LLM reasoning with RL**, you should pursue:
+
+> **Project 2: RL fine-tuning of LLMs for unit test generation using static-analysis-based rewards.**
+
+It gives you:
+
+- A cleaner, lower-noise RL setting with mechanizable rewards.
+- Direct leverage of structured reasoning (preconditions, branches, invariants) aligned with math/coding reasoning.
+- Easier evaluation and more generalizable research insights.
+- A natural path to richer settings (property-based testing, symbolic math, theorem proving).
+
+If you like, I can next:
+- Sketch a concrete experimental plan for Project 2 (datasets, metrics, reward model components, RL algorithm choice).
+- Propose ablation studies that would make the work compelling for top venues.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Epoch 2, Comparison 15:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+You should pursue **Project 2**.
+
+Here’s a concise comparison and recommendation tailored to your goals (improving LLM reasoning on math/coding with RL).
+
+---
+
+## High-level recommendation
+
+- **Project 2** is more likely to:
+  - Produce *immediately useful* improvements on reasoning (especially math/coding, if you tailor the data).
+  - Be easier to execute and iterate on.
+  - Generate publishable, broadly impactful insights about *self-reflection and meta-reasoning* that the community currently cares a lot about.
+- **Project 1** is more speculative:
+  - Technically cool and novel, but higher risk in terms of practical benefits and engineering complexity.
+  - Diffusion LMs for reasoning are still niche; payoff is less certain and more infrastructure-heavy.
+
+Unless your *primary* personal interest is in diffusion architectures themselves, **Project 2 is the better project to pursue.**
+
+---
+
+## Project 1: Diffusion LM → Reasoning Agent via critic-free RL
+
+**Pros**
+
+- **Novelty in architecture + RL**:  
+  - Diffusion LMs for text are comparatively underexplored, especially for reasoning.
+  - A critic-free policy gradient algorithm (diffu‑GRPO) specialized to masked diffusion could be genuinely new and interesting from an RL-methods perspective.
+- **Potential long-term payoff**:  
+  - Coarse-to-fine generation is conceptually well aligned with multi-step reasoning.
+  - If diffusion LMs become more mainstream for language, having a ready-made RL pipeline could be important.
+
+**Cons / Risks**
+
+- **High engineering complexity**:
+  - You need robust infrastructure for:
+    - Masked diffusion LM training/fine-tuning.
+    - Efficient sampling in the diffusion process (often slow).
+    - RL on top of that, with appropriate credit assignment through a multi-step/noisy generation process.
+  - Debugging failure modes (instability, mode collapse, reward hacking) will be harder in the diffusion setting than in standard autoregressive LMs.
+- **Unclear practical gain vs. regular LLMs**:
+  - The bar for “better math/coding reasoning” with autoregressive models plus RL is already high.
+  - You’re competing with very strong baselines (e.g., PPO/GRPO/variants on standard transformers + chain-of-thought).
+  - It’s not obvious diffusion brings a *clear*, easily demonstrable advantage in reasoning, especially on a single-project timescale.
+- **Evaluation / narrative risk**:
+  - Reviewers may ask: why diffusion at all for reasoning, versus just using standard LLMs with SFT + RL?
+  - You may end up with a technically impressive system but only marginal task improvement, which is hard to frame strongly.
+
+**When Project 1 makes sense**
+
+- You are specifically interested in:
+  - New RL algorithms for non-autoregressive generative models.
+  - Diffusion architectures as a research direction in their own right.
+- You’re okay with:
+  - Considerable implementation effort.
+  - Higher risk of “cool method, modest gains.”
+
+---
+
+## Project 2: Reflection-focused multimodal dataset + GRPO for better reasoning
+
+**Pros**
+
+- **Conceptual alignment with current state-of-the-art trends**:
+  - Reflection, self-critique, iterative refinement, and “meta-cognition” are all active and impactful directions.
+  - There’s strong empirical evidence that structured reasoning + reflection improves math/coding performance.
+- **More direct path to measurable gains**:
+  - You can:
+    1. Start with a capable MLLM (or even purely text if you want to focus on math/coding).
+    2. Generate (answer, reflection) pairs where reflections explain failures, gaps, or improvements.
+    3. Train a policy model to mimic both answer and reflection behavior.
+    4. Add GRPO with a reward tuned for:
+       - Accuracy on final answer.
+       - Quality and brevity of reflection (non-redundant, logically structured).
+  - This pipeline is very likely to yield *visible improvements* in reasoning benchmarks (e.g., GSM8K, MATH, coding problems), especially if you:
+    - Use reflection targeted at error analysis or revision steps.
+    - Enforce short, structured reflections rather than long verbose ones.
+- **Dataset contribution**:
+  - A well-curated reflection dataset (especially multimodal or coding-specific) can itself be a substantial contribution, independent of the RL component.
+  - Clear path to release: dataset + training recipe + reflections’ scoring heuristic.
+- **RL side is tractable**:
+  - GRPO on top of a policy model is conceptually standard: you’re varying mainly the reward design for reflections.
+  - You can iterate quickly: adjust reward terms, sample small batches, see impact on structure and usefulness of reflections.
+- **Broader impact and narrative**:
+  - Strong story: “We show that training models to produce concise, cognitively meaningful self-reflections significantly improves reasoning.”
+  - Easy to align with current discussions on interpretability and process supervision, as reflections expose intermediate reasoning signals.
+
+**Cons / Risks**
+
+- **Data quality dependence**:
+  - If the advanced MLLM that generates reflections is weak or hallucination-prone, your reflections may be noisy.
+  - You’ll need some filtering or scoring mechanism to maintain reflection quality (automatic rubric, reward model, or heuristic rules).
+- **Novelty risk**:
+  - Reflection-based methods are an active area; some of the ideas overlap with known work (e.g., self-refine, reflection, process supervision, etc.).
+  - Your novelty has to be:
+    - Quality and structure of the reflection dataset.
+    - The reflection reward design in GRPO (e.g., penalizing redundancy, rewarding specific cognitive patterns).
+- **Multimodality overhead** (if you fully lean into it):
+  - Multimodal brings extra complexity in data collection and evaluation.
+  - If your real goal is math/coding, it might be simpler to start with text-only reasoning and only later extend to multimodal.
+
+**When Project 2 makes sense**
+
+- You care about:
+  - Practical performance on math/coding reasoning.
+  - Structured self-reflection as a means of improved RL training.
+- You want:
+  - A more controlled risk profile.
+  - Faster iteration and clearer empirical and narrative payoffs.
+
+---
+
+## What I’d do in your position
+
+Given that your explicit goal is to improve reasoning (math, coding) with RL, and not specifically to pioneer diffusion architectures, I’d recommend:
+
+1. **Pursue Project 2 as the main line.**
+   - Start with *text-only* math/coding problems:
+     - Use a strong base LLM to generate:
+       - Initial solution.
+       - Reflection on that solution (why it might be wrong, alternative steps, final corrected answer).
+   - Curate reflections to be:
+     - Short.
+     - Step-structured (e.g., bullet-point logic, error identification, correction).
+   - Define a GRPO reward combining:
+     - Final answer correctness.
+     - Penalty on redundant or circular reflections.
+     - Positive reward for:
+       - Pointing out specific mistakes.
+       - Updating the solution accordingly.
+2. **Optionally, add a small, targeted component inspired by Project 1:**
+   - For instance, experiment with a *coarse-to-fine* reflection structure (short initial hypothesis, then selective refinement) to borrow the “coarse-to-fine” spirit without using diffusion.
+   - Or, use a simple, critic-free group-relative approach (as in GRPO) to keep credit assignment lightweight.
+
+Later, if you still have time or your lab is architecturally-diffusion-focused, you can spin out a more speculative follow-up on Project 1, armed with:
+
+- Better understanding of reflection rewards and RL training dynamics from Project 2.
+- Concrete baselines showing what’s achievable with standard autoregressive models.
+
+---
+
+**Bottom line:**  
+Pursue **Project 2**. It’s better aligned with your stated goal (improving reasoning on math/coding tasks via RL), more tractable, and more likely to yield strong empirical and publishable results.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Epoch 3, Comparison 29:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+You should pursue **Project 1 (Multi‑round Thinking)** if your goal is to *push capabilities* and generate novel, empirically grounded results in math/coding reasoning with RL(-adjacent) methods. Project 2 is valuable, but it’s more of a consolidation/meta‑research contribution than a capabilities advance.
+
+Here’s a concise comparison framed for an AI researcher deciding where to invest scarce time.
+
+---
+
+## 1. Impact on LLM reasoning (math/coding, RL‑style improvements)
+
+**Project 1: Multi‑round Thinking (Test‑time Scaling)**  
+- **Directly targets reasoning**: You are explicitly probing whether iterative, self‑refining inference improves math and coding performance—exactly where current models still struggle.  
+- **High leverage per unit effort**: A relatively simple intervention (prompting + orchestration) can yield measurable gains. You can also layer RL or bandit‑style selection on top (e.g., RL for selecting which candidate trace to feed back, or how many rounds to run).  
+- **Novel RL angle**:  
+  - You can frame test‑time reasoning as a *policy over thoughts* or *policy over inference steps*.  
+  - You can explore adaptive stopping, partial credit rewards (for intermediate steps), and credit assignment across rounds.  
+  - This can lead to new algorithmic ideas (e.g., online RL at inference time, budgeted reasoning, or “reasoning controllers”).  
+- **Empirical grounding**: You’ll get concrete curves: performance vs. number of rounds vs. cost, under different prompting/control strategies. This is fertile ground for publishable empirical findings and follow‑up work.
+
+**Project 2: Systematic Review of RL‑enhanced LLMs**  
+- **Indirect effect on reasoning**: You’d clarify the landscape of RLHF, RLAIF, DPO, and related methods, but you won’t directly *improve* math/coding ability in the short term.  
+- **Valuable, but more distanced from capabilities**: The nearest‑term gains are in survey and conceptual organization, not in new algorithms or empirical SOTA improvements on reasoning benchmarks.
+
+If your core motivation is “make LLMs *actually* better at reasoning,” Project 1 is better aligned.
+
+---
+
+## 2. Originality and publishability
+
+**Project 1**  
+- **Room for novelty**:  
+  - Multi‑round reasoning is underexplored compared to CoT and basic self‑consistency.  
+  - You can combine it with lightweight RL or bandit methods (e.g., learning a policy that decides which partial solutions to refine, or when to stop).  
+  - You can define new benchmarks/datasets tailored to multi‑step reasoning and show clear capability gains.  
+- **High chance of publishable paper** if you:  
+  - Demonstrate significant improvements on standard math/coding benchmarks (GSM8K, MATH, HumanEval, Codeforces/LeetCode subsets).  
+  - Analyze *failure modes* and when multi‑round helps vs. hurts.  
+  - Provide ablations: naive self‑refinement vs. RL‑guided refinement vs. static vs. adaptive depth.  
+
+**Project 2**  
+- **Crowded survey space**: There are already multiple RLHF/DPO/“alignment by RL” overviews, though the field is evolving quickly.  
+- To be novel, you’d need a strong angle (e.g., a unified formalism connecting reward‑based and reward‑free methods, or a rigorous taxonomy by objective, data source, and training pipeline).  
+- Surveys are absolutely publishable, but:  
+  - They’re often *less* cited than foundational method papers in this area (RLHF/RLAIF/DPO etc.).  
+  - The bar for clarity, coverage, and correctness is high, and they don’t immediately demonstrate new empirical results.
+
+If your publication goal is to contribute both method and measurable performance gains, Project 1 is the clearer bet.
+
+---
+
+## 3. Fit with your skills and career trajectory (as an AI researcher)
+
+Since you describe yourself as an “AI researcher” rather than a “research engineer” or “literature scientist,” I’ll assume you want to:
+
+- Design or evaluate **new algorithms** (especially RL‑style), not just synthesize existing ones.
+- Build a **track record of experimental / algorithmic contributions** in LLM reasoning and alignment.
+
+**Project 1** helps you build skills and reputation in:
+
+- Designing and evaluating **reasoning interventions**.  
+- Experimentation with RL‑style control policies at inference-time.  
+- Engineering practical LLM evaluation pipelines for math and coding.  
+
+**Project 2** helps you build skills and reputation in:
+
+- Conceptual synthesis of RL and alignment literature.  
+- Writing clear, structured, didactic technical prose.  
+- Lower engineering overhead, more reading/theorizing.
+
+If you want to be seen primarily as someone who *pushes the frontier* of reasoning‑capable LLMs (and potentially RL‑for‑reasoning), Project 1 fits more cleanly.
+
+---
+
+## 4. Feasibility, risk, and timeline
+
+**Project 1: Implementation & experiments**
+
+Pros:
+- **Fast minimum viable result**:  
+  - You can prototype multi‑round prompting with an API (OpenAI, Anthropic, etc.) in a few days.  
+  - Early baselines: 1 vs 2 vs 4 rounds; simple “feed back previous answer and reason about it” prompts.  
+- **Scales with available compute**:  
+  - You can start with small sample sizes and fewer benchmarks.  
+  - Later, scale up the number of tasks or model sizes if you get promising signals.
+- **Iterative improvement**:  
+  - Even if initial results are modest, you can iterate: better prompts, tree‑structured refinement, RL/bandits for selecting which branches to expand, or dynamic stopping.
+
+Cons:
+- You might run into **diminishing returns**: extra rounds help only a bit or only on some benchmarks.  
+- Careful evaluation is crucial; reasoning improvements can be fragile and dataset‑specific.
+
+**Project 2: Systematic review**
+
+Pros:
+- Lower uncertainty about feasibility: you can always finish a review if you manage your scope.  
+- No large compute or model access requirements.  
+- Predictable structure: intro → background RL → RLHF/RLAIF → DPO + reward‑free → challenges → future work.
+
+Cons:
+- **High time cost for reading**: to do it rigorously, you’ll read dozens to 100+ papers and keep up with new ones appearing during the project.  
+- Risk of being **scooped or partially overlapped** by concurrent surveys.  
+- Less “head‑turning” if peers value algorithmic novelty more than synthesis.
+
+If you want faster feedback on whether your idea is promising—and the option to pivot to a paper focused on, say, *adaptive test‑time RL for reasoning*—Project 1 gives you more flexibility.
+
+---
+
+## 5. What might a strong version of Project 1 look like?
+
+To make the recommendation concrete, here’s a crisp shape of Project 1 that would be both RL‑relevant and publishable:
+
+1. **Baseline setup**
+   - Tasks: GSM8K, MATH (or a subset), HumanEval or MBPP for coding, plus a few long‑chain reasoning tasks.  
+   - Models: one open‑source (e.g., Llama‑3‑8B‑Instruct) + one API model.  
+   - Round‑0: standard CoT or few‑shot prompting.  
+   - Round‑k: feed back previous answer (and optionally its reasoning) with a “reflect, critique, and improve” style meta‑prompt.
+
+2. **Core experiments**
+   - Vary number of rounds (1, 2, 4, maybe 8).  
+   - Track performance vs. cost.  
+   - Identify where multi‑round *helps*, *does nothing*, or *degrades* performance.
+
+3. **RL/decision‑making component**
+   - Develop a simple **controller** that decides:  
+     - whether to run another round, or  
+     - which candidate trace to refine.
+   - Frame this as a **bandit or RL problem**:  
+     - Reward = correctness (for math/coding), or proxy (self‑consistency, or heuristic derived from explanations).  
+     - Policy over (task features, intermediate traces) → (continue / stop / choose branch).  
+   - Show that an RL‑trained or data‑driven controller outperforms fixed strategies (e.g., always do 3 rounds).
+
+4. **Analysis**
+   - Error typology: which failure modes are fixable by refinement? Which are not?  
+   - Does the controller learn to allocate more inference to harder items?  
+   - How do gains differ between math vs. coding?
+
+This is a solid paper on **test‑time RL‑style control for multi‑round reasoning**, tightly aligned with your interests.
+
+---
+
+## Summary Recommendation
+
+Given your focus on **improving LLM reasoning with reinforcement-learning‑related ideas**, your desire for **empirical, capability‑relevant contributions**, and the current research landscape:
+
+- **Pursue Project 1: Multi‑round Thinking / Test‑time Scaling.**  
+- Use it as a platform to explore **RL‑style controllers for test‑time reasoning depth and branch selection**, and measure gains on math and coding benchmarks.
+
+You can keep notes on RL‑enhanced LLMs as you go; if the project matures, those notes can later seed a **targeted review** section in a future methods paper or a specialized survey focused on RL-for-test-time-reasoning.
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: gpt-5.1
+
+================================================================================

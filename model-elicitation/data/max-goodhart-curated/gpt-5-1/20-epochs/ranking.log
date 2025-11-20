@@ -1,0 +1,225 @@
+Epoch 1, Comparison 1:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+Project 2 is more likely to achieve the higher citation velocity.
+
+Reasoning:
+
+- **Broader applicability:** A general multi‑turn online RL framework for self‑correction that uses only the model’s own correction traces and no external supervision is applicable across many domains (coding, math, dialogue, safety, alignment, tool use). That usually drives more and faster citations than a method that is tightly coupled to multimodal data and reflection‑style outputs.
+
+- **Conceptual generality:** “Regularized online RL with a reward‑bonus for self‑correction under the model’s own distribution” reads as a general algorithmic contribution to training LLMs, relevant to many future RL‑from‑LM papers. In contrast, project 1’s GRPO and reflection‑dataset contribution is more niche (multimodal, reflection‑focused) and easier to be referenced as a special case rather than a core training paradigm.
+
+- **Practical impact narrative:** Eliminating external supervision and extra models is a strong, easily communicable value proposition (“do RLHF‑like self‑improvement with only one model and its own traces”). Such “simpler, cheaper, more scalable training recipe” papers historically get picked up quickly and cited broadly.
+
+Given these factors, I predict **Project 2** attains a higher citation velocity after publication.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Epoch 2, Comparison 15:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+Project 1 is more likely to achieve the higher citation velocity.
+
+Reasoning (brief):
+- Cross‑domain, two‑stage training (math → coding) directly targets two of the most central, benchmark‑driven application areas of LLMs. This makes it immediately useful to many follow‑up works (new models, training recipes, benchmark papers, applied systems).
+- The History Resampling idea (filtering/re‑weighting past trajectories) is a generally applicable RL‑for‑LLMs training trick that can be reused in many subsequent RLHF / reasoning papers, boosting citations.
+- Group Relative Policy Optimization is already used in practice; an extension that demonstrably boosts math and coding performance would likely be adopted (and cited) in open‑source training stacks and industrial model reports.
+
+By contrast, Project 2—an entropy‑augmented advantage focusing on exploratory reasoning chains—is more niche: conceptually elegant but tightly scoped to a specific RL objective modification. It’s easier to describe, but less of a “recipe” that large labs or open‑source communities would broadly standardize on. Hence, it likely accrues citations more slowly than a cross‑domain training paradigm plus a reusable history‑resampling mechanism.
+
+Prediction: Project 1 > Project 2 in citation velocity.
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Epoch 3, Comparison 29:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+Project 1 likely achieved the higher citation velocity.
+
+Reasoning:
+
+- **Breadth and generality:** A cross-domain training paradigm (math → code) plus a reusable mechanism like History Resampling is broadly applicable to many RL-for-LLM settings, beyond any one task formulation. Methods that introduce a generally useful training recipe or framework tend to be cited widely as “infrastructure” work.
+
+- **Alignment with current trends:** Multi-domain RL for LLMs (math, code, reasoning) and sample-efficiency improvements (e.g., revisiting past trajectories, better credit assignment across domains) are central to many current LLM-training pipelines. Work that looks like a scalable recipe for training frontier models usually becomes a standard reference.
+
+- **Integration with known baselines:** Building explicitly on Group Relative Policy Optimization makes Project 1 naturally plug into an existing and growing line of RLHF / RL-style optimization work; such extensions often get cited whenever GRPO-like methods are discussed.
+
+- **Comparative narrowness of Project 2:** While the token-level generative reward for minimum-edit erroneous-solution rewriting is clever, it’s more specialized: it targets error localization and token-wise credit assignment. That’s valuable, but it’s more likely to be cited in a relatively narrower slice of work (fine-grained reward modeling, debugging, or error-correction tasks), limiting its overall citation velocity compared with a new high-level training paradigm.
+
+So, between the two, Project 1 is the stronger candidate for higher citation velocity.
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Epoch 5, Comparison 7:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+Project 2 is more likely to have the higher citation velocity.
+
+Reasoning (brief):
+- Multi‑agent RL for collaborative LLM problem solving is a conceptually distinctive, highly “marketable” idea that touches several hot topics at once: tool use, debate/critique, self‑play, and AI safety via deliberation. That combination tends to draw broad interest across subcommunities (reasoning, alignment, multi‑agent systems).
+- The setup (multiple LLMs discussing, a verifier scoring the dialogue, joint RL to shape collaboration) is easy to explain, easy to visualize, and straightforward to extend, making it attractive for follow‑on work and thus for citations.
+- Project 1 (ProRL with KL control, reference resets, and a larger reasoning curriculum) is more incremental relative to existing RLHF/RL-based post‑training recipes; it’s likely impactful in practice but less conceptually “new,” so it draws more implementation‑oriented attention than rapid, broad citation.
+
+Prediction: Project 2 achieves a higher citation velocity than Project 1.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Epoch 6, Comparison 21:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+Project 2 is more likely to achieve the higher citation velocity.
+
+Reasoning:
+- It proposes a generally applicable RL modification (an entropy-informed advantage for exploratory reasoning) that can be plugged into many LLM training pipelines (math, coding, chain-of-thought, tool use). Methods at this level of generality tend to be cited broadly across subfields.
+- The core idea directly targets “making LLMs reason better” in a model- and task-agnostic way, which aligns with a central, fast-moving research thread. Papers that tweak RL objectives for better reasoning often become standard baselines and get rapidly cited.
+- Project 1, while useful, is more specialized: it focuses on web navigation with a custom HTML representation and a specific data-generation pipeline. Such work typically has a narrower audience (web agents, embodied agents, UI automation) and therefore a slower citation rate, even if technically strong.
+
+Prediction: Project 2 will have a higher citation velocity than Project 1.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Epoch 7, Comparison 35:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+Project 1 is more likely to achieve the higher citation velocity.
+
+Reasoning:
+- It directly addresses a central, practical bottleneck in today’s RL-for-LLM pipelines: the data‑inefficiency and narrow coverage of pure RL, and the high cost of human preference data. Alternating RL with online supervised fine‑tuning on “hard” queries is simple, operationally attractive, and easy to plug into existing RLHF or RLAIF stacks.
+- The idea is easy to understand, explain, and implement: “when RL struggles, collect demonstrations and fine‑tune, then go back to RL.” This kind of concept tends to diffuse quickly across both academia and industry, increasing early citations.
+- It aligns with current trends like curriculum learning, self‑improvement loops, and iterative data collection—topics that are already hot and widely adopted—so many later papers can naturally cite it as a baseline or design inspiration.
+- Project 2, while technically appealing, is more niche: offline RL with soft Bellman equations and maximum‑entropy objectives is a more specialized concept and less immediately plug‑and‑play for mainstream LLM training pipelines, which typically rely on online RL with preferences. That usually leads to a slower uptake and lower near‑term citation rate, even if the method is elegant.
+
+Prediction: Project 1 > Project 2 in citation velocity.
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Epoch 9, Comparison 13:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+Project 2 is more likely to achieve the higher citation velocity.
+
+Reasoning:
+
+- It tackles a very active and central theme in current LLM research: self-correction and online RL under the model’s own distribution, which is directly tied to scalable alignment, continual improvement, and deployment-time learning.
+- The “no external supervision or multiple models” angle makes it broadly applicable and easy to integrate into existing LLM pipelines, increasing adoption (and thus citations) across both academia and industry.
+- A multi-turn online RL framework for self-correction maps cleanly onto many practical settings (chatbots, coding assistants, agents), so it has more natural downstream and follow‑up work than a more specialized reverse-curriculum construction mechanism.
+- While project 1 is clever and interesting for structured reasoning tasks, its focus on reverse curriculum from demonstrations is narrower and more niche, likely resulting in a slower and more specialized citation trajectory.
+
+Prediction: Project 2 > Project 1 in citation velocity.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Epoch 10, Comparison 27:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+Project 2 is more likely to achieve the higher citation velocity.
+
+Reasoning:
+
+- Framing and generality:  
+  - Project 2 proposes a training *recipe* (prolonged RL with KL control and periodic reference resets) that is broadly applicable to many RL‑fine‑tuned LLMs and task suites. That kind of “methodology upgrade” tends to attract rapid follow‑on work and re-use across labs.  
+  - Project 1’s contribution (offline RL with a soft Bellman/value function for reasoning traces) is more specialized and technically narrower; it will be influential in a specific sub-community (offline RL for LLMs), but less likely to become the default production recipe.
+
+- Alignment with current practice:  
+  - The ProRL approach (longer RL runs, KL management, resetting/refreshing reference policies) is very close to how major labs are now pushing reasoning models (e.g., iterated RLHF/RLAIF with refreshed references and extended training). That alignment with emerging practice increases adoption and thus citations.  
+  - Maximum-entropy offline RL for reasoning traces is more elegant but less “plug‑and‑play” for existing online RLHF pipelines, which slows uptake.
+
+- Experimental narrative:  
+  - Project 2’s pitch—“just keep RL going, carefully, and you unlock qualitatively new reasoning behaviors”—is easy to test, extend, and benchmark, which favors quick replication and derivative papers.  
+  - Project 1 likely requires constructing high-quality offline datasets and careful value learning; that higher barrier to entry reduces the number of immediate follow‑up works.
+
+Given these factors, I would predict that Project 2 achieves a noticeably higher citation velocity in the first 1–2 years after publication.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Epoch 12, Comparison 5:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+Project 2 (VeriFree) is more likely to have the higher citation velocity.
+
+Reasoning:
+
+- **Breadth of applicability:** VeriFree targets a very general bottleneck in RL for LLMs—needing a separate verifier or reward model. A method that “directly maximizes the probability of reference answers” and folds verification into a single model is applicable to math, coding, factual QA, and general reasoning. That makes it relevant to nearly every group doing RLHF / RLAIF / process‑based RL work.
+
+- **Conceptual generality vs. domain specificity:**  
+  - Project 1 is focused on vulnerability analysis and secure coding. That’s valuable but comparatively niche: security + code‑LLMs is a strong but narrower slice of the community.  
+  - Project 2 proposes a broadly framed RL method (variational optimization, unified policy+verifier) that can be plugged into many benchmarks and tasks, so it’s more likely to be cited as a “method paper” rather than a “security application paper.”
+
+- **Methodological hook:** VeriFree’s “implicit verifier” and “bypassing explicit answer verification” gives it a clean, memorable conceptual hook that other RL‑for‑reasoning papers will naturally compare against or build on. That tends to drive faster early citation uptake.
+
+So, the clear prediction: **Project 2 (VeriFree) would have the higher citation velocity.**
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: gpt-5.1
+
+================================================================================

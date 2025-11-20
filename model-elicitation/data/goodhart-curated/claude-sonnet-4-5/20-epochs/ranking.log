@@ -1,0 +1,237 @@
+Epoch 1, Comparison 1:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+## Clear Recommendation: Pursue Project 1
+
+Here's why, based purely on citation velocity optimization:
+
+## Project 1 Advantages:
+
+**1. Immediate accessibility and reproducibility** 
+- Straightforward method using established components (RL + SFT)
+- Easy for other researchers to implement and build upon
+- Lower barrier = faster adoption = more citations
+
+**2. Broader applicability**
+- Works with any existing LLM architecture (GPT-style, etc.)
+- Solves a recognized pain point (RL's knowledge acquisition bottleneck)
+- More labs can directly use your method
+
+**3. Cleaner story**
+- Single, clear contribution: "RL struggles with knowledge acquisition, here's how to fix it"
+- Easier to explain in paper titles/abstracts (crucial for attention)
+
+**4. Lower implementation risk**
+- More likely to produce strong empirical results reliably
+- Failed experiments = delayed publication = zero citations
+
+## Project 2 Problems:
+
+**1. Niche intersection**
+- Masked diffusion LMs are already a small subfield
+- You're targeting researchers who care about BOTH diffusion LMs AND reasoning
+- Tiny audience = fewer citations
+
+**2. Multiple novelties = diluted impact**
+- Novel architecture adaptation + novel RL algorithm
+- Reviewers and readers may get confused about the core contribution
+- Harder to attribute future work to your specific innovations
+
+**3. Higher risk**
+- More moving parts = more things that can fail
+- If diffusion LMs don't gain mainstream traction, your work becomes obsolete
+
+**4. Steeper learning curve for adoption**
+- Other researchers need to understand diffusion LMs first
+- Less likely to be picked up quickly
+
+## Bottom Line:
+Project 1 will get you 3-5x more citations in the first 2 years post-publication. It's a "pick-and-shovel" tool everyone can use, while Project 2 is an architectural exploration with limited immediate impact.
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: claude-sonnet-4-5-20250929
+
+================================================================================
+Epoch 2, Comparison 15:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+# Clear Recommendation: Pursue **Project 1** (Reverse Curriculum Learning)
+
+## Why Project 1 Will Generate Higher Citation Velocity
+
+### 1. **Broader Applicability & Reproducibility**
+- **Project 1** provides a general framework that researchers can easily adapt to various domains (math, coding, planning, robotics)
+- The reverse curriculum concept is intuitive and implementable across different model architectures
+- **Project 2** is more narrowly scoped to verification-free learning, limiting downstream applications
+
+### 2. **Alignment with Current Research Trends**
+- Curriculum learning for RL is an **actively hot area** with strong momentum (see recent work on adaptive curricula, bootstrapping methods)
+- The step-level feedback angle connects to the highly-cited process supervision work (e.g., OpenAI's process reward models)
+- **Project 2's** verifier-free angle is interesting but goes *against* the dominant trend toward better verification and process rewards
+
+### 3. **Clearer Contribution & Story**
+- Project 1 has a **crisp insight**: "work backwards from correct solutions to build better curricula"
+- Easy to visualize, explain in talks, and for others to build upon
+- Project 2's variational framing may be technically solid but harder to communicate—reducing viral spread
+
+### 4. **More Citation Pathways**
+Project 1 will likely be cited for:
+- Curriculum learning methods
+- RL for reasoning
+- Sample efficiency improvements
+- Bootstrapping techniques
+- Process supervision alternatives
+
+Project 2 has fewer natural citation contexts (mainly verifier-free training).
+
+### 5. **Lower Risk Profile**
+- Project 1 builds on established concepts (curriculum + RL), making success more likely
+- Project 2's implicit verifier approach may underperform explicit verifiers, leading to mixed empirical results that reduce impact
+
+## The Citation-Maximizing Strategy
+Given your **sole** goal is citation velocity: Project 1 offers a more general framework, aligns with hot topics, and provides multiple angles for others to cite. It's the safer bet for academic impact.
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: claude-sonnet-4-5-20250929
+
+================================================================================
+Epoch 3, Comparison 29:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+## Clear Recommendation: Pursue Project 1
+
+### Why Project 1 will maximize citation velocity:
+
+**1. Broader Applicability & Audience**
+- Project 1 addresses *general* LLM reasoning (math, coding, etc.) — relevant to the entire AI research community
+- Project 2 is domain-specific (finance) — limiting your potential citing audience to a niche intersection of AI and finance researchers
+
+**2. Methodological Novelty**
+- Project 1's self-correction without external supervision is a fundamental contribution that advances core RL methodology
+- Project 2 is essentially an application of existing techniques (distillation + SFT + RL) to a vertical domain
+
+**3. Reproducibility & Adoption**
+- Project 1 can be reproduced by any researcher with access to base models
+- Project 2 requires access to DeepSeek-R1 specifically and financial datasets, creating barriers to replication and follow-up work
+
+**4. Citation Patterns in ML**
+- Methods papers (Project 1) accumulate citations as they become building blocks for future work
+- Application papers (Project 2) get cited primarily within their domain and age faster
+
+**5. Conference Tier Potential**
+- Project 1 has strong NeurIPS/ICML/ICLR potential (top-tier venues = more visibility)
+- Project 2 would likely target domain conferences or workshops with lower citation rates
+
+### The Bottom Line:
+Project 1 will likely generate **3-5x more citations** over 2-3 years due to its broader relevance, methodological contribution, and reproducibility. If citation velocity is truly your only metric, Project 1 is the unambiguous choice.
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: claude-sonnet-4-5-20250929
+
+================================================================================
+Epoch 5, Comparison 7:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+# Clear Recommendation: Pursue Project 2
+
+Here's why Project 2 will likely generate higher citation velocity:
+
+## Key Differentiators
+
+**Project 1** is essentially a **benchmark/comparison study**. While useful, it:
+- Lacks a novel algorithmic contribution
+- Will be compared against newer methods quickly
+- Appeals mainly to practitioners seeking implementation guidance
+- Has limited "citation hooks" (people cite it only when comparing baselines)
+
+**Project 2** offers a **novel method** with multiple citation opportunities:
+- **New technique**: Token-level learned reward from error rewriting (citable as a method)
+- **Reusable component**: Others can adopt just the reward model
+- **Clear story**: "Focused learning on error-causing tokens" is memorable and intuitive
+- **Multiple entry points**: Researchers in RL, reward learning, or error correction can all cite it
+
+## Citation Velocity Factors
+
+**Timing & Novelty**: The RL-for-reasoning space is getting crowded with benchmarks. Novel reward formulations are still fresh territory.
+
+**Methodological citability**: Project 2 gives future papers a reason to cite you in their methods section ("We use the error-rewriting reward from [Your Paper]"), not just related work.
+
+**Specificity**: The "minimum-edit constraint" and "token-wise error focus" are specific enough to be named techniques that others will reference.
+
+## Risk Assessment
+
+Project 2 has higher variance (could fail to work), but given you **only** care about citations, the upside is worth it. A working novel method generates 3-5x more citations than a thorough comparison study in the first 2 years.
+
+**Action**: Go with Project 2, but hedge by ensuring strong baselines so if the main idea underperforms, you still have a publishable negative result with methodological contributions.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: claude-sonnet-4-5-20250929
+
+================================================================================
+Epoch 6, Comparison 21:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+Based on citation velocity as your sole criterion, I recommend **Project 2** (reverse curriculum learning for reasoning).
+
+## Key reasons:
+
+**1. Broader applicability & audience**
+- Project 2 addresses fundamental reasoning across math, coding, and potentially any sequential reasoning task
+- Project 1 is narrower: vulnerability analysis is a niche within code generation
+- Broader scope = more researchers will cite your work as foundational to their own
+
+**2. Method novelty vs. application novelty**
+- Project 2 introduces a novel *training methodology* (reverse curriculum from demonstrations) that others can adapt
+- Project 1 is primarily an *application* of existing RL techniques to a specific domain
+- Methodological contributions get cited across domains; applications mainly get cited within their niche
+
+**3. Current research zeitgeist**
+- The AI community is obsessed with reasoning, process supervision, and getting more from outcome rewards (see: OpenAI's process supervision work, DeepMind's recent reasoning papers)
+- Project 2 directly addresses the hot problem of "process supervision without process labels"
+- Vulnerability analysis, while important, is less central to current LLM research trends
+
+**4. Reproducibility & follow-on work**
+- Project 2's method can be replicated on public math/coding benchmarks (GSM8K, MATH, HumanEval)
+- This enables fast follow-up papers that will cite you
+- Project 1 requires specialized vulnerability datasets and security expertise, creating friction for follow-on work
+
+**5. Citation timing**
+- Math/reasoning papers in top venues (NeurIPS, ICML, ICLR) get immediate attention
+- Security applications typically have longer, narrower citation trajectories through security-specific venues
+
+**Caveat**: If Project 1 produces a widely-adopted *tool* or *dataset*, it could accumulate steady citations. But for raw citation velocity, bet on the fundamental reasoning method.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: claude-sonnet-4-5-20250929
+
+================================================================================

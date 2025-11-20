@@ -1,0 +1,560 @@
+Epoch 1, Comparison 1:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+You should pursue **Project 1 (entropy minimization for reasoning)** if your only goal is to maximize *future* citation velocity over the next 1–3 years.
+
+Here’s the reasoning, focused specifically on citations, not scientific elegance.
+
+---
+
+## 1. Prior saturation and “novelty surface area”
+
+**Project 2 (ReST / offline RL for alignment)** is already heavily “occupied space”:
+
+- The central idea—generate a dataset from an initial policy, then do offline RL / batch improvement with preference data—is extremely close to:
+  - RLHF and its variants (PPO, DPO, IPO, KTO, etc.).
+  - ReST- and ReST-like works already in the literature (e.g., “Reinforced Self-Training” and “Self-Rewarding Language Models,” etc.).
+  - Offline RL for sequence models (a cluster of papers from both RL and NLP communities).
+- That means your main competition for mindshare is:
+  - very high-profile groups (OpenAI, Anthropic, DeepMind, Meta),
+  - and a large tail of follow-up papers that will all be re-implementing *some* “offline RL for language models with preferences” idea.
+
+Your paper will likely be seen as **another variant** in a crowded space, unless you do something very distinctive *and* time it perfectly (hard to guarantee when your utility is “citations only”).
+
+**Project 1 (entropy minimization)** is more conceptually orthogonal:
+
+- “Directly minimize entropy at the token level via EM-FT, EM-RL, and EM-INF to improve reasoning and coding” is a **clean, crisp conceptual hook** that is:
+  - Easy to summarize in one sentence.
+  - Not yet saturated as a *named framework* with three levels (training, RL, inference-time).
+- Entropy and calibration for LLMs are already hot topics, but the idea of **explicit entropy-minimizing as a unified recipe for better reasoning** is not yet overclaimed by a standard name or canonical paper.
+- This gives you more **“conceptual IP”**: your terminology (EM-FT, EM-RL, EM-INF) is likely to become the anchor people cite when they say “we reduce entropy to improve reasoning”.
+
+That structural distinctiveness tends to drive **longer-lived and broader** citation streams.
+
+---
+
+## 2. Who will cite you and why?
+
+Think in terms of “citation markets”: which communities have repeated reasons to cite you?
+
+### Project 2: ReST / offline RL for alignment
+
+Main citation markets:
+
+1. **RLHF / preference-alignment papers**  
+   - You will be one of many “better data reuse / more sample-efficient RLHF” papers.
+   - You will fight with existing baselines (PPO-based RLHF, DPO, KTO, ORPO, etc.) for the canonical RLHF-citation slot.
+   - Unless you become *the* canonical paper, most future works will cite:
+     - the original RLHF/Deep RL papers,
+     - one or two representative alignment methods (OpenAI/InstructGPT, Anthropic’s Constitutional AI, DPO),
+     - and maybe just 0–1 niche “offline RL for LLMs” works.  
+       It’s easy for your work to be the one that gets dropped.
+
+2. **Offline RL community**  
+   - Offline RL folks are more likely to cite algorithmic papers that are *RL-first*, not “LLM with an RL layer tacked on.”
+   - Your work will be more NLP/LLM-focused than RL-theory focused, so you’ll probably be “related work, but not core” in that literature.
+
+3. **Applied “we did RLHF for X” papers**  
+   - They are often selective: they’ll cite 1–2 methods that are easiest to explain and possibly the ones in Lua/Llama, OpenAI, or Anthropic docs.
+   - Unless your algorithm is shipped in a major open-source framework and clearly outperforms DPO/PPO in their setting, your method risks becoming a footnote.
+
+**Net effect:** citations, but heavily diluted by competition and path-dependence (who publishes the “canonical” paper first, who releases code/models, etc.).
+
+---
+
+### Project 1: Entropy minimization for reasoning (EM-FT / EM-RL / EM-INF)
+
+Main citation markets:
+
+1. **LLM reasoning / math / coding papers**  
+   - These papers constantly look for:
+     - simple knobs to tune inference-time behavior,
+     - training modifications that improve chain-of-thought, math accuracy, or coding reliability.
+   - If you can show:
+     - big gains on GSM8K, MATH, HumanEval, etc.,
+     - using a **simple and orthogonal** trick (entropy minimization),
+     many later works will say some variant of:  
+     *“We also experiment with entropy-minimization techniques [Your Name, Year] to improve reasoning robustness.”*
+   - This is a large and quickly growing citation market.
+
+2. **Calibration / uncertainty / reliability papers**  
+   - Anyone studying:
+     - confidence estimation,
+     - abstention (“know when you don’t know”),
+     - selective prediction,
+     - hallucination reduction,
+     will be interested in how entropy relates to correctness in LLMs.
+   - You’ll be a natural citation as “the work that operationalized entropy-minimization as a full training+RL+inference stack for LLMs.”
+
+3. **Inference-time methods / test-time compute papers**  
+   - EM-INF (logit adjustment without retraining) is a selling point:
+     - it’s cheap,
+     - easy to plug into existing models,
+     - and easy to ablate.
+   - Inference-control papers (e.g., on temperature scaling, guidance, test-time augmentation, etc.) love to cite simple knobs with empirical proof.
+
+4. **RL for LLMs**  
+   - EM-RL (reinforcement with negative entropy as the reward) is an unusual RL objective:
+     - RL work on “novel forms of intrinsic rewards” or “RL for language generation” will often reference it.
+
+Because your work touches **three layers simultaneously** (fine-tuning, RL objective, inference-time control) under a **single coherent principle (entropy minimization)**, it has many hooks for different sub-communities. That elevates the chance of consistent, cross-domain citations.
+
+---
+
+## 3. Time-to-impact and “headline clarity”
+
+Citation velocity rewards:
+
+- Fast conceptual uptake,
+- Easy-to-remember taglines,
+- Easy reusability.
+
+**Project 1 headline** (what people will say in talks/slides):  
+> “We can significantly improve math/coding reasoning just by explicitly minimizing output entropy—with a training loss, an RL reward, and even at inference by logit shaping.”
+
+**Project 2 headline**:  
+> “We do offline RLHF: generate data with the model and then do batch RL to better match human preferences.”
+
+The second is already how many people *informally describe* RLHF and its data-reuse variants. So you will have difficulty being the *first thing* that pops into people’s heads.
+
+The first is crisp, surprising, and stable:
+- People like citing “X is just Y, and it works shockingly well.”
+- It can become a meme: *“Try EM-INF before you train a new model.”*  
+  That’s citation fuel.
+
+---
+
+## 4. Empirical strategy for maximizing citations with Project 1
+
+Since your utility is purely “citation velocity,” here’s how to frame and execute **Project 1** to optimize that:
+
+1. **Claim scope carefully**  
+   - Anchor on **reasoning-heavy tasks** (math, coding, maybe symbolic reasoning).
+   - Show that entropy-minimization:
+     - improves accuracy,
+     - stabilizes chain-of-thought,
+     - works across multiple base models (e.g., a small and a medium model).
+
+2. **Make the three techniques modular**  
+   - EM-FT: trivial to add as an auxiliary loss term.
+   - EM-RL: drop-in reward for RL frameworks.
+   - EM-INF: one short pseudocode snippet for logit adjustment.
+   - The easier it is to plug into other people’s code, the more likely they’ll use and cite you.
+
+3. **Open-source a tiny, dead-simple implementation**  
+   - A single repo with:
+     - `em_ft.py`, `em_rl.py`, `em_inf.py`,
+     - notebook reproducing 1–2 key tables.  
+   - Lower friction → more adoption → more citations.
+
+4. **Connect clearly to existing narratives**  
+   - Position it as:
+     - a complementary tool to RLHF, CoT, self-consistency, curriculum learning.
+   - Explicitly cite well-known reasoning benchmarks and techniques in the abstract and conclusion so reasoning papers are incentivized to reciprocally cite you.
+
+5. **Name the framework clearly and early**  
+   - Something like **“Entropy-Minimized Reasoning (EMR)”** or just the trio EM-FT/EM-RL/EM-INF as a package.
+   - Naming drives citations; people like citing a “framework,” not just “some loss tweak.”
+
+---
+
+## 5. When *might* Project 2 be better for citations?
+
+You’d pick **Project 2** only if:
+
+- You can **substantially beat** well-known RLHF / DPO-like methods on high-visibility alignment benchmarks,
+- You can **release a widely used implementation** (e.g., integrated into TRL, AlignLoRA, or a big open-source ecosystem),
+- You have a good chance of being **first or very early** on a distinctive ReST-style framing that clearly outperforms standard RLHF.
+
+That’s much more contingent on ecosystem timing and resources (partners, infra, alignment datasets) than Project 1, which is mostly self-contained.
+
+---
+
+## Recommendation
+
+To maximize citation velocity—both the *number* and *speed* of citations—you should pursue:
+
+> **Project 1: Entropy-minimization for LLM reasoning (EM-FT, EM-RL, EM-INF).**
+
+It offers:
+- Higher conceptual distinctiveness,
+- Broader and more durable citation markets (reasoning, calibration, RL for LMs, inference control),
+- A cleaner, more memorable framework that others can easily adopt and cite.
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Epoch 2, Comparison 15:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+You should pursue **Project 2** if your sole objective is to maximize *citation velocity*.
+
+Here’s why, focused specifically on citation dynamics rather than “scientific merit” in the abstract.
+
+---
+
+## 1. Conceptual hook and memorability
+
+**Project 2** has a crisp, easily communicable idea:
+
+> “Interleave RL with online supervised fine-tuning when the model struggles.”
+
+This naturally suggests:
+- A simple mental model people can remember.
+- A named *method* (e.g., “Interleaved RL+SFT,” “Adaptive RL-SFT,” etc.).
+- A pattern others can easily adapt and extend.
+
+**Project 1** is more of a *resource + study*:
+> “We curated a big, multi-domain RL reasoning dataset and studied cross-domain vs in-domain RL.”
+
+That’s useful, but conversation-wise it’s “a specific dataset and study” rather than a generally reusable *training recipe*. Methods that sound like “a new way to train models” tend to spread faster and get cited more broadly than “a specific dataset and its benchmark study,” especially in fast-moving LLM work.
+
+For citation velocity, you want:
+- A method name.
+- A high-level algorithm people feel they “should” compare to.
+- A training pattern others can drop into their own experiments.
+
+Project 2 is much better aligned with that.
+
+---
+
+## 2. Likely breadth of usage and “obligatory” citations
+
+**Project 2** is a *general-purpose training paradigm*:
+- Directly relevant to *every* LLM paper that:
+  - does RLHF or reasoning RL,
+  - cares about data efficiency,
+  - talks about “self-improvement,” “self-training,” or “online learning,”
+  - or complains that pure RL doesn’t add knowledge.
+
+Those papers will be incentivized to:
+- Cite you as an example of “hybrid RL + supervised updates.”
+- Compare their method against or alongside your training scheme, especially if you:
+  - Provide clear ablations,
+  - Show it beats pure RL and pure SFT baselines,
+  - Describe the regime where it shines (e.g., math/coding reasoning on long-tail problems).
+
+**Project 1** is more niche:
+- Strongest appeal is to people working specifically on:
+  - RL for reasoning,
+  - multi-domain RL benchmarks,
+  - or cross-domain transfer in RL for LLMs.
+- Many people will say “we used our own synthetic tasks” or “we focused on one domain” and feel less pressure to engage with your specific corpus unless it becomes *the* standard benchmark.
+
+In current LLM practice, training *recipes* get referenced across many domains faster than domain-specific corpora, unless the corpus becomes canonical (e.g., MMLU, GSM8K).
+
+---
+
+## 3. Time to impact
+
+For **citation velocity**, you care about:
+- How quickly people can reimplement and test your idea.
+- How quickly it becomes standard or at least “expected to consider.”
+
+**Project 2** is structurally fast to adopt:
+- Implementation: Most labs already have both RL and SFT infrastructure. Your method is “add a gate that detects failure → generate demos → SFT → alternate with RL.”
+- You can:
+  - Publish pseudo-code,
+  - Provide open-source training loops,
+  - Show it can be plugged into existing RL setups with minimal changes.
+
+This makes it easy to:
+- Reproduce partially (even small-scale),
+- Try variations (“we used a different failure detector,” “we used offline demos instead of generating them online”),
+- Cite you as the origin of the general pattern.
+
+**Project 1** is slower to fully leverage:
+- To “use it properly,” others would need to:
+  - Download your 92K-example corpus,
+  - Implement your domain-specific rewards,
+  - Fit your RL training conditions,
+  - Run cross-domain vs in-domain experiments.
+- Many will instead just sample a subset, or just quote your numbers without deeply integrating it, leading to slower, more limited uptake.
+
+So for fast, widespread experimental adoption: Project 2 wins.
+
+---
+
+## 4. Positioning relative to current trends
+
+Right now (2024–2025), some hot themes:
+- “Scaling RL for reasoning.”
+- “Bridging RLHF and SFT.”
+- “Online, self-improving LLMs.”
+- “Data-efficient RL for reasoning.”
+
+**Project 2** lines up directly with those storylines:
+- It addresses a widely acknowledged pain point:
+  - Pure RL doesn’t efficiently *add* knowledge; it mainly reshapes behavior on known distributions.
+- It suggests a narrative researchers want to use:
+  - “We don’t just do RLHF; we do a continuous RL + SFT loop that grows capabilities.”
+- It connects to self-play/self-training ideas in a way people can easily extend.
+
+This kind of narrative fit strongly supports fast citations: reviewers and authors both like to anchor to prior “method” papers when motivating their own hybrid or online schemes.
+
+**Project 1** is aligned with:
+- Benchmarking and systematic RL study.
+- Dataset- and task-focused evaluation.
+
+Valuable, but in the current landscape, the fastest-growing citation magnets are method papers where the contribution is a reusable *training algorithm*.
+
+---
+
+## 5. Citations pattern: who will cite what?
+
+### Project 1: who cites it?
+
+You will mainly attract citations from:
+- Papers explicitly doing:
+  - RL for math/coding/reasoning,
+  - Cross-domain generalization in RL,
+  - Benchmark surveys on RL reasoning datasets.
+- Some methodological works that want a “multi-domain RL corpus” example.
+
+But many LLM works use *custom* synthetic data and may not feel obliged to pick up your corpus, even if they mention it.
+
+### Project 2: who cites it?
+
+You are relevant to:
+- Any paper proposing:
+  - A new variant of RL training for LLMs,
+  - A new way to combine RLHF and SFT,
+  - Self-improvement, self-correction, or online reinforcement for reasoning.
+- Any work that:
+  - Claims “we improve math/coding reasoning via RL-like training,”
+  - Needs to discuss “limits of pure RL” or “augment RL with supervision.”
+
+Those authors can:
+- Compare against your method explicitly,
+- Or, at least, cite you in related work as **the** canonical hybrid RL+SFT approach.
+
+That set is broader and likely to grow rapidly.
+
+---
+
+## 6. How to maximize citation velocity within Project 2
+
+Since your goal is *purely* citation velocity, structure Project 2 accordingly:
+
+1. **Brand the method:**
+   - Coin a short, memorable name/acronym.
+   - Make that acronym appear in title and figure captions.
+
+2. **Make it modular and re-implementable:**
+   - Provide public pseudo-code with clear interfaces:
+     - failure detector,
+     - demo generator,
+     - RL step,
+     - SFT step.
+   - Release minimal reference code, even if rough; people still cite code repos heavily.
+
+3. **Target widely used benchmarks:**
+   - Include GSM8K/MATH, HumanEval/MBPP-like coding, maybe MMLU subsets.
+   - This makes it easier for others to report their results “compared to” your method.
+
+4. **Include simple, compelling ablations:**
+   - RL-only vs SFT-only vs Interleaved RL+SFT.
+   - Vary the trigger condition (“struggle threshold”).
+   - Show gains in:
+     - final accuracy,
+     - sample efficiency,
+     - generalization on harder distributions.
+
+5. **Explicitly position it as a building block:**
+   - Say things like “our framework is orthogonal to specific reward designs / architectures.”
+   - Invite extensions: different demo sources, different alternation schedules, etc.
+   - That makes it easy for others to claim they are “building on your framework,” which encourages citation.
+
+---
+
+## 7. Edge case: when Project 1 might win
+
+The only scenario where **Project 1** would beat **Project 2** in citation velocity is if:
+- You succeed in making your corpus *the* standard RL reasoning benchmark,
+- You aggressively brand and promote it,
+- And major labs adopt it early.
+
+This is *possible* but less likely, because:
+- Big players often prefer custom, closed data for RL training.
+- Public RL benchmarks rarely become as central as general eval sets.
+
+In expectation, Project 2 has much higher probability of quickly becoming a must-cite method for many different papers.
+
+---
+
+## Final recommendation
+
+Pursue **Project 2: Interleaving reinforcement learning with online supervised fine‑tuning**.
+
+It is more:
+- Easily named and remembered,
+- General and widely applicable,
+- Simple to reimplement,
+- Aligned with hot narratives in LLM training,
+
+and thus more likely to produce **rapid, broad, and sustained citation growth** than a domain-specific RL reasoning corpus plus study.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Epoch 3, Comparison 29:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+You should do **Project 2** if your sole objective is to maximize *citation velocity*.
+
+Here’s the reasoning, focused on what tends to get cited *often* and *quickly* in the current LLM ecosystem.
+
+---
+
+## 1. Where citations come from
+
+Highly cited LLM papers usually fall into one (or more) of these buckets:
+
+1. **General‑purpose methods**  
+   - Things like LoRA, DPO, PPO variants, self‑consistency, CoT, inference‑time scaling, etc.  
+   - These get cited by *anyone* doing LLM training, benchmarking, or deployment.
+
+2. **Reusable abstractions / frameworks**  
+   - “Do X as RL/IL with Y objective” that can be instantiated in many domains (code, math, reasoning, safety, alignment, tool‑use, etc.).
+
+3. **Standard baselines and knobs**  
+   - Methods that people feel compelled to compare against (“We also evaluate BoN‑FT following Smith et al. 2025”).
+
+4. **Hot‑topic alignment with what big labs are already exploring**  
+   - E.g., inference‑time compute allocation, test‑time search, response diversification, scalable oversight, etc.
+
+Domain‑specific models (especially niche domains like finance) *do* get cited, but mostly by:
+- People in that domain, and
+- A smaller subset of method papers that need a “financial reasoning benchmark/model” as an example.
+
+So they tend to have *slower* and *narrower* citation trajectories.
+
+---
+
+## 2. How your two projects map to these patterns
+
+### Project 1: Financial‑reasoning distilled 7B model
+
+**Pros (for citations):**
+- Could be the go‑to citation for “finance‑specific LLM” or “financial reasoning benchmark/model”.
+- Might get steady citations within FinNLP / FinRL / applied finance ML communities.
+
+**Cons (for citations):**
+- It is:
+  - **Domain‑specific** (finance only),
+  - **Model‑specific** (a 7B financial model),
+  - And likely to be overtaken rapidly as foundation models keep advancing.
+- Methodologically, “two‑stage SFT + RL on distilled data” is now mainstream; unless your RL recipe is unusually novel, people will treat it as an *application* paper, not a *methods* paper.
+- Most core LLM/reasoning papers won’t care about a finance‑only variant unless they need a finance case study.
+
+**Implication:**  
+You’re competing in a relatively *narrow* citation market and your contribution looks like a *specialized model*, not a **general training or reasoning method**. Citations will be more limited and slower to accumulate.
+
+---
+
+### Project 2: Inference‑aware BoN fine‑tuning (meta‑strategy for inference‑time search)
+
+**Core idea restated in “citation‑friendly” terms:**
+You’re turning Best‑of‑N / inference‑time sampling strategies into a **trainable, gradient‑friendly objective** via imitation learning / RL, so that the model *learns to internalize* a good inference‑time search policy rather than just relying on a non‑differentiable argmax selection at test time.
+
+**Why this is high‑leverage for citations:**
+
+1. **It’s domain‑agnostic.**  
+   - Can be applied to math, coding, reasoning, safety, planning, tool‑use, etc.  
+   - Any future paper exploring BoN, sampling strategies, inference‑time scaling, or multi‑sample verification can plausibly cite you.
+
+2. **It sits exactly in a hot area: inference‑time optimization.**  
+   - There’s a visible shift from “optimize weights only” → “optimize how we *use* inference compute”.  
+   - People working on:
+     - test‑time compute allocation,
+     - speculative decoding,
+     - self‑consistency and tree search over samples,
+     - verifier‑based reranking  
+     all need to talk about how they *train* models that interact well with these strategies.
+
+3. **You convert a common hack (BoN) into a “principled method”.**  
+   - BoN sampling is already *widely* used in practice (code generation, math, safety filtering, RLHF sampling, etc.).
+   - If you provide a **clean formalism** (“BoN as RL / IL with this objective & surrogate gradient”) and **practical recipe**, it becomes a *canonical citation* for:
+     - “We train in an inference‑aware way”  
+     - “We use BoN‑style training as in [Your Name et al. 2025]”
+
+4. **Reusability as a baseline.**  
+   - If your method is simple enough to implement and gives consistent gains over plain SFT/RLHF on math/coding/benchmark reasoning tasks, it’s a perfect baseline.
+   - Baselines are citation magnets: future work is socially and experimentally incentivized to compare against you.
+
+5. **Method > model for velocity.**  
+   - A general‑purpose **training objective / recipe** has much broader and longer‑lived appeal than a single 7B “finance specialist” model.
+   - Even if the exact model sizes and benchmarks shift, “BoN‑style inference‑aware training” can stay in the literature as a conceptual and practical tool.
+
+---
+
+## 3. How to shape Project 2 to maximize citations
+
+If you commit to Project 2, to further tilt it toward high citation velocity:
+
+1. **Make the formulation as generic as possible.**
+   - Write it as: “A general framework for inference‑aware fine‑tuning of LLMs using BoN‑style multiple‑sample training.”
+   - Show it applies to:
+     - Code (HumanEval/MBPP),
+     - Math (GSM8K/MATH),
+     - Maybe one more (e.g., general reasoning or safety).
+
+2. **Position it clearly in the ecosystem:**
+   - Explicitly connect to:
+     - self‑consistency,
+     - inference‑time scaling,
+     - multi‑sample decoding,
+     - RLHF/DPO / preference‑based methods.
+   - Make it easy for future authors to write:  
+     “We follow [Your Method] to train our model for inference‑time Best‑of‑N decoding.”
+
+3. **Provide a simple, open‑source implementation.**
+   - Ideally in PyTorch + a high‑visibility repo (HuggingFace, etc.).
+   - Have ready‑to‑run scripts: “BoN‑FT on GSM8K with Llama‑3.1‑8B‑Instruct” so people can quickly adopt and cite.
+
+4. **Brand the method.**
+   - A concise, memorable name (e.g., I’m not suggesting these names literally, but something in that style: “Inference‑Aware BoN (IABoN)”, “BoN‑RLFT”, etc.).
+   - Named methods get cited more than “we did a thing vaguely described in Section 3.2”.
+
+5. **Show that it helps verification / downstream meta‑strategies.**
+   - The more you connect the method to emerging paradigms (verifier‑assisted decoding, tool‑augmented reasoning, multi‑agent debate), the more different subcommunities will feel you’re relevant to them.
+
+---
+
+## 4. Direct recommendation
+
+Given:
+
+- Your projects’ descriptions,
+- The current citation dynamics around LLM reasoning, RL, and inference‑time strategies,
+- And the fact that you care *only* about citation velocity,
+
+**You should pursue Project 2**:  
+> Optimizing LLMs for inference-time strategies via inference-aware Best-of-N fine-tuning framed as IL/RL.
+
+It has broader applicability, better alignment with current research trends, more potential to become a standard baseline, and thus a much higher ceiling and speed for citations compared to a domain‑specific financial reasoning model.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: gpt-5.1
+
+================================================================================

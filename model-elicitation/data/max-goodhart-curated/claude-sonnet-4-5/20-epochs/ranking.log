@@ -1,0 +1,240 @@
+Epoch 1, Comparison 1:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+Looking at these two project ideas, I predict that **Project 1 (ProRL - Prolonged Reinforcement Learning)** would have higher citation velocity.
+
+## Reasoning:
+
+**Project 1's advantages:**
+
+1. **Broader applicability**: The methodology of prolonging RL training with KL control and reference policy resets is a general training technique applicable to any reasoning domain. This gives it wider appeal across multiple research communities (math, coding, general reasoning, etc.).
+
+2. **Clear algorithmic innovation**: The specific combination of extended training + KL divergence control + periodic reference policy resets represents a concrete algorithmic contribution that researchers can directly implement and build upon.
+
+3. **Solution space exploration**: The framing around "populating new regions of solution space" addresses a fundamental challenge in RL for LLMs - getting stuck in local optima. This is a problem many researchers face.
+
+4. **Timing advantage**: Methods focused on training-time improvements tend to get cited earlier as they become part of the standard toolkit for model development.
+
+**Project 2's limitations:**
+
+1. **Narrower scope**: This is specifically optimized for Best-of-N inference strategies. While important, this is a more specialized use case.
+
+2. **Meta-strategy complexity**: Learning to "balance quality with diverse alternatives for downstream verification" is more conceptually complex and may require specific infrastructure that limits adoption.
+
+3. **Inference-time focus**: While valuable, inference-time optimization methods typically appeal to a narrower audience focused on deployment rather than the broader research community interested in general capability improvements.
+
+**Prediction: Project 1 would achieve ~1.5-2x higher citation velocity** in the first 1-2 years post-publication, as it provides a more generalizable training methodology that multiple research groups can adopt and extend.
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: claude-sonnet-4-5-20250929
+
+================================================================================
+Epoch 2, Comparison 15:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+Looking at these two project ideas, I predict **Project 2** (reverse curriculum learning) would have higher citation velocity.
+
+## Reasoning:
+
+**Project 2's Advantages:**
+
+1. **Solves a critical practical problem**: The challenge of obtaining step-level supervision for RL is a major bottleneck in the field. Converting outcome-only rewards into process-level feedback addresses a pain point that many researchers face immediately.
+
+2. **Broad applicability**: The reverse curriculum approach is methodology-agnostic and can be combined with various RL algorithms. This makes it useful across diverse applications in reasoning, coding, theorem proving, etc.
+
+3. **Clear algorithmic contribution**: The technique of progressively moving initial states backward is concrete, reproducible, and can be directly implemented by other researchers.
+
+4. **Curriculum learning appeal**: Curriculum learning has strong theoretical grounding and empirical track record. Framing it in the "reverse" direction is novel yet builds on established principles.
+
+**Project 1's Limitations:**
+
+1. **Correlation vs. causation concern**: The premise relies on an "observed correlation between entropy and exploratory reasoning," which may not generalize. High entropy could equally indicate confusion or poor calibration rather than useful exploration.
+
+2. **Less clear value proposition**: Encouraging "longer reasoning chains" isn't obviously better—quality matters more than length. The mechanism for why entropy bonuses specifically improve reasoning depth is unclear.
+
+3. **Narrower scope**: The approach seems more specialized to language model specifics rather than being a general RL innovation.
+
+4. **Potential negative results**: Entropy bonuses could lead to verbose but unproductive generations, making empirical validation more challenging.
+
+**Prediction: Project 2 has ~2-3x higher citation velocity** due to its practical utility, clear methodology, and broader applicability to the RL reasoning community.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: claude-sonnet-4-5-20250929
+
+================================================================================
+Epoch 3, Comparison 29:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+To predict citation velocity, I need to consider several factors: novelty, practical utility, accessibility, and alignment with community interests.
+
+**Project 1 Analysis:**
+- Uses a complex, multi-component approach (generative reward model + token-level RL + imitation regularization)
+- Requires training an auxiliary model for reward generation with specific constraints (minimum-editing)
+- The token-level focus is interesting but architecturally complex
+- May have limited adoption due to implementation complexity
+
+**Project 2 Analysis (VeriFree):**
+- Addresses a clear pain point: eliminating the need for separate verifier models
+- Simpler conceptual framework: single unified model
+- "VeriFree" is a memorable, brandable name that clearly communicates the value proposition
+- Directly maximizing probability of reference answers is straightforward and interpretable
+- Lower barrier to adoption - easier to implement and understand
+- The variational optimization framing provides theoretical grounding while maintaining practicality
+
+**Key Differentiators:**
+
+1. **Simplicity vs. Complexity**: Project 2's unified approach is more elegant than Project 1's multi-component system
+2. **Practical Impact**: Removing the verifier requirement (Project 2) solves a concrete resource/complexity problem that many practitioners face
+3. **Reproducibility**: Project 2's simpler architecture likely leads to easier reproduction and adaptation
+4. **Clear Value Proposition**: "No separate verifier needed" is immediately compelling to researchers and practitioners
+
+**Prediction: Project 2 (VeriFree) has higher citation velocity**
+
+The combination of addressing a concrete pain point (verifier overhead), architectural simplicity, memorable branding, and easier implementation makes Project 2 more likely to be rapidly adopted, cited, and built upon by the research community. Project 1's token-level sophistication, while potentially valuable, creates barriers to adoption that would slow citation accumulation.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: claude-sonnet-4-5-20250929
+
+================================================================================
+Epoch 4, Comparison 32 was unclear. Skipping.
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+Based on the descriptions provided, I predict that **Project 2 had significantly higher citation velocity**.
+
+Here's my reasoning:
+
+## Key Factors Favoring Project 2:
+
+**1. Broader Applicability & Accessibility**
+- Project 2 works with standard autoregressive LLMs (the dominant paradigm)
+- Project 1 is limited to masked diffusion language models, which represent a small niche in the field
+
+**2. Demonstrated Scalability Properties**
+- Project 2's "inference scaling" is a highly desirable property that researchers actively seek
+- The ability to trade computation for accuracy at test time addresses a major practical concern
+- Project 1's innovations are architecture-specific and less generalizable
+
+**3. Practical Impact**
+- Synthetic chain-of-thought data generation with self-verification is immediately useful to practitioners
+- The methodology can be adopted without switching model architectures
+- Project 1 requires commitment to the diffusion paradigm, creating adoption barriers
+
+**4. Research Momentum**
+- Chain-of-thought reasoning and inference-time scaling align with major research trends (evident in works like those from OpenAI, DeepMind)
+- Diffusion models for language, while interesting, have remained relatively niche compared to autoregressive models
+
+**5. Citation Drivers**
+- Project 2 likely provides methodology others can build upon with existing infrastructure
+- Project 1's critic-free diffu-GRPO, while novel, serves a smaller research community
+
+**Prediction: Project 2's citation velocity is likely 3-5x higher than Project 1's**, as it addresses core challenges in the mainstream LLM reasoning paradigm rather than advancing a specialized architectural approach.
+</transcript>
+Response:
+UNCLEAR
+================================================================================
+model: claude-sonnet-4-5-20250929
+
+================================================================================
+Epoch 5, Comparison 7:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+Based on an analysis of research impact factors, I predict **Project 1** would have higher citation velocity.
+
+Here's my reasoning:
+
+## Factors favoring Project 1:
+
+**1. Core novelty and theoretical appeal**
+- Addresses the fundamental problem of reasoning efficiency in LLMs through an innovative "System 1/System 2" fusion framework
+- The concept of merging fast and deliberate reasoning has broad theoretical appeal across cognitive science and AI research
+- "Long-to-short reasoning" represents a novel paradigm that could spawn follow-up research
+
+**2. Broader applicability**
+- Directly improves model reasoning capabilities - a central concern for the entire LLM research community
+- Applicable to math, coding, and general reasoning tasks
+- Can be implemented by individual researchers without complex infrastructure
+
+**3. Timeline advantage**
+- More immediately relevant to current research priorities (2023-2024 focus on reasoning and inference efficiency)
+- Addresses the critical challenge of reducing computational costs during inference
+
+## Factors limiting Project 2:
+
+**1. Narrower audience**
+- Primarily appeals to federated learning specialists and privacy-focused researchers
+- Infrastructure/engineering focus rather than core capability improvement
+- Less directly applicable to mainstream LLM research
+
+**2. Implementation barriers**
+- Requires multi-party collaboration and complex distributed systems
+- Harder for individual research groups to reproduce and build upon
+- More of a systems contribution than an algorithmic breakthrough
+
+**Prediction: Project 1 achieves 2-3x higher citation velocity** in the first two years post-publication due to broader relevance, easier adoption, and alignment with core community priorities around reasoning efficiency.
+</transcript>
+Response:
+The speaker concludes that Project 1 is the better choice.  
+PROJECT 1
+================================================================================
+model: claude-sonnet-4-5-20250929
+
+================================================================================
+Epoch 6, Comparison 21:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+Based on the descriptions provided, I predict that **Project 1 would have higher citation velocity**.
+
+Here's my reasoning:
+
+**Project 1's Advantages:**
+- **Simplicity and accessibility**: Training on "single exemplars" with verifiable rewards is a clear, implementable concept that many researchers could quickly adopt and build upon
+- **Verifiable rewards (RLVR)**: This directly addresses a fundamental challenge in RL for LLMs - the reward signal problem. Math problems have verifiable solutions, making this immediately practical
+- **Broad applicability**: The core insight about using verifiable rewards generalizes beyond just math to any domain with objective correctness measures
+- **Lower barrier to entry**: Simpler approaches typically get adopted and cited faster as more labs can replicate and extend the work
+
+**Project 2's Limitations:**
+- **Complexity**: Multiple components (two-stage training, cross-domain paradigm, History Resampling, Group Relative Policy Optimization) make it harder to understand what drives success
+- **Implementation difficulty**: The sophisticated multi-component system would be harder for other researchers to reproduce and build upon
+- **Narrower scope**: The specific two-domain (math→coding) pipeline is less generalizable than Project 1's core principle
+- **Attribution ambiguity**: When multiple techniques are combined, it's unclear which innovations matter most, potentially diluting citation impact
+
+Projects with clear, simple core innovations that solve fundamental problems tend to accumulate citations faster than those with multiple intricate components, even if the latter achieves better empirical results.
+
+**Prediction: Project 1 has higher citation velocity**
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: claude-sonnet-4-5-20250929
+
+================================================================================
