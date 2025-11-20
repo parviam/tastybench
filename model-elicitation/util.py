@@ -3,6 +3,8 @@ from typing import Tuple, List, Dict
 from rich import print
 import os, re
 from openai import OpenAI
+from anthropic import Anthropic
+import time
 
 def inference(messages: List[Dict[str, str]] | str, client: ollama.Client|None=None,
               model: str='openai/gpt-oss-120b', temperature: float=0.0) -> Tuple[str | None, str]:
@@ -49,6 +51,26 @@ def inference(messages: List[Dict[str, str]] | str, client: ollama.Client|None=N
                 return (response.thinking, response.content)
             else:
                 return (None, response.content)
+        elif model.startswith("claude"):
+            if "ANTHROPIC_API_KEY" not in os.environ:
+                raise ValueError("ANTHROPIC_API_KEY environment variable not set")
+            ant_client = Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
+            max_retries = 10
+            base_delay = 1
+            for attempt in range(max_retries):
+                try:
+                    message = ant_client.messages.create(
+                        max_tokens=2000,
+                        messages=messages,
+                        model=model,
+                    )
+                    return (None, message.content[0].text)
+                except Exception as e:
+                    if attempt == max_retries - 1:
+                        raise
+                    delay = base_delay * (2 ** attempt)
+                    print(f'[yellow]Anthropic API error (attempt {attempt + 1}/{max_retries}), retrying in {delay}s...[/]')
+                    time.sleep(delay)
         else:
             base_url = "https://glados.ctisl.gtri.org"
             if "LITELLM_API_KEY" not in os.environ:

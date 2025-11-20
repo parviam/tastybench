@@ -1,0 +1,45 @@
+Epoch 1, Comparison 1:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+# Clear Recommendation: Pursue Project 2 (DAPO)
+
+## Key Reasoning
+
+**Project 2 is the more practical and impactful choice** for advancing LLM reasoning capabilities. Here's why:
+
+### Advantages of Project 2:
+
+1. **Focused Innovation**: Tackles specific, well-defined inefficiencies in RL training (clipping issues, data sampling) rather than combining multiple complex directions
+
+2. **Scalability & Reproducibility**: Built within the verl framework with explicit emphasis on large-scale deployment and reproducibility—critical for real research impact
+
+3. **Faster Time-to-Results**: More concrete technical approach means quicker validation and iteration cycles
+
+4. **Broader Applicability**: Improvements to the RL training pipeline benefit ANY LLM reasoning task, not just specific architectures
+
+5. **Lower Risk**: Doesn't rely on unproven multimodal integration or complex distillation pipelines that could fail independently
+
+### Concerns with Project 1:
+
+1. **Too Many Moving Parts**: Multimodal + long-context + distillation pipeline + RL = high risk of component interactions causing failures
+
+2. **Unclear Value Proposition**: Deliberately omitting MCTS and value functions while adding complexity elsewhere seems contradictory
+
+3. **Distillation Uncertainty**: Long-to-short CoT distillation is notoriously difficult; failure here undermines the entire premise
+
+4. **Resource Intensive**: Multimodal long-context models require substantially more compute for potentially unclear gains
+
+## Actionable Path Forward
+
+Start with **Project 2**, establish strong baselines, and if successful, you can incorporate multimodal extensions later as a natural evolution rather than a risky all-in-one approach.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: claude-sonnet-4-5-20250929
+
+================================================================================

@@ -1,12 +1,12 @@
 {
-    "name": "goodhart-curated",
+    "name": "test-experiment",
     "models": [
         "claude-sonnet-4-5-20250929"
     ],
     "epochs": [
-        20
+        1
     ],
     "paper_dataset": "llm-rl-yix-curate",
-    "ranking_prompt": "model-elicitation/prompts/curated/judge_ideas_goodhart_curated.md",
+    "ranking_prompt": "model-elicitation/prompts/curated/judge_ideas_curated.md",
     "extract_choice_prompt": "model-elicitation/prompts/extract_choice.md"
 }

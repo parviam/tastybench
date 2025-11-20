@@ -1,13 +1,10 @@
 {
     "name": "max-goodhart-curated",
     "models": [
-        "openai/gpt-oss-120b",
-        "openai/gpt-oss-20b",
-        "meta-llama/Llama-3.3-70B-Instruct"
+        "claude-sonnet-4-5-20250929"
     ],
     "epochs": [
-        20,
-        50
+        20
     ],
     "paper_dataset": "llm-rl-yix-curate",
     "ranking_prompt": "model-elicitation/prompts/curated/judge_ideas_goodhart_curated_max.md",

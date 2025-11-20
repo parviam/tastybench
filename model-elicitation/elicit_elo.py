@@ -115,28 +115,39 @@ class RankingDataset():
         rankings: List[Tuple[str, str]] = []
         df = pd.DataFrame(self.paper_dataset.paper_data)
         total_comparisons = self.epochs * (len(df['idea']) - 1)
-        with tqdm(total=total_comparisons, desc=f"Getting {self.model} choices") as pbar:
-            for epoch in range(self.epochs):
-                epoch_dataset = df.sample(frac=1).reset_index(drop=True)
-                for i in range(0, len(epoch_dataset['idea']) - 1):
-                    idea1 = epoch_dataset['idea'][i]
-                    idea2 = epoch_dataset['idea'][i+1]
-                    prompt = ranking_prompt_template.replace('[PROJECT 1]', idea1).replace('[PROJECT 2]', idea2)
-                    __, response = inference(prompt, model=self.model, client=self.client)
-                    prompt = extract_choice_template.replace('[TRANSCRIPT]', response)
-                    __, response = inference(prompt, model=self.model, client=self.client)
-                    if pbar.n % 50 == 0:
-                        self.append_to_log(f"Epoch {epoch+1}, Comparison {i+1}:\nPrompt:\n{prompt}\nResponse:\n{response}\n")
-                    if "UNCLEAR" in response:
-                        self.append_to_log(f"Epoch {epoch+1}, Comparison {i+1} was unclear. Skipping.\nPrompt:\n{prompt}\nResponse:\n{response}\n")
+        try:
+            with tqdm(total=total_comparisons, desc=f"Getting {self.model} choices") as pbar:
+                for epoch in range(self.epochs):
+                    epoch_dataset = df.sample(frac=1).reset_index(drop=True)
+                    for i in range(0, len(epoch_dataset['idea']) - 1):
+                        idea1 = epoch_dataset['idea'][i]
+                        idea2 = epoch_dataset['idea'][i+1]
+                        prompt = ranking_prompt_template.replace('[PROJECT 1]', idea1).replace('[PROJECT 2]', idea2)
+                        try:
+                            __, response = inference(prompt, model=self.model, client=self.client)
+                        except Exception as e:
+                            self.append_to_log(f"ERROR at Epoch {epoch+1}, Comparison {i+1}:\nError: {str(e)}\nPrompt:\n{prompt}\n")
+                            self.ranking_data = pd.DataFrame(rankings, columns=['better_paper_id', 'worse_paper_id'])
+                            raise Exception(f"Inference failed at epoch {epoch+1}, comparison {i+1}. Saved {len(rankings)} comparisons so far.") from e
+                        
+                        prompt = extract_choice_template.replace('[TRANSCRIPT]', response)
+                        __, response = inference(prompt, model='openai/gpt-oss-120b', client=None)
+                        if pbar.n % 50 == 0:
+                            self.append_to_log(f"Epoch {epoch+1}, Comparison {i+1}:\nPrompt:\n{prompt}\nResponse:\n{response}\n")
+                        if "UNCLEAR" in response:
+                            self.append_to_log(f"Epoch {epoch+1}, Comparison {i+1} was unclear. Skipping.\nPrompt:\n{prompt}\nResponse:\n{response}\n")
+                            pbar.update(1)
+                            continue
+                        elif "PROJECT 1" in response:
+                            rankings.append((epoch_dataset['paper_id'][i], epoch_dataset['paper_id'][i+1]))
+                        elif "PROJECT 2" in response:
+                            rankings.append((epoch_dataset['paper_id'][i+1], epoch_dataset['paper_id'][i]))
                         pbar.update(1)
-                        continue
-                    elif "PROJECT 1" in response:
-                        rankings.append((epoch_dataset['paper_id'][i], epoch_dataset['paper_id'][i+1]))
-                    elif "PROJECT 2" in response:
-                        rankings.append((epoch_dataset['paper_id'][i+1], epoch_dataset['paper_id'][i]))
-                    pbar.update(1)
-        self.ranking_data = pd.DataFrame(rankings, columns=['better_paper_id', 'worse_paper_id'])
+        finally:
+            # Always save whatever rankings we collected
+            self.ranking_data = pd.DataFrame(rankings, columns=['better_paper_id', 'worse_paper_id'])
+            if len(rankings) > 0:
+                self.append_to_log(f"Collected {len(rankings)} total comparisons before completion/failure.\n")
     
     def export_to_csv(self, filename: str) -> None:
         self.ranking_data.to_csv(filename, index=False)
@@ -267,11 +278,9 @@ async def main():
     llm_rl_curated.export_to_csv('model-elicitation/data/llm_rl_yix_curate_with_ideas.csv')
 
     models = [
-        ('openai/gpt-oss-120b', 'gpt-oss-120b'),
-        ('openai/gpt-oss-20b', 'gpt-oss-20b'),
-        ('meta-llama/Llama-3.3-70B-Instruct', 'llama-3-70b'),
+        ('claude-sonnet-4-5-20250929', 'claude-sonnet-4-5'),
     ]
-    epochs = [20, 50]
+    epochs = [20]
 
     max_goodhart_experiment = Experiment(
         name='max-goodhart-curated',
