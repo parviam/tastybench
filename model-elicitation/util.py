@@ -1,10 +1,24 @@
 import ollama
-from typing import Tuple, List, Dict
+from typing import Tuple, List, Dict, Callable
 from rich import print
 import os, re
 from openai import OpenAI
 from anthropic import Anthropic
+import google.genai as gemini
 import time
+
+def _retry_with_backoff(func: Callable, api_name: str, max_retries: int = 10, base_delay: int = 1):
+    """Helper function to retry API calls with exponential backoff."""
+    for attempt in range(max_retries):
+        try:
+            return func()
+        except Exception as e:
+            if attempt == max_retries - 1:
+                raise
+            delay = base_delay * (2 ** attempt)
+            print(f'[yellow]{api_name} API error (attempt {attempt + 1}/{max_retries}), retrying in {delay}s...[/]')
+            print(f'[yellow]{e}[/]')
+            time.sleep(delay)
 
 def inference(messages: List[Dict[str, str]] | str, client: ollama.Client|None=None,
               model: str='openai/gpt-oss-120b', temperature: float=0.0) -> Tuple[str | None, str]:
@@ -38,39 +52,64 @@ def inference(messages: List[Dict[str, str]] | str, client: ollama.Client|None=N
     """
     if isinstance(messages, str):
         messages = [{"role": "user","content": messages}]
+    
     try:
         if client is not None:
-            response = client.chat(
-                model=model,
-                messages=messages,
-                options={'temperature': temperature}
-            ).message
-            if response.content is None:
-                raise ValueError("No content in response")
-            if hasattr(response, 'thinking'):
-                return (response.thinking, response.content)
-            else:
-                return (None, response.content)
+            def _ollama_call():
+                response = client.chat(
+                    model=model,
+                    messages=messages,
+                    options={'temperature': temperature}
+                ).message
+                if response.content is None:
+                    raise ValueError("No content in response")
+                if hasattr(response, 'thinking'):
+                    return (response.thinking, response.content)
+                else:
+                    return (None, response.content)
+            return _retry_with_backoff(_ollama_call, "Ollama")
+        
         elif model.startswith("claude"):
             if "ANTHROPIC_API_KEY" not in os.environ:
                 raise ValueError("ANTHROPIC_API_KEY environment variable not set")
             ant_client = Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
-            max_retries = 10
-            base_delay = 1
-            for attempt in range(max_retries):
-                try:
-                    message = ant_client.messages.create(
-                        max_tokens=2000,
-                        messages=messages,
-                        model=model,
-                    )
-                    return (None, message.content[0].text)
-                except Exception as e:
-                    if attempt == max_retries - 1:
-                        raise
-                    delay = base_delay * (2 ** attempt)
-                    print(f'[yellow]Anthropic API error (attempt {attempt + 1}/{max_retries}), retrying in {delay}s...[/]')
-                    time.sleep(delay)
+            
+            def _claude_call():
+                message = ant_client.messages.create(
+                    max_tokens=2000,
+                    messages=messages,
+                    model=model,
+                )
+                return (None, message.content[0].text)
+            return _retry_with_backoff(_claude_call, "Anthropic")
+        
+        elif model.startswith("gemini"):
+            if "GEMINI_API_KEY" not in os.environ:
+                raise ValueError("GEMINI_API_KEY environment variable not set")
+            gdm_client = gemini.Client()
+            
+            def _gemini_call():
+                response = gdm_client.models.generate_content(
+                    model=model,
+                    contents=messages[0]['content']
+                )
+                gdm_client.close()
+                return (None, response.text)
+            return _retry_with_backoff(_gemini_call, "Gemini")
+        
+        elif model.startswith("gpt"):
+            if "OPENAI_API_KEY" not in os.environ:
+                raise ValueError("OPENAI_API_KEY environment variable not set")
+            openai_client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
+
+            def _openai_call():
+                chat_response = openai_client.chat.completions.create(
+                    model=model,
+                    messages=messages,
+                )
+                return (None, chat_response.choices[0].message.content)
+            return _retry_with_backoff(_openai_call, "OpenAI")
+        
         else:
             base_url = "https://glados.ctisl.gtri.org"
             if "LITELLM_API_KEY" not in os.environ:
@@ -78,12 +117,15 @@ def inference(messages: List[Dict[str, str]] | str, client: ollama.Client|None=N
             api_key = os.environ["LITELLM_API_KEY"]
             openai_client = OpenAI(api_key=api_key, base_url=base_url)
 
-            chat_response = openai_client.chat.completions.create(
-                model=model,
-                messages=messages,
-                temperature=temperature,
-            )
-            return (None, chat_response.choices[0].message.content)
+            def _litellm_call():
+                chat_response = openai_client.chat.completions.create(
+                    model=model,
+                    messages=messages,
+                    temperature=temperature,
+                )
+                return (None, chat_response.choices[0].message.content)
+            return _retry_with_backoff(_litellm_call, "LITELLM")
+    
     except Exception as e:
         print(f'[red]util/inference :: messages: {messages}\nclient: {client is not None}\nmodel: {model}, temp: {temperature}[/]')
         raise e

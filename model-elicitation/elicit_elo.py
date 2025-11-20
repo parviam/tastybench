@@ -126,7 +126,9 @@ class RankingDataset():
                         try:
                             __, response = inference(prompt, model=self.model, client=self.client)
                         except Exception as e:
-                            self.append_to_log(f"ERROR at Epoch {epoch+1}, Comparison {i+1}:\nError: {str(e)}\nPrompt:\n{prompt}\n")
+                            error = f"Error at Epoch {epoch+1}, Comparison {i+1}:\n{str(e)}\nPrompt:\n{prompt}\n"
+                            self.append_to_log(error)
+                            print(f'[red]{error}')
                             self.ranking_data = pd.DataFrame(rankings, columns=['better_paper_id', 'worse_paper_id'])
                             raise Exception(f"Inference failed at epoch {epoch+1}, comparison {i+1}. Saved {len(rankings)} comparisons so far.") from e
                         
@@ -279,6 +281,8 @@ async def main():
 
     models = [
         ('claude-sonnet-4-5-20250929', 'claude-sonnet-4-5'),
+        ('gpt-5.1', 'gpt-5-1'),
+        ('gemini-2.5-pro', 'gemini-2-5-pro'),
     ]
     epochs = [20]
 
