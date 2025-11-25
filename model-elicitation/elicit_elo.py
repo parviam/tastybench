@@ -72,6 +72,52 @@ class PaperDataset():
         self.paper_data['idea'] = abstracts  # Use tldr as idea directly
         self.paper_data['title'] = titles
     
+    def get_intro_and_methods(self, json: str=json) -> None:
+        """
+        Load intro and methods text from a JSON file and use it as abstracts.
+
+        The JSON file must be keyed by paperId and have entries of the form:
+            {
+            "paperId": "...",
+            "intro_and_methods": "<extracted text>",
+            "success": true/false,
+            "error": "<message if any>",
+            "source_url": "<arxiv_html>"
+            }
+
+        Only entries with success == True and non-empty intro_and_methods
+        are kept. paper_data['abstract'] is set to this text, and papers
+        without valid intro_and_methods are removed.
+        
+        Parameters
+        ----------
+        json : str
+            Path to the JSON file.
+        """
+        with open(json, "r") as f:
+            data = json.load(f)
+
+        new_paper_ids: List[str] = []
+        abstracts: List[str] = []
+        titles: List[str] = []
+
+        for pid in self.paper_data["paper_id"]:
+            entry = data.get(pid)
+            if (
+            entry is None
+            or not entry.get("success", False)
+            or not entry.get("intro_and_methods")
+            ):
+            continue
+            new_paper_ids.append(pid)
+            abstracts.append(entry["intro_and_methods"].strip())
+            # no titles in the JSON schema, so keep a placeholder
+            titles.append("")
+
+        self.paper_data["paper_id"] = new_paper_ids
+        self.paper_data["abstract"] = abstracts
+        self.paper_data["title"] = titles
+
     def get_abstracts(self) -> None:
         """
         Fetch paper abstracts and titles from Semantic Scholar API.
