@@ -558,3 +558,2132 @@ PROJECT 2
 model: gpt-5.1
 
 ================================================================================
+Epoch 5, Comparison 7:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+You should do **Project 1** if your only goal is to maximize *citation velocity* in the current LLM research ecosystem.
+
+Here’s the reasoning, focused specifically on expected citations and their timing:
+
+---
+
+## 1. Topic fit with current “citation hotspots”
+
+Modern LLM‑reasoning and RL papers that get cited heavily and quickly tend to fall into a few clusters:
+
+- **RL for reasoning / math / coding** (DeepSeek‑R1, OpenAI o1, RL‑based math reasoning papers)
+- **Comparative or benchmarking studies** of RL algorithms or training regimes
+- **Scaling & ablations** across model sizes, reward types, and data
+
+**Project 1** sits exactly at that intersection:
+- Directly about *RL for reasoning* (math, coding) – an active and strategically important area.
+- Compares *multiple widely used algorithms* (PPO, Expert Iteration, Return‑Conditioned RL).
+- Varies *reward density*, *reward sources (heuristic vs. learned reward model)*, *model size*, *initialization*, *SFT vs. no SFT*.
+
+This makes it:
+- Immediately relevant to any future RL‑fine‑tuning paper.
+- Naturally citable as a *baseline, comparison, or design reference*.
+
+**Project 2** sits in a more niche conceptual space:
+- “Pure” entropy minimization as a training and inference principle is elegant but not obviously tied to any one flagship benchmark or industry trend.
+- It is less aligned with high‑level agendas like “scaling reasoning via RL,” “RL for math and coding,” or “improving chain‑of‑thought via feedback,” which are driving a lot of fast citations.
+
+---
+
+## 2. How people cite papers in this space
+
+Ask: *Who will need to cite me, and why?*
+
+### Project 1: Many natural “must‑cite” slots
+
+People working on:
+- New RL algorithms for LLM reasoning
+- New reward models or feedback pipelines
+- Scaling laws for RL on LLMs
+- Practical training recipes for math/coding agents
+
+will want statements like:
+- “PPO has been shown to outperform X in these settings…”
+- “Previous work compared sparse vs. dense rewards for reasoning…”
+- “RL from heuristic vs. learned rewards behaves differently across model sizes…”
+
+If your paper:
+- Runs systematically comparable experiments
+- Has clear conclusions like “PPO + dense RM rewards > Expert Iteration in low‑data math,” or “Return‑conditioned RL is more sample‑efficient under sparse supervision”
+you become the **go‑to citation** whenever someone discusses algorithm choice, reward structure, or training setup.
+
+This yields:
+- **Broad horizontal relevance** (any RL-for-LLM paper).
+- **Long citation tail** (as long as people keep doing RL for reasoning, they keep citing “the comparative study”).
+
+### Project 2: Narrower and more optional citations
+
+Who “must” cite Project 2?
+
+- People working specifically on **entropy/temperature control**, **sharpness of distributions**, or **deterministic decoding**.
+- Maybe some **calibration**, **uncertainty**, or **self‑training / self‑distillation** papers if they engage with entropy as a training signal.
+
+But for most RL‑for‑reasoning or scaling work, your method is:
+- A niche, possibly interesting technique,
+- Not an obvious *must-include* baseline,
+- Easy to ignore if they are focused on performance and reward design rather than entropy as such.
+
+So citations likely:
+- Arrive more slowly (people won’t need it for basic “How do I set up RL for LLMs?” questions).
+- Stay more concentrated in a smaller subcommunity.
+
+---
+
+## 3. Benchmark and “baseline-ability”
+
+**Project 1** has high “baseline-ability”:
+
+- If you run on standard benchmarks (GSM8K, MATH, HumanEval, etc.),
+- Provide open training recipes or at least clear descriptions,
+- And report numbers for several algorithms and reward setups,
+
+then subsequent work will often:
+- Copy or adapt your setup,
+- Explicitly compare to “our PPO baseline from [Your Paper]”,
+- Cite you when describing RL training design choices.
+
+**Project 2** is more specialized:
+- EM‑INF (logit adjustment) is an inference trick that some may try, but many might not feel obligated to test or report.
+- EM‑FT and EM‑RL are “alternative objectives” – they’re interesting but not obviously compulsory to run alongside PPO, DPO, etc. when the main goal is solving reasoning benchmarks.
+
+This means **Project 1** is more likely to become part of standard *experimental sections* (a strong driver of citation volume), whereas Project 2 is more like a conceptual/algorithmic curiosity that only some groups adopt.
+
+---
+
+## 4. Time to impact
+
+You care about *speed* as much as total volume.
+
+**Project 1**:
+- Very plug‑and‑play with current trends. As soon as it’s on arXiv, any group writing:
+  - “We used PPO with a reward model for math reasoning…”
+  - “We explore sparse vs. dense rewards for code generation…”
+  is incentivized to acknowledge existing careful comparisons and to say how they differ.
+- If you preprint and provide clear experimental protocol, it can be cited even before formal publication.
+
+**Project 2**:
+- People first must:
+  - Understand and care about entropy minimization as a distinct objective.
+  - See—through your results—that this yields big, practically relevant gains.
+- If results are modest or application‑dependent, adoption and citations will be slower and more gradual.
+
+Project 1 has a **clearer fast‑path to being cited immediately** by ongoing RL‑for‑reasoning work.
+
+---
+
+## 5. Risk vs. robustness of citation outcome
+
+In citation terms:
+
+- **Project 1 (lower risk, robust payoff)**  
+  Even if none of the methods dramatically “wins,” a careful comparative RL‑for‑reasoning study is still heavily citable as:
+  - “The main comparative analysis of [PPO vs. Expert Iteration vs. Return‑Conditioned RL] on reasoning.”
+  - “Evidence about how reward model quality, sparsity, and SFT initialization affect RL outcomes.”
+
+- **Project 2 (higher variance)**  
+  To attract many citations quickly, you’d need:
+  - A strong, surprising empirical result (e.g., “entropy minimization alone boosts GSM8K by X points without labels”).
+  - Clear, simple recipes that people can import and that generalize well.
+  
+If the gains are moderate or conditional (“works well in some narrow settings”), the paper will be more niche and citation growth slower.
+
+---
+
+## 6. How to structure Project 1 to maximize citations
+
+Since that’s your sole objective, a few tactical choices:
+
+1. **Be the canonical comparison paper.**  
+   - Choose 2–3 widely referenced reasoning benchmarks in math + code.
+   - Use at least one open LLM (e.g., LLaMA‑style) at multiple sizes.
+   - Compare:
+     - Expert Iteration vs PPO vs Return‑Conditioned RL
+     - Sparse vs dense rewards
+     - Heuristic vs reward-model rewards
+     - With vs without SFT
+
+2. **Produce clear, quotable conclusions.**  
+   Aim for conclusions like:
+   - “Across all scales tested, PPO with dense reward-model feedback outperformed Expert Iteration by X% on GSM8K and Y% on HumanEval.”
+   - “Return‑conditioned RL was more sample‑efficient than PPO under sparse heuristic rewards but underperformed when dense RM feedback was available.”
+   These become sentences people re-use and cite.
+
+3. **Make methods and setups reusable.**  
+   - Standardize your training scripts and share them, or at least document hyperparams clearly.
+   - Provide tables that others can copy directly into their “Baselines” sections.
+
+4. **Frame the paper explicitly as a design reference.**  
+   In intro and conclusion, explicitly pitch it as:
+   - “A practical guide for choosing RL algorithms and reward structures for LLM reasoning.”
+   That language invites being cited as a “best practices” or “what we know so far” reference.
+
+---
+
+## Bottom line
+
+Considering current research trends, incentive structures, and how people choose citations:
+
+- **Project 1** (comparative study of feedback‑driven RL methods for LLM reasoning, with varied rewards and settings) has a *much higher and more reliable expected citation velocity*.
+- **Project 2** (entropy minimization) is more conceptually neat but less central to the driving narratives and benchmarks that are generating fast, high‑volume citations.
+
+If you only care about maximizing how many people cite you and how soon they do it, you should pursue **Project 1**.
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Epoch 6, Comparison 21:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+You should do **Project 1** if your only objective is to maximize *citation velocity*.
+
+Here’s the reasoning, focused specifically on what historically drives fast citations in the LLM/RL space:
+
+---
+
+### 1. Conceptual “hook” and meme‑ability
+
+Project 1 has a much stronger, memorable hook:
+
+- “LLMs learn to self‑correct with only their own correction traces, no external supervision, no multiple models”
+- Buzzwords people will naturally use in papers:
+  - *self‑correction*, *online RL*, *no external supervision*, *single‑model training*, *multi‑turn RL to avoid collapse*
+
+Project 2 reads as an optimization/engineering refinement:
+
+- “Decouple clipping from policy updates + dynamic data sampling within verl”
+- That’s useful, but it’s harder to turn into a conceptual meme. It sounds like:
+  - “Yet another RL fine‑tuning trick” rather than a qualitatively new capability.
+
+In terms of how people cite things:
+- Project 1 is something you cite when saying:  
+  “We leverage self‑correction / we compare to self‑correction‑only RL / we avoid human labels by…”  
+- Project 2 is something you cite when implementing large‑scale RL or verl‑based training more efficiently, which is narrower.
+
+---
+
+### 2. Surface area for downstream citations
+
+Project 1 touches multiple hot narratives at once:
+
+- **Self‑correction / self‑training / autonomous improvement**
+- **Label‑free / supervision‑free RL** for reasoning
+- **Multi‑turn reasoning** in math and code
+- **Single‑model training** (no critic or teacher model)
+- **Behavior collapse & stability in online RL**
+
+These connect to:
+- Reasoning papers (math/coding benchmarks, chain‑of‑thought methods)
+- Alignment & safety discussions (self‑improvement, distributional shift, robustness)
+- Semi‑supervised / self‑learning / distillation work
+- Scaling laws for RL on reasoning tasks
+
+Each of those communities has a natural reason to cite such a method, even if they don’t reimplement it.
+
+Project 2 mainly plugs into:
+
+- RLHF/RL‑style optimization work
+- People using verl or neighboring frameworks
+- Methodology papers on RL stability/efficiency
+
+That’s a smaller and more engineering‑oriented slice of the citation graph.
+
+---
+
+### 3. Novelty perception vs. actual difficulty
+
+For citation velocity, **perceived conceptual novelty** matters more than how technically sophisticated the contribution is.
+
+- Project 1 *reads* like a new paradigm:  
+  “Train a model to reason better purely from its own multi‑turn correction traces, under online RL, without supervision.”
+- Project 2 *reads* like an algorithmic refactor to improve stability and efficiency (decoupled clipping + adaptive sampling).
+
+Even if Project 2 ends up more practically valuable for large labs, Project 1 is more likely to become a reference point for future conceptual or empirical reasoning work.
+
+---
+
+### 4. Benchmark and narrative fit
+
+You explicitly care about math and coding reasoning tasks.
+
+Project 1:
+- Naturally yields a narrative like:  
+  “We show that a model can bootstrap its own reasoning abilities on math and coding solely from self‑generated corrections, without human labels or external models.”
+- This is exactly what a lot of follow‑up work wants to claim, attack, extend, or compare against.
+
+Project 2:
+- The natural narrative is:  
+  “We make large‑scale RL training of LLMs more stable and efficient; here are better performance/variance curves.”
+- That’s important, but less central to the current *reasoning* storyline. It’s more central to *RL infrastructure*.
+
+---
+
+### 5. “Reference type” and longevity
+
+Project 1 is likely to become a **canonical conceptual baseline**:
+
+- “Self‑correction‑only RL for reasoning”
+- That’s something people will feel obligated to include in comparison or related work sections when they talk about:
+  - Training LLMs to improve their own chain‑of‑thought
+  - Reasoning without external supervision
+  - Online RL for reasoning
+
+Project 2 is more of a **technique in a crowded optimization space**:
+
+- There are already many works on advantage clipping variants, PPO variants, data filtering, curriculum, etc.
+- Even if you do it well, it risks being “one of several PPO‑adjacent improvements” unless it’s dramatically superior—and even then, industrial usage doesn’t always translate to high academic citation velocity.
+
+---
+
+### 6. How to maximize citation velocity with Project 1
+
+If you go with Project 1, to maximize citations:
+
+1. **Brand the method clearly.**
+   - Give it a concise, memorable name emphasizing:
+     - self‑correction
+     - label‑free / supervision‑free
+     - single‑model, online RL
+   - People should naturally write sentences like:  
+     “We compare against XYZ, which trains a model to self‑correct via online RL using only its own correction traces.”
+
+2. **Tie it to multiple hot topics in the title and abstract.**
+   - Mention:
+     - “math and code reasoning”
+     - “self‑correction”
+     - “online reinforcement learning”
+     - “no external supervision or teacher models”
+   - That ensures it shows up as relevant across multiple sub‑fields.
+
+3. **Show strong, interpretable benchmarks.**
+   - Standard math/code benchmarks (GSM8K, MATH, HumanEval, etc.)
+   - Ablations:
+     - with vs. without external supervision
+     - with vs. without multi‑turn RL initialization
+     - with vs. without reward‑bonus regularization
+   - Make it easy for others to say: “We improved on XYZ by X points on GSM8K/HumanEval.”
+
+4. **Release code, traces, and maybe a small model checkpoint.**
+   - Especially the **correction traces** and training scripts.
+   - The more “plug‑and‑play” for baseline comparisons, the higher the citation count.
+
+5. **Position it as a foundation for broader self‑improvement work.**
+   - Even if you don’t run scaling experiments yourself, hint clearly at:
+     - “This framework is compatible with larger models, more complex domains (theorem proving, agent tasks), and multimodal extensions.”
+   - That prompts future authors in those spaces to cite you as an enabling prior.
+
+---
+
+### Bottom line
+
+For maximum and fastest citations:
+
+- **Choose Project 1** (multi‑turn, online RL for self‑correction from self‑generated traces, no external supervision).
+- Design and present it as *the* canonical “self‑correction‑only RL for reasoning” method, with a sticky name, strong benchmarks, and public code.
+
+Project 2 is valuable but is much more likely to end up as a niche RL‑optimization reference rather than a broad, high‑velocity citation anchor in the reasoning literature.
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Epoch 7, Comparison 35:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+You should do **Project 2 (entropy minimization for LLM outputs)** if your sole goal is to maximize *citation velocity*.
+
+Here’s why, focused specifically on citations and not on “scientific purity” or “personal interest”.
+
+---
+
+## 1. Problem framing and generality
+
+**Project 2**:
+- Tackles an extremely *general* and *model-agnostic* problem: how to shape LLM output distributions.
+- It’s easy to pitch as:  
+  “A general framework for making LLMs more decisive/confident across any domain (math, coding, reasoning, etc.) via entropy minimization.”
+- The three-part decomposition (EM‑FT, EM‑RL, EM‑INF) is:
+  - Simple to remember.
+  - Easy to reuse and extend.
+  - Easy to plug into existing pipelines.
+
+This is exactly the kind of “building-block” idea that gets referenced broadly: by RLHF papers, decoding papers, evaluation work, alignment, tool-use, etc.
+
+**Project 1**:
+- Focuses on **web navigation with simplified HTML** + hybrid data generation.
+- That’s more niche. It will mainly be cited by:
+  - Web-agent / browser-agent / embodied-agent papers.
+  - A subset of instruction-following / tool-use work.
+- The HTML-simplification and curriculum-learning angle is useful, but the work is “tied” to the web environment, which constrains citation breadth.
+
+From a pure “surface area for citations” perspective, **Project 2 dominates**: it applies to *any* text-generation scenario and slots naturally into existing RLHF/inference pipelines.
+
+---
+
+## 2. Ease of adoption and “default baseline” potential
+
+To get a lot of citations fast, your method needs to become a **default baseline** or a **standard knob** people feel obliged to mention.
+
+**Project 2** is structured almost optimally for that:
+
+1. **EM‑INF (inference-time entropy reduction)**  
+   - No retraining, no extra data, just a post-processing of logits.  
+   - This has a high chance of becoming:
+     - A standard ablation (“we also test with EM‑INF…”).
+     - An easy trick that libraries/frameworks can incorporate as a decoding option.
+   - Anything that can be adopted with “add two lines of code” gets widely tried and cited.
+
+2. **EM‑FT (entropy-minimization fine-tuning)**  
+   - Uses *unlabeled self-generated data* and a simple additional loss term.  
+   - That is exactly the sweet spot for people doing practical fine-tuning:
+     - “We tried EM‑FT on top of our RLHF/SFT setup and got X.”
+   - Papers that tune model confidence, calibration, or robustness now have to compare against your method.
+
+3. **EM‑RL (entropy-driven RL)**  
+   - While conceptually extreme (reward = negative entropy), it is:
+     - Super clean to describe.
+     - Trivially implementable with existing RLHF infrastructure.
+   - It gives authors a “pure” entropy-only RL baseline they can reference or contrast with.
+
+The more ways people can plug in your idea (training-time, RL-time, inference-time), the more times they can legitimately cite you. Project 2 gives three reusable primitives.
+
+**Project 1**, in contrast:
+- Requires a **custom environment** and a particular HTML simplification pipeline.
+- Adoption cost is high:
+  - People must care specifically about web navigation.
+  - They need to replicate your environment or trust your benchmarks.
+- This slows down both reproduction and follow-up work, and therefore slows citation velocity.
+
+---
+
+## 3. Trend alignment and searchability
+
+Citation velocity is heavily driven by how your work shows up in:
+- Keyword searches,
+- Conceptual clusters (e.g., RLHF, decoding, calibration, alignment),
+- Survey and tutorial papers.
+
+**Project 2** lives dead-center in several hot, evergreen keywords:
+- “entropy minimization in language models”
+- “decoding strategies for large language models”
+- “confidence calibration in LLMs”
+- “RLHF / reinforcement learning for LLMs”
+- “inference-time steering / control”
+
+It’s straightforward for future authors to write:
+- “Following prior work on entropy steering in LLMs [YourName, Year]…”
+- “We compare to entropy-minimization fine-tuning (EM‑FT) [YourName, Year]…”
+- “At inference time, we optionally apply entropy-based logit adjustment [YourName, Year]…”
+
+**Project 1** relies on narrower search hooks:
+- “web navigation”
+- “HTML simplification”
+- “web agents curriculum learning”
+
+These are important niches but have lower overall volume, and growth is tied to the subfield’s pace rather than the entire LLM ecosystem.
+
+From a purely game-theoretic perspective of future literature graphs, **Project 2 positions you in the core of RLHF/decoding/control discourse**, which is much denser citation territory.
+
+---
+
+## 4. “Concept stickiness” and meme-ability
+
+High-citation work often has:
+- A memorable name/abbreviation,
+- A clean conceptual story,
+- A simple recipe.
+
+**Project 2** already has this baked in:
+- EM‑FT, EM‑RL, EM‑INF form a neat triad.
+- The core statement is extremely quotable:  
+  “We directly minimize the entropy of the model’s output distribution to make it more decisive.”
+- You can pitch it as:
+  - “Entropy shaping as a unifying principle for training and decoding LLMs.”
+
+Survey authors and practitioners *love* encapsulated, modular ideas they can summarize in a paragraph and a figure. That tends to drive citations.
+
+**Project 1** is more complex to summarize in a single sentence:
+- You’re combining:
+  - HTML simplification,
+  - hybrid human–AI data generation,
+  - curriculum learning,
+  - RL + rejection sampling.
+
+Each component is interesting, but the “meme” isn’t as crisp. It reads more like a sophisticated system paper than a single, portable idea.
+
+System papers in niche environments do get cited, but often more slowly and within a smaller subcommunity.
+
+---
+
+## 5. Direct link to math/coding reasoning claims
+
+You specifically care about **LLM reasoning (math, coding)**.
+
+Both could plausibly improve reasoning:
+- Entropy minimization → more decisive chains of thought, less dithering.
+- Better web agents → better tool-use, external search, etc.
+
+But for *fast* reasoning-related citations:
+
+**Project 2**:
+- You can run benchmarks on math/coding datasets (MATH, GSM8K, AIME, Codeforces-style problems, HumanEval, etc.) and show:
+  - EM‑FT / EM‑RL / EM‑INF improves correctness by making the model more confident in its main reasoning trajectory.
+- This connects you directly to the main reasoning benchmarks everyone uses.
+- Future math/coding RL and reasoning-control papers will:
+  - Either adopt your entropy techniques as baselines, or
+  - At least cite you in related work when discussing distribution shaping or inference-time steering.
+
+**Project 1**:
+- The link to math/coding reasoning is more indirect:
+  - The stronger web agent might do multi-step browsing to help solve reasoning tasks,
+  - But reviewers and readers will primarily treat it as *“web agent / browser agent work”*, not *“core reasoning methodology.”*
+- Citation overlap with math/coding papers will be limited unless they explicitly use web browsing as their main technique.
+
+If your only KPI is “how many reasoning/LLM papers cite me,” **Project 2 is closer to the center of gravity**.
+
+---
+
+## 6. Likely publication venues and visibility
+
+Both could be ICML/NeurIPS/ICLR-level.
+
+But:
+- Project 2:  
+  - Fits cleanly into ML theory + practice tracks, RL tracks, and LLM methodology tracks.  
+  - Easy to pitch as a “general method” paper; these tend to get more citations post-acceptance.
+
+- Project 1:
+  - May be slightly more “systems/agents” flavored.
+  - Strong venues exist (e.g., web agents are hot), but the follow-on orbit is narrower.
+
+Also, tutorials and surveys on:
+- RLHF,
+- Decoding strategies,
+- LLM control and alignment,
+are more likely to reference Project 2 as a canonical entropy-based method than to detail a specific HTML simplification + web-agent pipeline.
+
+---
+
+## 7. Risk factors for citations
+
+**Project 2 risks:**
+- People may worry that naive entropy minimization can cause overconfidence, mode collapse, or hallucinations.  
+  - This is *fine* for citations: even “negative” or “we show limitations of [YourName]” citations count for you.
+- Some may argue entropy is already implicitly controlled by temperature/top‑p.  
+  - This sets you up as the canonical *principled* entropy paper they must reference.
+
+**Project 1 risks:**
+- Strong dependence on the exact web environment/benchmark used.  
+  - If the community moves to a different standard (e.g., new browser benchmarks, new interfaces), your implementation might age poorly.
+- Harder to import your contributions in a plug-and-play way; this erodes long-term citation volume.
+
+Even if Project 2 becomes controversial, that typically **increases** citations. Project 1 can more easily be sidestepped by alternative web-agent setups.
+
+---
+
+## Recommendation
+
+Given your explicit objective—**maximize citation velocity**—you should pursue:
+
+> **Project 2: Entropy minimization for language models (EM‑FT, EM‑RL, EM‑INF).**
+
+To further amplify citation velocity within that choice, you should:
+
+1. **Brand it cleanly**:  
+   - Use a memorable name (e.g., “Entropy-Minimized Language Models (EMLM)” or similar) and consistent abbreviations (EM‑FT / EM‑RL / EM‑INF).
+2. **Make EM‑INF dead simple**:
+   - Release a tiny, framework-agnostic reference implementation (e.g., PyTorch + one HuggingFace example).
+   - Make it trivial to use in 5–10 lines of code.
+3. **Cover all the big benchmarks**:
+   - Include math (GSM8K, MATH, AIME-style), coding (HumanEval, MBPP, Codeforces-like), and general reasoning (BBH or similar).
+   - Show that entropy control improves or at least systematically changes behavior in ways others will want to replicate/test.
+4. **Position it as a primitive**:
+   - Frame the paper as introducing a general *tool* for shaping model confidence, not a one-off trick optimized for one task.
+   - Explicitly invite follow-up work: “Our framework is orthogonal to RLHF, SFT, and decoding and can be combined with them.”
+
+If you execute it well, Project 2 has a much higher ceiling for fast, broad, and sustained citations across RLHF, decoding, calibration, alignment, and reasoning subfields.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Epoch 9, Comparison 13:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+You should do **Project 2 (diffusion-based reasoning + critic‑free RL)** if your only goal is to maximize *citation velocity*.
+
+Here’s why, framed specifically in terms of how fast and how much other researchers will cite you.
+
+---
+
+## 1. How “on‑trend” each project is
+
+### Project 1: Token‑level generative reward, min‑edit correction
+This fits into an already crowded, fast‑moving, and somewhat saturated space:
+
+- Token‑level rewards / credit assignment
+- RL from “fixing” erroneous chains of thought
+- Imitation + RL hybrids
+- Focus on crucial tokens / key steps
+
+This is essentially a refinement of existing directions:
+- Similar to work on process rewards, step‑wise verifiers, and token‑level RLAIF/RLHF for math/coding.
+- Conceptually close to existing “error localization + correction” approaches and edit‑based training.
+
+Result:  
+You’re competing with many nearby papers that are easier to implement and explain (e.g., “we detect the wrong step in CoT and reinforce the right fix”). Unless you show a **huge** performance jump or extremely clear empirical win, it risks being seen as “yet another clever RL reward shaping paper” and getting moderate but not explosive uptake.
+
+---
+
+### Project 2: Diffusion LMs as reasoning agents + critic‑free RL (diffu‑GRPO)
+
+This hits multiple hot keywords and under‑explored angles **at once**:
+
+- Diffusion models for *language* (already a niche but growing community)
+- Coarse‑to‑fine generation and masked diffusion
+- Reasoning and tool use with non‑autoregressive models
+- Critic‑free RL algorithm specialized for diffusion‑style policies
+- A full SFT+RL pipeline that says: “Here’s how to make diffusion LMs competitive for reasoning”
+
+This positions you as:
+- One of the first clear “reference papers” for **RL‑for‑reasoning with diffusion LMs**.
+- A method paper (diffu‑GRPO) that others can cite *even if they’re not using your exact dataset or tasks*.
+- A bridge between two currently separate but very active communities: diffusion people and reasoning/RLHF/RLAIF people.
+
+Result:  
+You maximize the chance of becoming a “canonical citation” in *three* spaces:
+1. Diffusion language models
+2. RL for reasoning
+3. Critic‑free / GRPO‑style methods for non‑autoregressive models  
+
+This is ideal for long‑tail, cross‑field, compounding citations.
+
+---
+
+## 2. Citable “hooks” per project
+
+Think in terms of recognizable bullets another author will happily drop into a related work section.
+
+### Project 1 hooks
+Others might cite you for:
+- “token‑level generative reward models that focus on error‑causing tokens”
+- “minimum‑edit constrained error correction as a reward signal”
+- “combining token‑level RL with imitation regularization”
+
+These are conceptually nice, but:
+- They’re tweaks within an existing RLHF/RLAIF frame.
+- The novelty is mainly in reward shaping and training objective design, which can be harder to explain and easier to approximate with simpler baselines.
+
+Expect citations concentrated among:
+- People deeply into token‑level credit assignment.
+- A subset of math/program synthesis RL papers.
+
+### Project 2 hooks
+Others might cite you for:
+- “Using masked diffusion LMs for reasoning / math / coding”
+- “First/early work adapting diffusion‑based language models as reasoning agents”
+- “Diffu‑GRPO, a critic‑free policy‑gradient algorithm for diffusion LMs”
+- “An SFT+RL pipeline that preserves coarse‑to‑fine diffusion generation while improving reasoning”
+- “Demonstrating that diffusion‑based LMs can leverage standard RL for reasoning”
+
+These are:
+- High‑level, easy to reference, and fit naturally into many narratives: “diffusion for text,” “non‑autoregressive reasoning,” “RL for new architectures,” “critic‑free RL.”
+- Methodologically central, not just a reward tweak: you’re providing an **algorithmic building block** and a **pipeline template**.
+
+Expect citations from:
+- All diffusion‑LM papers, even if they’re not about reasoning.
+- RL algorithm papers referencing diffusion policy optimization.
+- Reasoning/benchmark papers that want to include or at least “acknowledge diffusion‑based LMs.”
+- Survey/tutorial papers on “LLM architectures beyond autoregressive Transformers,” “RL for generative models,” etc.
+
+---
+
+## 3. Time‑to‑impact dynamics
+
+Citation *velocity* depends on:
+
+1. **How quickly others can build on it**
+   - Project 1: To really use your method, they need to implement your token‑level reward model, min‑edit rewriting setup, and carefully reproduce your RL objective. That’s adoption friction.
+   - Project 2: The RL algorithm + SFT‑for‑diffusion approach can be modular. Even imperfect reimplementations are still “diffu‑GRPO‑style critic‑free RL for diffusion LMs.” Lower friction to approximate.
+
+2. **Is the field “waiting” for this?**
+   - Diffusion LMs are clearly moving toward larger‑scale text and coding, but there’s very little established “how to do RL for reasoning” story there. Your paper could easily become the default citation for that question.
+   - By contrast, token‑level reward and error‑correction RL for autoregressive LLMs is not a missing piece; it’s one of many incremental refinements under way.
+
+3. **Survey and framework papers**
+   - Surveys love novel axes: “RL for autoregressive vs non‑autoregressive vs diffusion‑based LMs.” You give them a solid “diffusion RL for reasoning” node.
+   - Your critic‑free RL algorithm has a good chance of being cited as one of the named methods in methodological overviews.
+
+---
+
+## 4. Risk profile and how it affects citations
+
+- **Project 1 risk**:  
+  If the performance lift is modest or sensitive to implementation, it can be dismissed as a niche trick in a saturated space. To get strong citations, you’d almost need *state‑of‑the‑art* jumps on big benchmarks, which is hard and compute‑heavy.
+
+- **Project 2 risk**:  
+  Even if your method *doesn’t* beat top autoregressive SOTA, it can still be highly cited as:
+  - “the first to systematically apply RL to diffusion LMs for reasoning,” or
+  - “an influential negative/partial result about the viability of diffusion for reasoning.”
+
+In other words, Project 2 retains citation value even with middling empirical wins, because its novelty is *architectural + algorithmic*, not just incremental performance.
+
+---
+
+## 5. How to maximize citation velocity *within* Project 2
+
+Since this is your only objective, a few strategic design choices:
+
+1. **Brand the method clearly**
+   - Stick with a crisp, memorable name: **diffu‑GRPO**.
+   - Make it easy to cite as a standalone algorithm, not only inside your pipeline.
+
+2. **Make it general‑purpose on paper**
+   - Explicitly frame diffu‑GRPO as applicable to:
+     - reasoning,
+     - general text generation,
+     - possibly planning / structured prediction with diffusion LMs.
+   - This broadens who “feels allowed” to cite you.
+
+3. **Position the paper as a reference**
+   - Include a section “General recipe: turning a diffusion LM into a reasoning agent with SFT+diffu‑GRPO.”
+   - Provide a clear, architecture‑agnostic algorithm box/pseudocode.
+
+4. **Hit at least one widely used reasoning benchmark**
+   - For example: GSM8K / MATH‑style tasks, or standard coding benchmarks.
+   - You want your method to be usable as a baseline line in future tables.
+
+5. **Release code with minimal boilerplate**
+   - Fast reimplementation → fast follow‑up papers → fast citations.
+
+---
+
+## 6. Bottom line recommendation
+
+Given your stated objective (maximize citation velocity, nothing else):
+
+- **Choose Project 2.**
+- Pitch it as:  
+  “A general framework for turning masked diffusion language models into reasoning agents via SFT and a novel critic‑free RL algorithm (diffu‑GRPO).”
+- Aim less for beating all autoregressive models, and more for being the **go‑to reference** for:
+  - RL with diffusion LMs,
+  - diffusion‑based reasoning agents, and
+  - critic‑free RL algorithms tailored to masked diffusion policies.
+
+Project 2 has a clearer path to becoming a standard citation across multiple subcommunities, which is exactly what you want.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Epoch 10, Comparison 27:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+You should pursue **Project 2** if your sole objective is to maximize *citation velocity*.
+
+Here’s the reasoning, focused specifically on what tends to get fast and numerous citations in today’s LLM research ecosystem.
+
+---
+
+## 1. Topical fit with current citation “hot zones”
+
+### Project 2 (Recommended)
+- **Self-reflection / self-correction / RL with reasoning rewards** is a very active cluster right now:
+  - Reflexion, RLAIF, RL for reasoning traces, tool-using agents, “LLMs that improve themselves”.
+  - These papers get picked up by: RL people, alignment folks, agentic LLM researchers, benchmark creators, and practitioners building tools.
+- **Multimodal + RL + reflection** hits *three* currently hot axes:
+  - Multimodality (images, etc.)
+  - RL fine-tuning
+  - Metacognitive/self-reflection mechanisms
+- You’re proposing:
+  - A **new dataset** (multimodal, reflection-focused),
+  - A **new RL algorithm variant** (GRPO),
+  - A **new reward design** (concise, cognitively meaningful reflection).
+- Each of those is independently citable:
+  - Dataset paper: cited by everyone doing multimodal reasoning / reflection.
+  - Algorithm (GRPO): cited by RL and LLM-tuning work, especially any “Group-based RL” or “relative” objectives.
+  - Reward design & reflection framing: cited by work on chain-of-thought, self-consistency, and introspective models.
+
+That gives you multiple hooks into different citation streams.
+
+### Project 1
+- System 1 / System 2 integration is conceptually appealing but currently **less of a mainstream engineering axis** and more of a niche in interpretability / cognitive framing.
+- Techniques like **task-vector alignment, SVD, activation fusion**:
+  - Are cool and technical but tend to get cited mostly by a narrower interpretability / model surgery / representation learning crowd.
+  - Don’t have as immediate a story for practitioners compared to “we built a reflection dataset + RL method you can directly use”.
+- It’s also closer to “clever fine-tuning / merging” work, which often gets *some* citations but tends not to explode unless it yields a very obvious empirical leap or very cheap deployment recipe.
+
+---
+
+## 2. How people actually discover and cite things
+
+Projects with **tangible artifacts** and **clear plug-and-play components** get more and faster citations.
+
+### Project 2: strong citation affordances
+You can structure it to maximize citability:
+
+1. **Dataset as a first-class artifact**
+   - A named dataset (e.g., “Reflex-MM” or similar) with:
+     - Public release,
+     - Clear benchmark splits,
+     - Leaderboard-style tasks (reasoning + reflection quality).
+   - People *have* to cite you if:
+     - They evaluate on your dataset.
+     - They compare their reflection or RL method to yours.
+
+2. **GRPO as a methodology hook**
+   - A distinctive name (GRPO) and a clean formulation.
+   - RL and LLM-finetuning work will cite it simply as “we base our objective on GRPO (Author et al., 202X)”.
+   - Even modest gains can be enough if the method is conceptually neat and easy to re-use.
+
+3. **Novel reward design**
+   - You define a “reflection quality” reward that:
+     - Penalizes redundancy,
+     - Rewards brevity + cognitive usefulness.
+   - This becomes a reference point for anyone doing:
+     - Reward shaping for reasoning,
+     - Compression of chain-of-thought,
+     - Reflection-based agents.
+
+4. **Workflow-level reuse**
+   - People doing agents or tool-using MLLMs can:
+     - Use your dataset to pretrain a reflection policy.
+     - Borrow your reward design to fine-tune their own models.
+   - That’s fertile ground for fast adoption and citations.
+
+### Project 1: narrower reuse channels
+Project 1’s contributions are more “inside the model”:
+
+- **Model-merging / activation fusion pipeline** is:
+  - Trickier to standardize as a reusable library / dataset.
+  - More sensitive to model architecture, training data, and implementation.
+- People might cite you if:
+  - They work specifically on System 1 / System 2,
+  - Or on model merging / task vectors / basis decompositions.
+- That’s a smaller and slower-moving pool than:
+  - “I need a reflection dataset” or
+  - “I need an RL objective for multimodal self-reflection”.
+
+Unless you produce a stunning, widely publicized performance jump (e.g., SOTA across many reasoning benchmarks in a way that’s *easy* to replicate), citation velocity here will likely be lower.
+
+---
+
+## 3. Speed of impact
+
+### Project 2
+- **Dataset papers** often accrue citations fast:
+  - People scramble to show they evaluated on all the relevant datasets.
+  - Benchmarks and datasets become “checklist citations” in new reasoning/multimodal work.
+- **Multimodal reflection** is underdeveloped compared to text-only reflection:
+  - Being early in this micro-niche boosts your odds of becoming the *canonical* reference.
+- RL methods with catchy acronyms and a clear policy-gradient or PPO-style analogy also diffuse quickly, even if they are modest variants.
+
+### Project 1
+- Interpretability and representation-level techniques:
+  - Often take longer to permeate.
+  - Require more conceptual buy-in and technical implementation effort.
+- To get high citation velocity, you’d almost need:
+  - A heavily publicized code release,
+  - Very simple, robust recipe,
+  - And very visible gains on widely-used reasoning benchmarks.
+
+Even then, the core community may be smaller.
+
+---
+
+## 4. Risk vs. reward, conditional on your goal
+
+You only care about citation velocity, not elegance, originality per se, or long-term depth.
+
+### Project 2 aligns better with that incentive:
+- You can optimize for:
+  - Releasable dataset + “starter” models,
+  - An easy-to-implement GRPO variant with reference code,
+  - Benchmark-style evaluations that others must compare against.
+- Even if:
+  - GRPO is only a modest improvement over PPO, and
+  - The reflection reward is somewhat heuristic,
+  you still get citations from people:
+  - Re-implementing/self-comparing,
+  - Using your dataset as a standard.
+
+### Project 1 is more “high‑brow, low throughput”:
+- Could be influential long-term if it yields real conceptual breakthroughs, but:
+  - The path to fast mass citation is less clear.
+  - It’s less obviously integrable into everyone’s experimental pipeline.
+
+---
+
+## 5. How to maximize citation velocity within Project 2
+
+To sharpen the recommendation, here are the key design decisions to bias toward more citations:
+
+1. **Make the dataset central and branded**
+   - Clear name, website, and easy download.
+   - Standard evaluation protocol (scores, leaderboards).
+   - Include many existing benchmarks converted into a reflection format so it’s broadly relevant.
+
+2. **GRPO as a modular drop‑in**
+   - API-level clarity: “Swap PPO with GRPO in this line of code.”
+   - Release a small, clean RL library or config for several open MLLMs.
+
+3. **Positioning in the title and abstract**
+   - Keywords that maximize search hits and topical overlap:
+     - “Multimodal reasoning”, “self-reflection”, “reinforcement learning”, “dataset”, “Group Relative Policy Optimization”.
+   - Example framing:  
+     - “Multimodal Self-Reflection: A Benchmark and GRPO for Training Reflective MLLMs”
+
+4. **Early and aggressive open‑sourcing**
+   - Hugging Face datasets + models,
+   - Colab demos,
+   - Example training scripts.
+
+The easier it is for others to *immediately* plug it into their workflows, the higher your citation velocity.
+
+---
+
+## Final recommendation
+
+Pursue **Project 2**.
+
+It is better aligned with:
+- Current high-citation themes (multimodal, RL for reasoning, self-reflection),
+- The creation of clearly reusable artifacts (dataset, RL objective, reward scheme),
+- And the practical behavior of how LLM/ML communities discover and cite work.
+
+If you structure it as a named dataset + method + reference implementation, it gives you multiple, independent citation vectors and a high likelihood of fast uptake.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Epoch 12, Comparison 5:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+You should pursue **Project 1 (test‑time scaling with multi‑round thinking)** if your only objective is to maximize *citation velocity*.
+
+Here’s why, focusing specifically on citation dynamics rather than scientific merit in the abstract:
+
+---
+
+## 1. Generality vs. Niche: Broader Methods Get Cited More, Faster
+
+**Project 1** is:
+
+- Architecture‑agnostic (works with most LLMs)
+- Domain‑agnostic (math, coding, reasoning, tutoring, planning, etc.)
+- Training‑free (prompting / inference only)
+
+This makes it inherently attractive as a **general technique paper**. Every future paper that wants to say “we improved reasoning via test-time methods” can plausibly benchmark against, compare to, or cite multi‑round thinking as:
+
+- A baseline for reasoning improvement
+- A simple, reproducible method
+- A conceptual reference for “test‑time scaling” or “test‑time reinforcement of reasoning”
+
+**Project 2**, in contrast, is:
+
+- Domain‑specific (finance)
+- Model‑specific (a particular 7B financial model)
+- Pipeline‑specific (two-stage SFT+RL on a distilled financial dataset)
+
+That’s almost guaranteed to have a **much smaller citing population**:
+- Primarily financial NLP / LLM‑for‑finance researchers
+- A few works from RLHF / domain‑specific LLM communities
+
+You are capping your citation pool by targeting a niche. The number of people who work on “reasoning in general” is an order of magnitude larger than those working explicitly on “financial reasoning models.”
+
+---
+
+## 2. Conceptual Handle: Easy‑to‑Name Ideas Get Cited Repeatedly
+
+Project 1 has the potential to become a **named concept** in the literature:
+
+- “Multi‑round thinking”
+- “Test‑time scaling”
+- “Iterative self‑refinement”
+- “Answer‑as‑prompt reasoning”
+
+Once a method has a short, catchy, reusable label, it tends to get cited in:
+
+- Survey papers (“Test‑time scaling methods such as Multi‑Round Thinking [YourName et al., 202X]…”)
+- Method comparisons (“We compare chain‑of‑thought, self‑consistency, and multi‑round thinking [YourName et al., 202X]…”)
+- Benchmark papers (“We evaluate several prompting strategies, including multi‑round thinking [YourName et al., 202X]…”)
+
+**Project 2** is more likely to be referenced as:
+
+- “A specialized financial model with RL fine‑tuning [YourName et al., 202X]”
+
+This style of contribution is typically cited:
+- Once per paper, if they *specifically* discuss LLMs for finance, and
+- Often only in the related work section, not as a core methodological anchor.
+
+Project 1 has a better chance to become a **canonical reference method**.
+
+---
+
+## 3. Implementation Barrier and Replicability
+
+For rapid citation uptake, other groups must be able to **try, extend, or baseline your method with minimal friction**.
+
+**Project 1:**
+
+- No additional training required.
+- Can be implemented as a small wrapper around any inference API (OpenAI, Anthropic, open‑source LLMs).
+- Easy to reproduce in a day or two by a grad student.
+
+That dramatically increases:
+- Adoption
+- Inclusion as a default baseline in new reasoning papers
+- Citations in quick turnaround works (arXiv, workshops, industrial tech reports)
+
+**Project 2:**
+
+- Requires access to:
+  - DeepSeek‑R1 (or at least a strong base model)
+  - Your distilled financial dataset
+  - RL infrastructure (PPO/GRPO or similar)
+- Harder to replicate end‑to‑end
+- Even if you release the model, most researchers not working directly on finance have no incentive to use it as a baseline.
+
+This constrains both how quickly and how widely it will be adopted.
+
+---
+
+## 4. Alignment with Current Citation Trends in LLM Reasoning
+
+Recent highly cited reasoning‑improvement works tend to fall into a few categories:
+
+- **Prompting / test‑time methods**: CoT, self‑consistency, Tree of Thoughts, debate‑style prompting, planning‑oriented prompting.
+- **General RL‑for‑reasoning approaches**: “R1”-style training, RL trees, verifier‑guided reasoning.
+- **Framework / algorithm papers**: scalable RL from LMs, general reasoning architectures.
+
+Project 1 fits cleanly into the **test‑time reasoning scaling** thread:
+- It can be compared directly against CoT, self‑consistency, ToT, etc.
+- It’s easy for future papers to say: “We extend / outperform / combine with multi‑round thinking.”
+
+That makes it likely to be cited by:
+- Method papers
+- Benchmark papers
+- Practical system papers (“we used a multi‑round self‑refinement strategy based on [YourName et al.]”)
+
+Project 2 is closer to a **single‑domain application of a now‑standard pipeline** (distillation + SFT + RL). These tend to be:
+
+- Cited modestly
+- Quickly overshadowed by larger or more general models
+- Replaced as “state of the art” once a bigger lab releases a stronger finance model
+
+The saturation of “here is a domain‑X LLM” papers works against citation velocity.
+
+---
+
+## 5. Longevity and Obsolescence Risk
+
+Project 2 is at higher risk of **rapid obsolescence**:
+
+- If a major lab drops a stronger financial model, your 7B will be quickly bypassed.
+- Many future works will say “We use Model X (a popular proprietary or open model) for finance,” not “We use [YourName’s model].” They might only nod in your direction as a historical reference, if at all.
+
+Project 1’s **idea** is more robust to model churn:
+
+- Even when new models appear, your method still applies.
+- Future larger models and RL‑trained models can still be evaluated with multi‑round thinking.
+- The method could remain relevant as a **general inference strategy** for many generations of models.
+
+Shared test‑time techniques age more gracefully than domain‑specific checkpoints.
+
+---
+
+## 6. How to Maximize Citation Velocity with Project 1
+
+To push citation velocity as high as possible, you should structure Project 1 like this:
+
+1. **Positioning**
+   - Explicitly frame it as a **general test‑time scaling method for LLM reasoning**.
+   - Connect it to but differentiate it from CoT, self‑consistency, ToT, debate, etc.
+   - Introduce a clear, memorable name and use it consistently.
+
+2. **Benchmarks**
+   - Evaluate on a **wide range** of tasks: math (GSM8K, MATH), coding (HumanEval, MBPP), logical reasoning, planning, maybe some QA and instruction following.
+   - Use both open and closed LLMs (e.g., a 7B/14B open model + one proprietary frontier model, if possible).
+   - Emphasize that **no additional training** is required.
+
+3. **Practicality**
+   - Release easy‑to‑use code:
+     - One Python script to wrap any chat completion API for multi‑round inference.
+     - Super simple configuration (number of rounds, stopping criteria).
+   - Provide results showing “strong gains for minimal engineering” so practitioners adopt it quickly.
+
+4. **Ablations / Insights**
+   - Show how performance scales with:
+     - Number of rounds
+     - Different prompting variants for feeding back prior answers
+   - Provide simple heuristics for when multi‑round thinking helps vs. wastes tokens.
+   - These ablations increase your chance of being used as a **reference for understanding** test‑time scaling, not just as a trick.
+
+5. **Narrative**
+   - Sell it as: “How far can we push LLM reasoning quality with *pure* test‑time compute, without any extra training?”
+   - Tie into broader themes: “reasoning as iterative refinement,” “test‑time RL‑like improvements without gradient updates,” etc.
+
+This kind of framing makes your work an obvious anchor citation for future authors working on any test‑time or inference‑level reasoning technique.
+
+---
+
+## 7. Direct Answer
+
+Given your explicit objective—maximize the number and speed of citations after publication—you should:
+
+**Choose Project 1: Multi‑round test‑time scaling for LLM reasoning.**
+
+It is more general, easier to adopt, easier to reference, and more likely to become a standard baseline or named technique across many subfields, which directly optimizes for citation velocity.
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Epoch 13, Comparison 19:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+You’ll almost certainly get higher and faster citation velocity with **Project 1 (the systematic review)**.
+
+Here’s the reasoning, tuned specifically to your goal of maximizing *citations per unit time*, not scientific elegance or long‑term impact.
+
+---
+
+## How citation dynamics actually work here
+
+### 1. Systematic reviews in hot areas are citation magnets
+
+In a fast‑moving, fragmented field like “RL for LLMs / RLHF / reasoning enhancement,” a well‑executed, clearly titled, and well‑SEO’d survey tends to:
+
+- **Cite broadly → get cited broadly.**  
+  Every subcommunity you cite now has a canonical “Related Work: see [YourName, 2025] for a survey of RL‑enhanced LLMs.”
+
+- **Become the default pointer** for:
+  - “For an overview of RL for language models, see …”
+  - “For a taxonomy of RLHF / DPO / RLAIF methods, see …”
+  - “For a summary of RL‑based alignment techniques, see …”
+
+- **Keep accruing citations for years** without needing to stay SOTA.
+
+Empirically, in ML/AI, surveys in emerging subfields often outperform typical single‑method papers in *raw* citation counts, especially if:
+- The topic is broad and hot (RLHF + LLMs + alignment + reasoning definitely is).
+- The paper is formatted and titled clearly as a “survey / systematic review / comprehensive overview.”
+
+Project 1 is exactly in that sweet spot.
+
+---
+
+### 2. Project 2 is “just one method” in a crowded RLHF‑for‑LLMs space
+
+Project 2 (ReMax) has solid technical appeal, but from a citation‑velocity perspective it has disadvantages:
+
+- **Narrower citation surface area.**  
+  You’ll mostly be cited by:
+  - People implementing or benchmarking RLHF algorithms.
+  - People doing low‑level RL algorithmic work for sequence models.
+  - A subset of LLM reasoning / alignment papers that care about training details.
+
+  By contrast, a survey will be cited by *all* of these plus:
+  - Position papers.
+  - New alignment methods that don’t even use your algorithm.
+  - Application‑area papers that want a background reference.
+
+- **You’re competing with entrenched baselines.**  
+  PPO, GRPO, DPO, etc. have mindshare. For your method to be widely cited, it must:
+  - Obtain **clearly better results** on **standard benchmarks**, and  
+  - Be **easy to adopt** (open‑source code, good docs, stable implementation), and  
+  - Be *promoted* heavily (blog posts, library integrations, huggingface, etc.).
+
+  Even then, a lot of practitioners will just keep using PPO‑style methods by inertia and cite either:
+  - The original RLHF / PPO papers, or
+  - One “big” paper that bundled RLHF into an influential model release.
+
+- **Method papers have longer “time to uptake.”**  
+  People need time to:
+  - Read and understand your algorithm.
+  - Implement or wait for a library implementation.
+  - Run experiments.
+  - Write up and publish their papers.
+
+  That pipeline is slower than: “need a sentence of background → grab the most recent RL‑for‑LLMs survey from arXiv.”
+
+---
+
+## Project‑specific assessment
+
+### Project 1: Systematic review of RL‑enhanced LLMs
+
+Pros for citation velocity:
+
+- **Huge audience**: RLHF, RLAIF, DPO, Instruct‑tuning, alignment, LLM‑reasoning, tool‑use, safety, etc.  
+  Many subfields will need a single “overview” citation.
+
+- **Broad keyword coverage**:
+  - “RLHF,” “RLAIF,” “RL for LLMs,” “preference optimization,” “alignment,” “reward models.”
+  - Good title/abstract optimization can channel a lot of generic “we need a reference” citations to you.
+
+- **Works even if it’s not “the best” survey**.**  
+  Once you’re one of the earliest or best‑branded surveys:
+  - You get “incumbency” in citation habits.
+  - Even if a later survey appears, people often keep citing the older one as “classic/background.”
+
+- **Fast usable value**:
+  - People don’t need to re‑implement anything to use your paper.
+  - They just cite it for discussion or context, which is frictionless.
+
+Risks to manage:
+
+- You must avoid being “yet another shallow overview.” To maximize citations:
+  - **Be comprehensive** (large, well‑curated bibliography).
+  - **Provide clear taxonomies/diagrams** people can reuse in slides/papers.
+  - **Identify gaps and “future directions”** clearly—other authors will cite you when they position their new work as addressing those gaps.
+  - Time it so it appears when “RL for LLMs” is clearly emerging but not yet saturated with multiple surveys. Right now is still good.
+
+If you execute well, expect:
+- **Higher initial citation rate** within 6–18 months post‑arXiv,
+- **Broader disciplinary spread** (NLP, RL, alignment, safety, HCI, etc.),
+- **Sustained long‑tail citations**.
+
+---
+
+### Project 2: ReMax RLHF algorithm
+
+Pros:
+
+- You have a **clearly stated algorithmic novelty**:
+  - REINFORCE with a variance‑reduction trick that obviates a value network.
+  - Reduced memory + simpler hyperparameters vs PPO with comparable performance.
+
+- If:
+  - You deliver **strong, convincing benchmarks** on widely used RLHF testbeds and reasoning benchmarks (GSM8K, MATH, Codeforces‑like tasks, etc.), and
+  - The code is **high‑quality, plug‑and‑play**,  
+  then ReMax *could* become a go‑to baseline in lean RLHF implementations.
+
+Cons for citation velocity:
+
+- **Niche within a niche**: it’s an optimization‑detail within RLHF, not a conceptual anchor for the whole area.
+- **Heavily dependent on adoption**: if big labs or major frameworks don’t pick it up, citations will be moderate at best.
+- Even in papers that *use* RLHF, many will just mention “we use PPO‑style RLHF (Schulman et al.)” and ignore alternative algorithms unless yours becomes extremely prominent.
+
+Unless you’re particularly well‑positioned to:
+- Get the method integrated into major open‑source RLHF libraries (TRL, OpenRLHF, Axolotl, etc.),
+- Pair it with a high‑profile model release or leaderboard win,
+
+the expected *median* citation trajectory is lower than a strong survey.
+
+---
+
+## Direct recommendation
+
+If **maximizing citation velocity is your only goal**, you should pursue:
+
+> **Project 1: the systematic review of reinforcement‑learning‑enhanced large language models.**
+
+And you should design it explicitly as a **canonical reference** by:
+
+1. **Title/branding for maximum recall**, e.g.  
+   - “Reinforcement Learning for Large Language Models: A Comprehensive Survey”  
+   - Or “Reinforcement Learning for Aligning and Enhancing Large Language Models: A Systematic Review”
+
+2. **Cover all the big buckets** clearly:
+   - RLHF / RLAIF / reward modeling
+   - Offline RL with demonstrations / preference data
+   - Direct Preference Optimization & other reward‑free objectives
+   - Methods targeted at reasoning/math/coding specifically
+   - Open problems and benchmark issues (e.g., instability, reward hacking, generalization to unseen tasks)
+
+3. **Make it a practical “one‑stop shop”**:
+   - Tables summarizing methods, data types, and trade‑offs.
+   - Taxonomy figures people can screenshot.
+   - Per‑task and per‑benchmark organization (math, coding, dialogue, safety, etc.).
+
+4. **Release early on arXiv**, then iterate:
+   - Early visibility maximizes long‑term citation accumulation.
+   - Regular updates (v2, v3) keep it top‑of‑mind.
+
+If you really want to hedge, you can:
+
+- Aim for **Project 1 now** (faster to impact, broader reach),
+- Use the survey’s “future work” section to set the stage for **Project 2** later; when you publish ReMax, you’ll already own the “background RLHF” citation space and can cross‑promote.
+
+But given your singular objective—citation velocity—**Project 1 dominates Project 2 in expected returns.**
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Epoch 14, Comparison 33:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+You’ll almost certainly get higher and faster citation velocity from **Project 2**.
+
+Here’s why, framed explicitly around citation dynamics rather than scientific merit:
+
+---
+
+## 1. Conceptual hook and meme‑ability
+
+**Project 2**:
+- Core meme: *“LLMs self‑improve by grading their own outputs”* / *“student–teacher in one model”* / *“unsupervised RL with an internal reward model.”*
+- Easy to describe in a single sentence and a figure: generation → self‑critique → RL update.
+- This is the kind of idea people name (“Self‑Rewarding LMs”, “Self‑Teacher”, “Self‑Judge RL”, etc.) and then casually cite whenever they talk about:
+  - self‑training / self‑distillation
+  - RL for LLMs
+  - unsupervised or “no human labels” learning
+  - LLMs as judges / reward models
+
+Named, general mechanisms with a catchy story spread faster and get reused broadly.
+
+**Project 1**:
+- Core meme: *“Zero‑RL from scratch with a generative verifier and a massive verified‑answer dataset.”*
+- This is more niche and infrastructure‑like:
+  - a big dataset + an LLM‑based verifier + a specific RL recipe.
+- People will mostly cite it if:
+  - they care specifically about your dataset,
+  - or they do RL from scratch and want a precedent.
+- Harder to explain in one soundbite; readers tend to remember “yet another RLHF‑style data+pipeline paper,” which slows adoption as a default citation.
+
+In terms of **meme‑fitness**, Project 2 wins clearly.
+
+---
+
+## 2. Alignment with current citation “hot spots”
+
+Right now (and plausibly over the next few years), the citation magnets around LLM reasoning include:
+
+- **“LLMs as judges / reward models”**  
+  Project 2 fits *directly*: you use the model’s own internal scoring function to guide RL. This will be cited in:
+  - papers on LLM‑as‑a‑judge,
+  - works on RL without external reward models,
+  - self‑critique / reflection style techniques.
+
+- **“Self‑training / self‑distillation / bootstrapping”**  
+  Project 2 is basically a modern, LLM‑native form of self‑training + RL. Every future paper that says “we let the model train on its own pseudo‑labels or self‑scores” has a natural reason to cite you.
+
+- **“Reducing or removing human supervision”**  
+  Unsupervised or “no human labels” + RL is maximally cite‑able because it’s a clear axis: *more performance, fewer labels*.  
+  Project 2 is explicitly *unsupervised self‑improvement*.
+
+Project 1 hits:
+- RL from scratch / “Zero RL”
+- dataset creation
+- generative verification
+
+Those are important, but they fragment the citation base: some will only care about the dataset; some only about the verifier; some only about the training scheme. That usually **dilutes** citation density compared to a single iconic algorithmic idea.
+
+---
+
+## 3. Generality vs specificity
+
+**Project 2** explicitly claims: “unsupervised self‑improvement across various NLP tasks.”
+
+That’s gold for citations:
+- It makes your method relevant to *every* task where someone wants RL without labels.
+- Future papers on machine translation, summarization, code, dialogue safety, etc. can all justify: “We build on the self‑rewarding / self‑grading approach of [You].”
+
+**Project 1** is implicitly more specialized:
+- Multi‑domain reasoning with verifiable answers.
+- Needs questions where the “correctness” is checkable (math, coding, QA with ground truth).
+- People working on open‑ended generation, dialog quality, style transfer, etc. will feel less compelled to cite it as directly relevant.
+
+Broader task applicability → more different communities → more and faster citations. That favors Project 2.
+
+---
+
+## 4. Data vs method papers: citation patterns
+
+Empirically:
+
+- **Method / algorithm papers with a strong, reusable abstraction** (e.g., LoRA, PPO for LLMs, RLHF, instruction‑tuning, chain‑of‑thought) have *longer and fatter tails* of citations.
+- **Big dataset + pipeline** papers get:
+  - an initial burst when released, and
+  - then steady but narrower citations, usually mostly from people directly using that data regime.
+
+Project 1 is more “dataset + pipeline + training recipe.”  
+Project 2 is a clean **method**: an *unsupervised RL framework using the model as its own judge*.
+
+Even if your actual experimental gains are modest, the idea is the thing that gets remembered and recited in introductions and related work. That’s advantageous for pure citation count.
+
+---
+
+## 5. Ease of adoption by others
+
+For future authors to cite you, they don’t even need to **use** your method; they just need it as conceptual prior art. But high adoption does help.
+
+**Project 2**:
+- Conceptually simple, can be prototyped with off‑the‑shelf RL + prompting:
+  - Generate candidate outputs.
+  - Score them with a learned or prompt‑based internal critic.
+  - Use scores as rewards.
+- It’s architecturally orthogonal to model and data source – fits well into existing RLHF/online RL loops.
+
+**Project 1**:
+- Requires:
+  - heavy‑duty crawling and data cleaning,
+  - building and validating a generative verifier,
+  - training from scratch (“Zero RL”) on that data.
+- Substantially higher barrier to replication or extension.
+- Many labs will instead cite whatever’s already dominant in RLHF or use synthetic reward models, and you become “one more” dataset+verifier reference instead of the default.
+
+For generating downstream work that *extends* your idea (which greatly boosts citations), Project 2 is more accessible.
+
+---
+
+## 6. Paper framing for maximum citation velocity (for Project 2)
+
+If you choose Project 2, I’d suggest explicitly crystallizing it into a memorable, generalizable template:
+
+- Give it a strong, short name that sounds like a primitive rather than a one‑off method.
+- Emphasize:
+  - “Unsupervised RL for LLMs via self‑rewarding evaluation.”
+  - “LLM as both *policy* and *reward model* (‘Student–Teacher in one’).”
+- Show breadth:
+  - At least 3–4 diverse tasks (math/coding, QA, summarization, maybe dialogue).
+  - Show consistent gains over a simple baseline (e.g., supervised fine‑tuning on the same unlabeled data using pseudo‑labels, if feasible).
+- Include ablations on:
+  - different internal scoring functions (prompted judge vs trained head),
+  - stability and failure cases,
+  - interaction with chain‑of‑thought (self‑critique before scoring).
+
+The goal is to make your paper the **canonical citation** for:
+> “We let the model evaluate its own outputs and use those evaluations as reward for RL, without external labels.”
+
+That sentence appears in a wide range of future work; you want your bib entry to be the default.
+
+---
+
+## 7. Edge case: when Project 1 might win
+
+Project 1 could beat Project 2 in citation velocity only if you can credibly do *both*:
+- release a **massive**, high‑quality, *immediately useful* public dataset that becomes the standard benchmark for multi‑domain reasoning, and
+- show **dramatic state‑of‑the‑art results** from “Zero RL” that other labs can’t easily match.
+
+That’s more resource‑intensive and has higher execution risk. Unless you have near‑OpenAI/Anthropic‑level infra and data access, it’s less likely to dominate the field’s default citations.
+
+---
+
+## Recommendation
+
+Given your goal is purely to **maximize citation velocity**, you should pursue:
+
+> **Project 2: the dual‑role self‑evaluating LLM that updates itself via unsupervised reinforcement learning on its own internal scores.**
+
+Then design and name it so it becomes the standard handle for:
+- “self‑rewarding LLMs,”
+- “LLM as its own reward model / judge,”
+- and “unsupervised RL for LLMs.”
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Epoch 16, Comparison 11:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+You should pursue **Project 2 (RL with Verifiable Reward for math reasoning)** if your sole objective is to maximize *citation velocity*.
+
+Here’s why, framed specifically in terms of likely speed and volume of citations:
+
+---
+
+### 1. Topic “heat” and alignment with current citation trends
+
+- **Project 2 (RLVR for math reasoning)**:
+  - Directly hits several very hot areas: 
+    - *Formal/verifiable reasoning* with LLMs  
+    - *Math benchmarks* (e.g., GSM8K, MATH, AIME‑style problems)  
+    - *RL for reasoning* and “small data / single-exemplar” generalization  
+  - These areas are tightly coupled to current frontier model work (OpenAI o1, DeepMind AlphaGeometry‑style, etc.), which are already drawing a lot of research attention. Follow‑up work on verifiable‑reward RL for reasoning is very likely.
+  - Math reasoning papers that show **strong benchmark gains** or **scalable training recipes** tend to be rapidly cited, because:
+    - New models must compare to them.
+    - New methods for reasoning almost always cite prior RL‑for‑reasoning papers as baselines/inspiration.
+
+- **Project 1 (offline RL / ReST for preference alignment)**:
+  - Offline RL for alignment is interesting, but **less novel right now** compared to online RLHF and direct preference optimization (DPO, IPO, ORPO, etc.), which are occupying more attention.
+  - “Batch RL for alignment” is a more incremental conceptual move: it looks like another point in the RLHF/DPO/SFT ecosystem rather than a new paradigm.
+  - The MT / generic generation angle is also less central to current LLM discourse than *reasoning*. Much of the newest work wants to show stronger *deliberation* and *problem-solving*, not just better general alignment or translation.
+
+**Net: Project 2 is better aligned with where the citations are clustering right now.**
+
+---
+
+### 2. Verifiability and benchmarking = citation magnets
+
+- **Project 2**:
+  - Verifiable reward is *extremely* attractive for follow-up work:
+    - People developing new RL methods, exploration strategies, or scalable training methods will want a **clean, automatic, verifiable reward environment**—math reasoning with programmatic checkers is ideal.
+    - You’re giving the community a *standardized, reusable testbed* for RL algorithms on LLMs with “ground truth” reward.
+  - If you:
+    - Target canonical benchmarks (GSM8K, MATH, competition problems),
+    - Provide a well-specified RLVR training setup,
+    - And release code + scripts to reproduce training,
+    
+    then your paper becomes a **go-to baseline**. This dramatically increases citation velocity.
+
+- **Project 1**:
+  - Offline RL for alignment uses *preference modeling*, which is noisy, more expensive to replicate, and less obviously “ground truth”.  
+  - It’s harder for others to treat your setup as a clean algorithmic benchmark, especially if human labels are needed or if the setting is highly engineering-dependent.
+
+**Net: verifiable reward + standard math benchmarks = high reuse + fast citations.**
+
+---
+
+### 3. “Story strength” in abstracts and talks
+
+Ask: Which abstract will get more immediate clicks and citations?
+
+- **Project 2 abstract-style hook**:
+  - “We show that a general-purpose LLM, trained with RL from only single exemplars per task and verifiable rewards, significantly improves mathematical reasoning and generalizes across problem types.”
+  - This has:
+    - *Single-exemplar training* (data efficiency)
+    - *Verifiable reward* (clean RL testbed)
+    - *Reasoning improvements on math benchmarks* (highly visible metrics)
+
+- **Project 1 abstract-style hook**:
+  - “We apply offline RL to a dataset of model generations and human preferences, enabling ReST (Reinforced Self-Training) that improves generative quality via batch RL.”
+  - This is interesting but less “sharp”: it will compete in a crowded landscape of RLHF/DPO-style methods, where names blur and conceptual novelty is moderate.
+
+**Net: The Project 2 story is more viral in the current discourse.**
+
+---
+
+### 4. Longevity and cross-field citation potential
+
+- **Project 2**:
+  - Potential to be cited by:
+    - RL researchers (testbed for algorithms)
+    - LLM reasoning / math papers
+    - Safety / reliability papers (verifiable RL setups)
+    - Systems papers that train larger reasoning models and need baselines
+  - If you design it well, you can become *the canonical “RL for math reasoning with verifiable reward” reference*.
+
+- **Project 1**:
+  - Likely to be cited by:
+    - Some alignment / RLHF / offline-RL subcommunity
+  - Harder to generalize as a *must-cite* methodology across many future works, because:
+    - DPO-style methods and direct logit-based objectives are currently winning mindshare.
+    - Offline RL for preferences is conceptually neat but not as obviously the “default” direction the field is converging on.
+
+**Net: Project 2 has broader and more durable citation routes.**
+
+---
+
+### 5. How to *maximize* citation velocity within Project 2
+
+Since citations are your *only* goal, structure Project 2 accordingly:
+
+1. **Make it a reference implementation, not just a result.**
+   - Open-source:
+     - Training code (policy-gradient + entropy regularization),
+     - Reward scripts (problem formats + solvers/checkers),
+     - Baseline configs.
+   - Provide an easy “plug in your model” interface. This ensures later works will *use your setup* and thus cite you.
+
+2. **Target widely-used benchmarks.**
+   - GSM8K, MATH, maybe AIME or Olympiad-style subsets.
+   - Show:
+     - Single-exemplar training,
+     - Generalization across *problem types*, not just repeated templates.
+
+3. **Emphasize protocol over clever tricks.**
+   - The more algorithmically clean and general your method is, the more people will copy it:
+     - A clean policy-gradient objective,
+     - Clear entropy regularization rationale,
+     - Precise training loops and hyperparameters.
+
+4. **Make comparisons impossible to ignore.**
+   - Compare to:
+     - SFT only,
+     - RLHF-style reward models (if feasible),
+     - Few-shot prompting baselines,
+     - “Self-consistency” and chain-of-thought sampling without RL.
+   - This ensures your paper appears in tables as a baseline for future RL / math reasoning work.
+
+5. **Frame it as a template for *any* verifiable domain.**
+   - Even if you only run math experiments, explicitly frame the method as:
+     - “A general RLVR recipe for LLMs when verifiable reward is available (e.g., code execution, theorem proving, symbolic tasks).”
+   - This invites citations from code reasoning, theorem proving, and other symbolic reasoning papers.
+
+---
+
+### 6. Summary recommendation
+
+- If your objective is to **maximize citation velocity**, you should choose:
+  
+  **→ Project 2: RL with verifiable reward (RLVR) for mathematical reasoning.**
+
+- It is better aligned with:
+  - Current hot topics (LLM reasoning, math, verifiable signals),
+  - Benchmark-driven reproducible research,
+  - Cross-area interest (RL, LLMs, safety/reliability),
+  - Being a future “standard baseline” others must cite.
+
+If you want, I can next help you shape a concrete project plan and paper outline for Project 2 optimized specifically for citation impact (title, abstract framing, experiment set, and release strategy).
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Epoch 17, Comparison 25:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+You should pursue **Project 2 (diffusion LMs for reasoning + critic‑free RL)** if your sole objective is to maximize *citation velocity*.
+
+Here’s the reasoning, focused specifically on citation dynamics rather than scientific “merit”:
+
+---
+
+## 1. Topic “temperature” and novelty
+
+**Project 2** sits at the intersection of three very hot, fast‑moving areas:
+
+1. **Reasoning with LLMs (math, coding, RLHF-style pipelines)**  
+2. **Diffusion models (still highly cited, but underexplored for text)**  
+3. **New RL algorithms for LMs (critic‑free variants akin to GRPO/DPO‑style trends)**  
+
+This combination is unusual right now. Most reasoning work is on autoregressive transformers; “diffusion language models as reasoning agents” is still sparse but conceptually appealing and easy to cite because it’s a clear new *paradigm*.
+
+By contrast, **Project 1** is:
+
+- A refinement of **exploration bonuses / UCB** applied to RL‑fine‑tuning for LLMs.  
+- Conceptually more incremental: “better exploration for RL‑tuned LLMs.”  
+- Competing for attention in a **very crowded** RL‑for‑LLM‑reasoning space.
+
+People can (and often will) gloss over specific exploration tweaks, especially if they don’t give a huge SOTA gain. But they *like* citing “the paper that turned diffusion LMs into reasoning agents with an RL pipeline” because it’s a distinct conceptual anchor.
+
+**Net: Project 2 is more novel in *kind*, not just in degree, which tends to drive more and earlier citations.**
+
+---
+
+## 2. Who will naturally cite this, and how often?
+
+### Project 1: Outcome‑based exploration for RL‑tuning
+
+Likely citers:
+
+- Papers doing **RL on LLMs** that:
+  - a) care about exploration in detail, and  
+  - b) read your method deeply enough to incorporate it.
+- Some “survey of RL for LLMs” papers.
+
+Many RL‑for‑LLM works instead emphasize:
+- alignment, safety, scaling laws, or  
+- high‑level methods like PPO/GRPO/DPO/RL‑free approaches.
+
+Exploration details often end up in the related‑work section, cited only if your method becomes a standard baseline. That’s a *high bar* in today’s very fast LLM‑RL ecosystem.
+
+### Project 2: Diffusion LMs + reasoning + critic‑free RL
+
+Here your citation graph is broader:
+
+- **Diffusion LMs researchers**:  
+  - Will cite you as *the* (or one of the first) works using diffusion LMs as reasoning agents.  
+  - Will cite your RL technique as the go‑to method when they say “how do we RL‑tune diffusion LMs?”
+- **Reasoning & RLHF‑style method papers**:  
+  - Will cite your method as extending RL tuning to a non‑autoregressive family.  
+  - Survey papers on RL for LMs will likely mention you because you represent the *diffusion‑LM branch*.
+- **Architectural / paradigm overview papers**:
+  - “Beyond autoregressive transformers” / “alternative generative paradigms for LMs” will want a diffusion‑reasoning reference.
+  
+Even if diffusion LMs don’t win the race, **every paper that “covers the space” needs at least one exemplar** of “diffusion LMs used as reasoning agents + RL.” That structural role in the citation ecosystem is extremely valuable for velocity.
+
+---
+
+## 3. How fast will citations accumulate?
+
+For citation *velocity*, you want:
+
+1. A concept that is easy to summarize in one phrase.  
+2. A concept that’s orthogonal enough that surveys and method papers *must* mention it.  
+3. A method that other groups can adapt as a baseline without re‑architecting their entire stack.
+
+**Project 2 checks these boxes:**
+
+- One‑phrase concept:  
+  - “We adapt masked diffusion LMs into reasoning agents using a critic‑free RL algorithm (diffu‑GRPO).”  
+- It will be the natural “first‑wave” reference whenever someone talks about:
+  - diffusion‑based LMs for reasoning  
+  - critic‑free RL on diffusion LMs  
+  - coarse‑to‑fine reasoning generations vs standard token‑by‑token decoding.
+- It is likely to be **heavily cited in survey papers**, which are major citation hubs.
+
+**Project 1**, in contrast, is:
+
+- Easy to compress to a smaller footnote:  
+  - “Some works explore UCB‑style exploration bonuses in RL‑tuning LLMs [X].”  
+- Competes with many alternative RL variants and tricks.  
+- Less likely to be *required* reading outside a narrow sub‑niche.
+
+Result: **Project 2 has more “surface area” to be cited from multiple directions earlier.**
+
+---
+
+## 4. Risk vs reward for citation velocity
+
+**Project 1** has lower conceptual risk: it’s an incremental extension of exploration techniques that are already well understood in RL. But for citations:
+
+- If the improvements are modest or fragile, it won’t anchor a new direction; it becomes “one of many RL tweaks.”
+- Strong performance alone doesn’t guarantee high citations if the idea isn’t seen as a new *paradigm*.
+
+**Project 2** is somewhat higher technical risk, but *for citations* this is actually acceptable if you manage 3 things:
+
+1. **Clear first‑mover framing**: “first to do X”:  
+   - First comprehensive pipeline for masked diffusion LMs as reasoning agents with RL.  
+2. **Strong baselines & clear positioning:**  
+   - Compare to autoregressive RL‑tuned LLMs and SFT‑only variants.  
+   - Show distinctive strengths (sample diversity, robustness, or coarse‑to‑fine interpretability) even if absolute SOTA is mixed.  
+3. **A named algorithm and pipeline**:  
+   - “diffu‑GRPO” (good, name is already here)  
+   - Maybe name the overall pipeline, e.g. “Diffusion Reasoning RL (DR‑RL)” or similar.
+
+Methods with names and clearly defined paradigms get cited more, even when performance isn’t dominant.
+
+---
+
+## 5. How to structure Project 2 specifically for citation velocity
+
+If you go with Project 2, design it with “citable handles” in mind:
+
+1. **Sell the paradigm, not just numbers**  
+   - Emphasize: “We show how to transform masked diffusion LMs into step‑by‑step reasoning agents using an SFT‑plus‑critic‑free‑RL pipeline.”  
+   - Include a high‑level diagram that people will reuse in talks and survey figures.
+
+2. **Make diffu‑GRPO a reusable general algorithm**  
+   - Specify it clearly, with pseudocode, hyperparameters, and a simple reference implementation.  
+   - Separate the algorithm from your particular datasets so others can apply it to different domains (dialogue, tool use, etc.).
+
+3. **Benchmark across both math and coding**  
+   - Reasoning + code = more communities that can cite you.  
+   - Even if results are only “competitive,” the fact that you *demonstrate feasibility* is key.
+
+4. **Highlight distinctive traits of diffusion‑based reasoning**  
+   - Coarse‑to‑fine corrections, global consistency, robustness, or diversity (e.g., multiple diverse valid reasoning paths).  
+   - Survey and method papers love citing “alternative generation paradigms with different inductive biases.”
+
+5. **Position against RL‑free and RL‑with‑critics approaches**  
+   - Show where critic‑free shines (stability, implementation simplicity, computational cost).  
+   - This makes diffu‑GRPO easy to mention in discussions of RL variants, even for autoregressive models.
+
+---
+
+## 6. Bottom line recommendation
+
+For maximizing **citation velocity**:
+
+- **Choose Project 2.**  
+- Frame it as:  
+  - The **first systematic adaptation** of masked diffusion LMs into reasoning agents,  
+  - Powered by a **novel critic‑free RL algorithm (diffu‑GRPO)**,  
+  - Demonstrated on math and coding tasks with a **coarse‑to‑fine reasoning paradigm**.
+
+Project 1 is scientifically reasonable, but from a purely citation‑optimization perspective, it is more likely to be submerged in a dense cluster of RL tweaks, whereas Project 2 can stand as a clear, distinctive “flag‑post” paper that surveys and follow‑up works will repeatedly cite.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Epoch 19, Comparison 3:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+You should do **Project 2 (vulnerability analysis + RL on code comments)** if your only goal is to maximize *citation velocity*.
+
+Here’s why, framed specifically around citation dynamics:
+
+---
+
+## 1. Audience size and breadth
+
+**Project 1 (ReMax / RLHF variant)**  
+- Primary audiences:
+  - RL + LLM training researchers
+  - A subset of alignment / RLHF people
+  - Some systems engineers interested in training efficiency
+- This is a *methods-on-methods* paper: RL algorithmic tweak within an already niche subdomain (RLHF implementation details).
+- Highly relevant, but mainly to people who:
+  - Are training models themselves, and
+  - Are willing to swap out PPO/GRPO/variants for your algorithm.
+
+**Project 2 (RL for vulnerability analysis and code comments)**  
+- Primary audiences:
+  - Software security & program analysis
+  - Applied LLM-for-code community (Copilot-like tools, code intelligence)
+  - General ML + applied RL people
+  - Practitioners reading security and SE venues (not just ML)
+- It’s an *application paper* that:
+  - Targets a hot real-world problem (software vulnerabilities).
+  - Uses a trendy toolbox (LLMs + RL + semantics-aware rewards).
+- This makes it accessible and citable by:
+  - ML people (“we build on prior work that uses RL for code vulnerabilities…”)
+  - Security people (“prior LLM-based vulnerability detection models…”)
+  - Software engineering tools papers (“we compare to RL-based LLM vulnerability analyzers…”)
+
+**Citation-velocity implication:** Project 2 has several *disjoint* citation pools; Project 1 has one fairly tight one.
+
+---
+
+## 2. How people typically cite these types of work
+
+**Project 1-type papers (RLHF algorithm variants):**
+- Typical citation contexts:
+  - “We train our model with PPO [Ouyang et al.], DPO [Rafailov et al.], etc.”
+  - “We extend REINFORCE-based methods [your paper] with X.”
+- To get lots of citations, you need to be:
+  - Either *earliest* or *clearly dominant* in a new RLHF family.
+  - Or widely adopted as a *standard* in open-source libraries (e.g., TRL, DeepSpeed, vLLM integrations).
+- Barriers:
+  - The field is somewhat saturated with RLHF algorithm tweaks (PPO, GRPO, IPO, DPO, RPO, etc.).
+  - Big labs use internal implementations; incremental algorithmic gains often don't dislodge entrenched methods unless gains are dramatic or strongly marketed.
+
+**Project 2-type papers (applied code+RL+LLM):**
+- Typical citation contexts:
+  - “Previous work uses LLMs to detect vulnerabilities [your paper, others].”
+  - “We build on methods that use RL and custom rewards for code quality and security [your paper].”
+  - “For automated vulnerability repair, LLM-based methods have shown promise [your paper].”
+- Papers in:
+  - Security
+  - Software engineering
+  - ML-for-code
+  - Dev tooling / empirical software engineering
+all need to gesture at “prior work doing LLM-based vulnerability detection/repair”. If your paper is recognizable and does a full-stack workflow (detect + explain + fix), it becomes a natural “one-stop” citation.
+
+**Citation-velocity implication:** Methodological RLHF tweaks are *high depth but narrow channel*; impactful application papers are *broad but shallower per-citation*. For velocity, breadth dominates.
+
+---
+
+## 3. Novelty perception and “stickiness” of the contribution
+
+**Project 1:**
+- Core pitch: “REINFORCE-style training for RLHF without a value network, with a novel variance-reduction technique.”
+- Upside:
+  - Conceptually clean: no value network, smaller hyperparameter surface.
+  - Attractive to people wanting simpler training pipelines.
+- Risk:
+  - Many readers will mentally bucket it as “another RLHF variant” unless:
+    - You show very strong gains (e.g., +X on GSM8K, HumanEval with same compute).
+    - Or you get widely adopted in a major library.
+  - The novelty (“variance-reduction, no value network”) is technical; people often handwave and just write “we use an RLHF algorithm similar to [X]”.
+
+**Project 2:**
+- Core pitch: “We use RL with a semantic reward on comments to train an LLM that (1) finds vulnerabilities, (2) explains them, and (3) fixes them.”
+- This is easy to remember and easy to summarize in one sentence:
+  - “An RL-trained LLM that explains and fixes vulnerabilities using a semantic reward over comments.”
+- Even if someone doesn’t deeply understand the RL details, they know when they’re in your topic area (“LLMs for security / vulnerabilities”) and must cite you.
+
+**Citation-velocity implication:** Work that is easy to summarize in one memorable line and fits a concrete task domain tends to get cited more and faster than another “slightly better RLHF objective.”
+
+---
+
+## 4. Speed to publish and places that will amplify citations
+
+**Project 1:**
+- Best homes:
+  - NeurIPS / ICML / ICLR main tracks, or specialized LLM tracks.
+- Review bar:
+  - Strong demands on algorithmic novelty and ablation rigor vs PPO/GRPO etc.
+  - Needs strong experiments on multiple benchmarks (math, coding, general RLHF) vs strong baselines.
+- Timeline:
+  - Major conferences are bottlenecked to 1–2 cycles/year.
+  - Rebuttal + risk of rejection slows the first appearance and thus citation clock.
+
+**Project 2:**
+- Publishable in multiple communities:
+  - ML (NeurIPS/ICLR/ICML, specialized “LLM4Code” or “ML4CyberSec” workshops).
+  - Security conferences (IEEE S&P, USENIX Security, CCS) and their workshops.
+  - Software engineering (ICSE, FSE, ASE) and journals.
+- Strategy for velocity:
+  - First: fast-turnaround arXiv + workshop (e.g., an LLM4Code or ML4Sec workshop).
+  - Then: submit to a top-tier venue while the arXiv version is live and already being cited.
+- Applied domains often accept a strong system paper even if RL algorithmic novelty is moderate, as long as:
+  - Results beats baselines,
+  - Dataset and evaluation are clear,
+  - Pipeline is practically useful.
+
+**Citation-velocity implication:** Project 2 can hit arXiv early, multiple communities, and get audience quickly.
+
+---
+
+## 5. Dataset / benchmark creation and long-tail citations
+
+**Project 1:**
+- If you don’t release a benchmark but only an algorithm, long-term citations depend primarily on:
+  - Algorithm becomes a “standard tool”.
+- That requires strong engineering follow-through and community adoption.
+
+**Project 2:**
+- You can:
+  - Release an instruction-tuned dataset for vulnerability analysis and repair.
+  - Provide evaluation scripts for detection/description/fix quality.
+- Benchmarks in security/code domains are *sticky*: anyone working in “LLMs for vulnerability detection or repair” will compare against your dataset or at least cite it when describing prior data.
+
+**Citation-velocity implication:** A dataset + task definition in a hot applied domain is one of the most reliable drivers of long-term and fast citations.
+
+---
+
+## 6. Risk of being “scooped” vs “blended into noise”
+
+**Project 1 risks:**
+- The RLHF objective space is crowded and moves fast:
+  - New policy-gradient variants / offline RLHF / preference-free methods constantly appear.
+- If a bigger lab releases a simpler or more performant method around the same time (say some “Stateless RLHF” variant), your contribution can get overshadowed and become a minor citation.
+
+**Project 2 risks:**
+- Other groups are also exploring LLMs for security, but:
+  - The problem space is large (different languages, domains, threat models).
+  - Having *any* early, clear RL-for-vuln-analysis system is enough to anchor future work to you.
+- Even if others also do “LLMs for vulnerability detection,” your particular:
+  - semantic reward on comments,
+  - detect–explain–fix workflow,
+  - and dataset
+can still be the canonical reference for that configuration.
+
+**Citation-velocity implication:** Project 1 is at higher risk of being one of many RLHF tweaks; Project 2 is more likely to stand out as a named point in the LLM-for-security landscape.
+
+---
+
+## 7. How to tilt Project 2 further toward maximum citation velocity
+
+To sharpen it for citation impact:
+
+1. **Name the system and task clearly.**  
+   - E.g., “VulnRL: Reinforcement Learning for LLM-Based Vulnerability Detection, Explanation, and Repair”.
+   - A catchy name increases the probability it becomes “the” reference.
+
+2. **Release a well-structured dataset + code.**  
+   - Curate:
+     - Insecure code snippets,
+     - Buggy + fixed pairs,
+     - High-quality, comment-style explanations.
+   - Make it easy to benchmark new models (one script, standard metrics).
+
+3. **Measure against diverse baselines:**
+   - Instruction-only models (no RL).
+   - Simple reward heuristics (e.g., just BLEU over comments) vs your semantic reward.
+   - Off-the-shelf code LLMs (e.g., CodeLlama, StarCoder, etc.) prompted without RL.
+
+4. **Emphasize multi-output capability in the abstract:**
+   - Stress that your model:
+     - identifies,
+     - explains,
+     - and patches vulnerabilities
+     in a single pass. This will be quoted directly in related work paragraphs.
+
+5. **Target both ML and security/code venues:**
+   - Put a solid arXiv version up early.
+   - Submit the “full theory+ML” version to an ML venue.
+   - Present a systems-focused or shortened version in a security/code workshop.
+
+---
+
+## Recommendation
+
+Pursue **Project 2**.
+
+From a purely citation-velocity standpoint, it wins because:
+
+- It addresses a concrete, high-visibility, cross-disciplinary problem (software vulnerabilities).
+- It can become a reference dataset + system paper that multiple communities must cite.
+- It’s easier to summarize, remember, and slot into “related work” sections across ML, security, and software engineering.
+- It can be deployed quickly on arXiv and in workshops, accelerating its citation clock.
+
+If you care only about maximizing how many people cite you and how fast, Project 2 is the better bet.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Epoch 20, Comparison 17:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+You should do **Project 1 (the systematic review)** if your sole objective is to maximize *citation velocity*.
+
+Here’s why, focused specifically on citation dynamics in this area:
+
+### 1. Review papers in fast‑moving fields are citation magnets
+- In ML/LLM research, **well‑written surveys quickly become “default citations”** for:
+  - the intro/background sections of new methods papers,
+  - thesis chapters,
+  - grant proposals,
+  - tutorials and lecture notes.
+- RL + LLMs + alignment (RLHF, RLAIF, DPO, etc.) is a rapidly growing and fragmented space. A paper that **organizes and names the landscape** will be referenced by almost everyone needing to situate their work.
+
+By contrast, **novel RL exploration tweaks for LLMs (Project 2)**:
+- Compete with many other method papers.
+- Tend to be cited mainly by a narrower slice: people doing RL‑fine‑tuning or exploration‑focused work.
+- Often have a slower and lower long‑term citation curve unless they become *the* standard method (which is hard in this crowded regime).
+
+### 2. Topical breadth and “compulsory citation” potential
+Project 1 naturally attracts citations from:
+- RLHF / RLAIF / DPO / preference learning papers.
+- General LLM alignment and safety work.
+- Engineering papers on instruction‑tuning and post‑training.
+- Benchmarks and eval frameworks for reasoning / alignment.
+- Policy and survey‑of‑surveys pieces.
+
+Because you’ll **cover RLHF, RLAIF, DPO, variants of RL fine‑tuning for reasoning, and maybe tree‑search and tool use**, it becomes the one-stop reference for “RL + LLM” and “reward‑based alignment” — which are currently extremely hot.
+
+Project 2 is inherently **narrower**:
+- It’s really about *exploration strategies* in RL fine‑tuning for LLMs.
+- That’s a sub-slice of a subfield. Many LLM RL papers won’t be about exploration and won’t need to cite it.
+- To get high citation velocity, you’d need the method to be obviously and consistently state‑of‑the‑art on popular benchmarks and easily reproducible, then widely adopted. That’s a high bar.
+
+### 3. Time to impact and velocity profile
+For **citation velocity**, you care about:
+- **How broadly relevant the work is** at the moment others are writing.
+- **How quickly it becomes a go‑to reference** once it’s out.
+
+Project 1:
+- As soon as it appears on arXiv, it can be cited in:
+  - Papers that are already written and being revised.
+  - New work over the next few years needing an RL‑LLM background section.
+- Surveys often accumulate **steady, compounding citations** because they stay useful even as the field changes (as long as you write it at the right abstraction level).
+
+Project 2:
+- Needs:
+  - Implementation replication.
+  - Benchmark adoption.
+  - Positive results by others.
+- This **lags behind publication** and may never really “take off” if a couple of high‑profile papers don’t adopt it or if another exploration idea becomes more popular.
+
+### 4. Current state of the literature (as of 2024–2025 context)
+- RLHF, RLAIF, and preference optimization for LLMs have exploded, but the literature is scattered across industry reports, arXiv preprints, and partial explanations in big model papers.
+- There is **no single, widely agreed canonical survey** that:
+  - Systematically covers *both* reward‑model‑based and reward‑free (DPO‑type) methods,
+  - Explicitly focuses on **reasoning capabilities** (math, coding, complex tasks) and how RL/feedback affects them,
+  - Unifies the alignment and capability‑boosting narratives.
+- That gap makes Project 1 highly citable if executed cleanly:
+  - Clear taxonomy: RLHF / RLAIF / DPO / policy gradient vs. supervised objectives / on‑policy vs. off‑policy / self‑play vs. human feedback.
+  - Coverage of both **alignment** and **capability / reasoning improvement**.
+  - Critical discussion of instability, reward hacking, distribution shift, and evals specifically for reasoning tasks.
+
+Project 2, while technically interesting, enters a saturated technical niche:
+- Exploration bonuses, UCB‑style methods, and diversity penalties are conceptually familiar in RL.
+- LLM RL fine‑tuning papers increasingly use **simple, scalable tricks**; anything that complicates the pipeline has to deliver very clear improvements to be adopted and thus widely cited.
+
+### 5. Risk profile and robustness of citation outcome
+From a *pure citation‑optimization* standpoint:
+
+**Project 1 (survey):**
+- Low risk, high robustness:
+  - Even a “merely good” survey in this area will draw citations.
+  - You don’t need SOTA results; you need **clarity, coverage, and a compelling structure**.
+  - You can update it (v2 on arXiv) to stay relevant, further extending its lifetime and attractiveness.
+
+**Project 2 (method):**
+- Higher variance:
+  - If performance gains are modest or fail to reproduce, citation volume will be limited.
+  - If a larger lab releases an alternative RL fine‑tuning recipe with better benchmarks and code, your method can get overshadowed.
+  - You only get many citations if it becomes part of the “standard recipe” or a focal point in the exploration literature.
+
+### 6. How to maximize citations within Project 1
+Since your goal is explicit citation maximization, design the survey with that in mind:
+
+- **Title and abstract:** Make it obviously the “go‑to” reference.
+  - E.g., “Reinforcement Learning for Large Language Models: A Systematic Survey of RLHF, Preference Optimization, and Reward‑Free Alignment Methods.”
+- **Taxonomy figure + table:** A single clean diagram and big comparison table that everyone wants to copy or reference.
+- **Breadth over narrow novelty:** Include:
+  - RLHF, RLAIF, DPO, IPO, ORPO, etc.
+  - Reasoning‑specific RL setups: self‑consistency, tree search, tool‑assisted RL, code/math benchmarks.
+  - The connection between RL‑based alignment and emergent reasoning.
+- **Position it as foundational:** Explicitly discuss:
+  - Open problems and research directions,
+  - System design patterns and best practices,
+  - Evaluation pitfalls for math/coding reasoning.
+
+This makes the paper useful to:
+- Researchers writing related‑work sections,
+- Newcomers learning the field,
+- Senior people preparing slides and tutorials.
+
+Those are precisely the behaviors that generate **fast and broad citation uptake**.
+
+---
+
+**Recommendation:**  
+Pursue **Project 1 (the systematic review of RL‑enhanced LLMs)**. It is substantially more likely to yield higher and faster citation rates than Project 2, given the current maturity, breadth, and growth of RL‑tuned LLM research.
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Collected 720 total comparisons before completion/failure.
+================================================================================
+model: gpt-5.1
+
+================================================================================

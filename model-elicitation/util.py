@@ -23,32 +23,45 @@ def _retry_with_backoff(func: Callable, api_name: str, max_retries: int = 10, ba
 def inference(messages: List[Dict[str, str]] | str, client: ollama.Client|None=None,
               model: str='openai/gpt-oss-120b', temperature: float=0.0) -> Tuple[str | None, str]:
     """
-    Perform inference using the specified Ollama model or GLaDoS (GTRI only).
+    Perform inference using various LLM providers including Ollama, Anthropic Claude,
+    Google Gemini, OpenAI GPT, or LiteLLM.
 
     Parameters
     ----------
-    messages : List[str] | str
-        A list of message strings to send to the model as the conversation history.
-        Alternatively, just one message, in which case it's passed as a user.
+    messages : List[Dict[str, str]] | str
+        A list of message dictionaries with 'role' and 'content' keys representing
+        the conversation history. If a single string is provided, it's converted to
+        a user message.
     client : ollama.Client | None
-        An initialized Ollama client used to communicate with the model.
+        An initialized Ollama client. If provided, uses Ollama for inference. If None,
+        the function determines the provider based on the model name prefix.
     model : str, optional
-        The model identifier to use for inference (default is ``'gemma3:27b'``).
+        The model identifier to use for inference (default is ``'openai/gpt-oss-120b'``).
+        Model prefixes determine the provider: 'claude-*' for Anthropic, 'gemini-*' for
+        Google, 'gpt-*' for OpenAI, or other prefixes for LiteLLM.
     temperature : float, optional
         Sampling temperature for the model; ``0.0`` produces deterministic output
-        (default).
+        (default). Only used with Ollama and LiteLLM providers.
 
     Returns
     -------
-    Tuple[str, str]
-        A tuple containing ``thinking`` (the model's internal reasoning or
-        explanation) and ``content`` (the generated response).
+    Tuple[str | None, str]
+        A tuple containing ``thinking`` (the model's internal reasoning, if available;
+        otherwise None) and ``content`` (the generated response text).
 
     Raises
     ------
+    ValueError
+        If required API keys are not set in environment variables (ANTHROPIC_API_KEY,
+        GEMINI_API_KEY, OPENAI_API_KEY, or LITELLM_API_KEY).
     Exception
-        Propagates any exception raised by the Ollama client or GLaDoS during the chat
-        request, after printing a formatted error message.
+        Propagates any exception raised by the API clients during inference, after
+        printing a formatted error message and retrying with exponential backoff.
+    
+    Notes
+    -----
+    The function automatically retries failed API calls up to 10 times with exponential 
+    backoff to handle transient errors.
     """
     if isinstance(messages, str):
         messages = [{"role": "user","content": messages}]

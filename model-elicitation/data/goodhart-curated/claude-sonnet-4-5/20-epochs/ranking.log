@@ -235,3 +235,533 @@ PROJECT 2
 model: claude-sonnet-4-5-20250929
 
 ================================================================================
+Epoch 7, Comparison 35:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+Based purely on maximizing citation velocity, I recommend **Project 2** (interleaving RL with online supervised fine-tuning).
+
+Here's why:
+
+## Key factors favoring Project 2:
+
+**1. Broader applicability & easier reproduction**
+- Project 2 is conceptually simpler and can be applied to virtually any reasoning domain
+- Lower barrier to entry means more labs can reproduce, extend, and cite your work
+- Project 1's reverse curriculum requires demonstrations and careful curriculum design, limiting who can build on it
+
+**2. Stronger narrative appeal**
+- "Overcoming limitations of pure RL" is a compelling story that resonates with current community frustrations
+- Combines two familiar paradigms (RL + SFT) in a practical way
+- Project 1's contribution is more technical/architectural - harder to sell the impact
+
+**3. Better positioning in current landscape**
+- Directly addresses the hot debate around DeepSeek-R1 and similar systems about knowledge acquisition
+- Project 2 sits at the intersection of multiple active research threads (RL, continual learning, curriculum learning)
+- Project 1 is more niche - reverse curriculum is clever but less connected to burning questions
+
+**4. Citation patterns favor practical methods**
+- Methods papers that improve SOTA across benchmarks get cited by every incremental follow-up
+- Project 2 is more likely to become a "default component" in future reasoning systems
+- Project 1 might get recognized as clever but used less frequently
+
+**5. Faster impact timeline**
+- Project 2's results will likely be more dramatic (enabling harder tasks entirely)
+- Clearer ablations and analysis opportunities = more follow-up work citing you
+
+The main risk is if Project 2 has already been done (check very recent preprints), but the specific framing around reasoning tasks seems fresh enough.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: claude-sonnet-4-5-20250929
+
+================================================================================
+Epoch 8, Comparison 32 was unclear. Skipping.
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+I'll give you a direct recommendation based on citation velocity potential:
+
+**Choose Project 2 (Self-Critique/Refinement)** - but with an important caveat that it may already be too late.
+
+## Why Project 2 has higher citation velocity potential:
+
+1. **Broader appeal**: Code generation and task automation papers get cited across ML, SE, HCI, and systems communities. Math reasoning is more ML-focused.
+
+2. **Practical utility wins**: Papers that help developers write code get cited in applied work constantly. Self-improving code agents have clear use cases people will build on immediately.
+
+3. **Demo-ability**: "Few-shot task solving without reward functions" is a compelling hook that will attract applications papers citing you for the method.
+
+4. **Benchmark proliferation**: Code/command tasks spawn many benchmarks (HumanEval, MBPP, SWE-bench, etc.). Each new benchmark paper will likely cite foundational methods.
+
+## The critical concern:
+
+Both ideas sound like **variants of existing well-cited work**:
+- Project 1 resembles self-consistency, STaR, and various chain-of-thought refinement methods
+- Project 2 sounds very similar to **Self-Refine** (Madaan et al., 2023) and **Reflexion** (Shinn et al., 2023)
+
+## Actual recommendation:
+
+If you *only* care about citations, **don't do either unless you have a significant novel angle**. Instead:
+
+- Check if these already exist (they likely do)
+- If pursuing anyway, emphasize whatever is genuinely novel
+- Consider: Is there a new dataset, benchmark, or evaluation angle that would make people cite this as "the paper" for that resource?
+
+The harsh truth: incremental prompting methods rarely accumulate high citation velocity unless they're first to a space or establish a definitive benchmark.
+</transcript>
+Response:
+UNCLEAR
+================================================================================
+model: claude-sonnet-4-5-20250929
+
+================================================================================
+Epoch 9, Comparison 13:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+# Clear Recommendation: **Pursue Project 2**
+
+## Reasoning:
+
+**Project 2 will likely generate significantly higher citation velocity** for these reasons:
+
+### 1. **Broader Applicability & Appeal**
+- Project 2's reverse curriculum approach is **conceptually novel** and applies to any sequential reasoning domain (math, coding, theorem proving, planning)
+- Project 1 is essentially "REINFORCE with better variance reduction" - an incremental improvement to existing methods
+- Broader applicability = more researchers can build on your work = more citations
+
+### 2. **Addresses a Fundamental Problem**
+- The "outcome-only → step-by-step feedback" conversion is a **high-value transformation** that many researchers struggle with
+- Solves the expensive annotation problem (no need for process labels)
+- Project 1 solves a more narrow technical issue (value network complexity in RLHF)
+
+### 3. **Story & Clarity**
+- Project 2 has an intuitive, elegant narrative: "start from the end and work backward"
+- Easier for non-specialists to understand and cite in related work
+- Project 1's story is "we save memory and simplify hyperparameters" - less compelling
+
+### 4. **Conference Appeal**
+- Project 2 is more likely to get spotlight/oral presentations at top venues (NeurIPS, ICML, ICLR)
+- The curriculum learning + RL reasoning angle hits multiple popular research themes
+- Higher visibility → faster citations
+
+### 5. **Follow-on Work Potential**
+- Project 2 enables an entire research direction others can extend (different curriculum strategies, domains, etc.)
+- Project 1 will likely be compared against and replaced by the next incremental RL optimization
+
+**Expected citation trajectory**: Project 2 could hit 50+ citations within 12 months if published at a top venue; Project 1 would likely be in the 10-20 range.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: claude-sonnet-4-5-20250929
+
+================================================================================
+Epoch 10, Comparison 27:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+Based purely on **citation velocity**, I recommend **Project 2 (VeriFree)**.
+
+Here's why:
+
+## Key factors favoring Project 2:
+
+**1. Conceptual simplicity and broader appeal**
+- "No separate verifier needed" is an instantly graspable contribution that researchers can quickly understand and cite
+- Solves a clear pain point (verifier training/deployment complexity) that many practitioners face
+- The framing as variational optimization gives it theoretical grounding that appeals to ML theory folks
+
+**2. Lower barrier to citation**
+- Researchers working on ANY RL-for-LLM project can cite this as a baseline or alternative approach
+- It's easier to position as "we compare against the verifier-free approach of [Your Paper]"
+- Project 1 requires understanding multiple interacting components (clipping, adaptive sampling, etc.), making it harder to quickly cite
+
+**3. Provocative positioning**
+- "Bypassing verification" is counterintuitive and memorable
+- Likely to generate follow-up work both supporting AND critiquing the approach (both generate citations)
+- Creates a clear research question: "When does implicit vs explicit verification work better?"
+
+**4. Timing advantage**
+- Self-verification and process reward models are hot RIGHT NOW
+- Project 1's techniques (clipping variants, adaptive sampling) are more incremental to existing work
+
+## Citation velocity killers in Project 1:
+- Sounds like an engineering contribution ("set of complementary techniques")
+- Harder to extract which component to cite
+- "Reproducible, high-performance" doesn't create a research agenda others will follow
+
+**Bottom line**: Project 2 will get cited faster and more often because it's memorable, addresses a clear problem, and creates research momentum around a question others will investigate.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: claude-sonnet-4-5-20250929
+
+================================================================================
+Epoch 12, Comparison 5:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+**Clear Recommendation: Pursue Project 1 (the RL reasoning corpus)**
+
+Here's why it will maximize your citation velocity:
+
+## High Citation Velocity Factors for Project 1:
+
+1. **Immediate utility value** - Researchers will cite your dataset every time they use it for experiments. Benchmark/dataset papers get cited perpetually (see GLUE, SuperGLUE, HumanEval).
+
+2. **Multiple citation opportunities** - You'll get cited for:
+   - The dataset itself
+   - The reward design methodology
+   - Baseline results across domains
+   - Cross-domain transfer findings
+
+3. **Broader citing audience** - Anyone working on LLM reasoning, RL for LLMs, multi-task learning, or specific domains will cite you.
+
+4. **Fast initial uptake** - If you release the data publicly, citations begin immediately as others experiment with it.
+
+5. **Timely contribution** - Fills a clear gap while RL for reasoning is hot (post-o1 excitement).
+
+## Why Project 2 Will Have Lower Citation Velocity:
+
+1. **Survey papers cite slowly** - They're referenced for background, not as core methodology. Citations accumulate gradually over years.
+
+2. **Crowded space** - Multiple RL+LLM surveys likely exist or are in progress.
+
+3. **Depreciating value** - Surveys become outdated as the field evolves rapidly.
+
+4. **Limited citing contexts** - Mainly intro/related work sections, not methods/experiments.
+
+## Execution Tip:
+Release Project 1 with clear documentation, leaderboards, and easy-to-use code. Consider arxiv → fast conference track (NeurIPS datasets track, ICLR) to accelerate visibility.
+
+**Expected timeline: Project 1 could hit 50+ citations within 12 months; Project 2 might take 24+ months for similar impact.**
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: claude-sonnet-4-5-20250929
+
+================================================================================
+Epoch 13, Comparison 19:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+**Go with Project 2** - the interleaved RL + supervised fine-tuning approach.
+
+Here's why it will maximize your citation velocity:
+
+## Key Advantages for Citations:
+
+**1. Clearer narrative and broader appeal**
+- The "RL gets stuck, inject knowledge" story is immediately intuitive to a wide audience
+- Doesn't require deep technical expertise to understand the motivation
+- Appeals to both RL researchers AND supervised learning communities
+
+**2. Stronger empirical story**
+- Much easier to show clear performance improvements on benchmarks
+- You can ablate the components cleanly (pure RL vs. interleaved)
+- Likely to achieve SOTA results that attract attention
+
+**3. Practical applicability**
+- Industry labs will actually use this - it solves a real deployment problem
+- More likely to be adopted by major labs (leading to citations from their papers)
+- Clear path to reproducibility and follow-up work
+
+**4. Better positioning**
+- Fits the current zeitgeist of "hybrid methods" and "best of both worlds"
+- Connects to active debates about RL limitations in LLMs
+- Can cite and build on both DeepSeek-R1 and recent RL papers
+
+## Why Project 1 is Riskier:
+
+- **Theoretical murkiness**: The entropy-exploration link needs strong empirical validation or it sounds hand-wavy
+- **Narrow audience**: Mainly interests RL theorists, not the broader ML community
+- **Unclear gains**: Might just produce longer chains without better accuracy
+- **Harder story**: Reviewers may question whether you're just regularizing, not truly improving reasoning
+
+## Timeline Consideration:
+Project 2 also likely ships faster - you can show results incrementally, whereas Project 1 needs careful ablations to prove the entropy mechanism works as claimed.
+
+**Bottom line**: Project 2 is the safer bet for high-impact citations within 1-2 years of publication.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: claude-sonnet-4-5-20250929
+
+================================================================================
+Epoch 14, Comparison 33:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+**Clear recommendation: Pursue Project 1 (the dataset/corpus project).**
+
+Here's why Project 1 will likely generate much higher citation velocity:
+
+## Key Advantages of Project 1:
+
+**1. Immediate utility = citations**
+- Researchers need datasets to run experiments. Your 92K multi-domain corpus becomes infrastructure that others *must* cite to use
+- Every paper using your dataset = automatic citation
+- Datasets accumulate citations steadily over time as they become community standards
+
+**2. Empirical contributions > literature reviews**
+- Novel empirical results (cross-domain vs in-domain RL findings) generate follow-up research
+- Your specific findings become baselines that others compare against
+- Survey papers get front-loaded citations then taper off; dataset papers compound
+
+**3. Multiple citation vectors**
+- Researchers will cite you for: (a) using the dataset, (b) comparing to your baselines, (c) using your reward designs, (d) referencing your cross-domain findings
+- Project 2 mainly gets cited as "background work"
+
+**4. Timing advantage**
+- RL for LLM reasoning is currently hot; an immediate empirical contribution captures the wave
+- Surveys are more valuable when a field matures; this field is still rapidly evolving (making surveys quickly outdated)
+
+## Project 2's disadvantages:
+
+- Survey papers typically get fewer total citations than foundational empirical work
+- The RL+LLM space already has several surveys
+- Gets "stale" quickly in a fast-moving field
+- Mainly cited in introduction sections, not methods/results
+
+**Bottom line:** If citation velocity is your *only* metric, Project 1 is the obvious choice. It creates a reusable artifact with compounding citation value.
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: claude-sonnet-4-5-20250929
+
+================================================================================
+Epoch 16, Comparison 11:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+# Clear Recommendation: Pursue Project 2
+
+## Rationale for Maximum Citation Velocity
+
+**Project 2 will likely generate significantly higher citation velocity** for these reasons:
+
+### 1. **Broader Appeal & Applicability**
+- **Multimodal + long-context** = relevant to the entire LLM community (vision-language models, document understanding, code generation, etc.)
+- Project 1's narrow focus on math reasoning appeals to a smaller niche
+- More potential use cases = more researchers citing your work
+
+### 2. **Trendy Components That Drive Citations**
+- "Long-context scaling" is a **hot topic** (2024-2025 zeitgeist)
+- Multimodal LLMs are experiencing explosive growth
+- "Simplification narratives" (avoiding MCTS, value functions) resonate well - researchers love "simpler is better" stories
+- Project 1's single-exemplar angle is interesting but less buzzworthy
+
+### 3. **Multiple Citation Entry Points**
+Project 2 offers researchers reasons to cite you for:
+- Long-context RL techniques
+- Multimodal reasoning
+- Chain-of-thought distillation methods
+- Simplified RL baselines (everyone building on MCTS-free approaches will cite you)
+
+Project 1 mainly gets cited for: single-exemplar learning in math domains (narrower)
+
+### 4. **Competitive Positioning**
+- Project 2 positions you as providing a **strong baseline** that others will compare against - this drives sustained citations
+- The "deliberately omitting complex components" angle makes your method the natural starting point for future work
+- Project 1 competes in the crowded math reasoning space without a clear differentiation advantage
+
+### 5. **Industry + Academic Citations**
+- Project 2's multimodal focus attracts both DeepMind/OpenAI-style citations AND academic followers
+- Long-context capabilities appeal to production-oriented researchers (higher citation diversity)
+
+## The Citation Math
+Project 2 could realistically achieve **2-3x the citation velocity** within 18 months post-publication due to broader relevance and multiple citation vectors.
+
+**Go with Project 2.**
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: claude-sonnet-4-5-20250929
+
+================================================================================
+Epoch 17, Comparison 25:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+I'll give you a direct recommendation based on citation velocity potential:
+
+## Recommendation: Pursue **Project 1 (ProRL)**
+
+### Key Reasons:
+
+**1. Clearer novelty and conceptual contribution**
+- The "KL control + periodic reference reset" mechanism is more distinctive and memorable
+- "Populating new solution space regions unreachable by base model" is a compelling, quotable claim
+- Easier for future papers to reference as "the prolonged RL approach"
+
+**2. Broader applicability**
+- The core idea (extended training with periodic resets) can be applied across many RL-for-LLM scenarios
+- More likely to be cited by diverse follow-up work (math, coding, planning, etc.)
+
+**3. Stronger narrative arc**
+- "Systematic expansion of reasoning capabilities" is a clearer story for intro/related work citations
+- The exploration metaphor is intuitive and memorable
+
+**4. Project 2's weaknesses for citations:**
+- Sounds more like an engineering contribution (efficiency/reproducibility)
+- "Complementary techniques" signals incremental improvement rather than conceptual breakthrough
+- Risk of being seen as "yet another PPO variant"
+- Framework-specific mention (verl) limits perceived generality
+
+### Citation velocity multipliers for Project 1:
+- Target top venues (NeurIPS/ICML) where algorithmic novelty is valued
+- Lead with strong empirical results showing capabilities impossible without prolonged training
+- Release code immediately
+- Use memorable terminology ("ProRL", "solution space expansion")
+
+**Bottom line:** Project 1 has the conceptual clarity and memorable hook that drives high citation velocity. Project 2 risks being categorized as incremental systems work.
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: claude-sonnet-4-5-20250929
+
+================================================================================
+Epoch 19, Comparison 3:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+# Clear Recommendation: Pursue Project 1
+
+## Why Project 1 will maximize citation velocity:
+
+**1. Immediate accessibility and reproducibility** (~3-6 months faster citations)
+- Simple, implementable techniques that any lab can reproduce quickly
+- Researchers will cite you while trying to replicate/extend your work
+- Lower barrier = more attempts = more citations
+
+**2. Three papers in one** (3x citation surface area)
+- Each technique (EM-FT, EM-RL, EM-INF) can be cited independently
+- Different subfields will cite different components
+- Ablation-friendly design means others will reference specific parts
+
+**3. Broad applicability** (wider citing audience)
+- Works across tasks (math, coding, reasoning, general chat)
+- Applicable to any LLM architecture
+- Both training-time AND inference-time methods = cited by both research and applied ML communities
+
+**4. Controversial/provocative angle** (generates discussion citations)
+- "Minimizing entropy improves reasoning" is counterintuitive 
+- Will generate response papers, criticism, and defense papers
+- Academic debates drive citation velocity dramatically
+
+**5. Immediate industry relevance**
+- EM-INF requires no retraining = instant deployment
+- Will get cited in technical reports, blog posts, and applied papers
+- Fast transition to practice = faster citations
+
+## Why Project 2 is riskier for citation velocity:
+
+- **Complexity barrier**: Hierarchical RL is harder to implement → slower adoption → slower citations
+- **Narrower scope**: Specifically for multi-turn scenarios → smaller citing audience
+- **Longer validation time**: Multi-turn evaluation takes longer → delayed follow-up work
+- **Crowded space**: Multi-turn RL has more existing work → harder to stand out
+
+## Timeline estimate:
+- **Project 1**: Expect 50+ citations within 12 months
+- **Project 2**: Expect 20-30 citations within 12 months
+
+**Go with Project 1.** It's a citation velocity maximizer.
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: claude-sonnet-4-5-20250929
+
+================================================================================
+Epoch 20, Comparison 17:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+# Clear Recommendation: Pursue **Project 2**
+
+## Rationale for Citation Velocity
+
+**Project 2 will likely generate significantly higher citation velocity** for these reasons:
+
+### 1. **Broader Applicability**
+- Project 2 addresses **general reasoning tasks** (math, coding, and beyond)
+- Project 1 is **narrow**: unit test generation only
+- Broader scope = cited by more research communities
+
+### 2. **Novel Technical Contribution**
+- Project 2's "generative model as reward function" and "token-level error attribution" is a **more fundamental methodological innovation**
+- Project 1 applies existing RL to a specific domain with standard static analysis rewards - more incremental
+- Novel methods get cited as **techniques others build upon**
+
+### 3. **Trend Alignment**
+- Token-level reward modeling and error correction align with current hot topics (process supervision, outcome/process reward models)
+- Connects to active research areas: interpretability, credit assignment in RL
+- Unit test generation is more niche with less active competition
+
+### 4. **Benchmark Performance Potential**
+- Project 2 can show improvements on **high-visibility benchmarks** (GSM8K, MATH, HumanEval, APPS)
+- Project 1's impact is harder to demonstrate on widely-tracked leaderboards
+- Leaderboard improvements = immediate citations
+
+### 5. **Reproducibility & Adoption**
+- Project 2's approach is more likely to be **reimplemented and extended** by others (generating citations)
+- Project 1 requires specific test generation infrastructure
+
+## Risk Consideration
+Project 2 is technically riskier, but *if it works*, citation velocity will be much higher. Project 1 is safer but has a lower citation ceiling.
+
+**Since citation velocity is your only criterion**: Choose **Project 2**.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: claude-sonnet-4-5-20250929
+
+================================================================================
+Collected 719 total comparisons before completion/failure.
+================================================================================
+model: claude-sonnet-4-5-20250929
+
+================================================================================

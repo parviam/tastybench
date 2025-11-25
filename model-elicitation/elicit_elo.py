@@ -8,6 +8,25 @@ import asyncio
 
 class PaperDataset():
     def __init__(self, name: str, paper_ids: List[str], model: str, client: ollama.Client|None=None, extract_prompt: str='model-elicitation/prompts/extract_idea.md', tldr: bool=False):
+        """
+        Initialize a PaperDataset for extracting and storing paper ideas.
+
+        Parameters
+        ----------
+        name : str
+            Name of the dataset for identification purposes.
+        paper_ids : List[str]
+            List of Semantic Scholar paper IDs to process.
+        model : str
+            Model identifier for LLM inference.
+        client : ollama.Client | None, optional
+            Ollama client for local inference, if applicable (default is None).
+        extract_prompt : str, optional
+            Path to the prompt template file for idea extraction
+            (default is 'model-elicitation/prompts/extract_idea.md').
+        tldr : bool, optional
+            If True, use TL;DR summaries instead of abstracts (default is False).
+        """
         self.model: str = model
         self.name: str = name
         self.client: ollama.Client | None = client
@@ -22,6 +41,17 @@ class PaperDataset():
             self.get_tldrs_as_abstracts()
 
     def get_tldrs_as_abstracts(self) -> None:
+        """
+        Fetch TL;DR summaries from Semantic Scholar API and use them as abstracts.
+
+        Updates the paper_data dictionary with paper_id, abstract (from TL;DR),
+        idea (same as TL;DR), and title for papers that have TL;DR summaries.
+
+        Raises
+        ------
+        NotImplementedError
+            This method is not yet implemented.
+        """
         raise NotImplementedError("TLDR fetching not implemented yet")
         r = requests.post(
             'https://api.semanticscholar.org/graph/v1/paper/batch',
@@ -43,6 +73,13 @@ class PaperDataset():
         self.paper_data['title'] = titles
     
     def get_abstracts(self) -> None:
+        """
+        Fetch paper abstracts and titles from Semantic Scholar API.
+
+        Updates the paper_data dictionary with paper_id, abstract, and title
+        for papers that have non-empty abstracts. Papers without abstracts are
+        filtered out.
+        """
         r = requests.post(
             'https://api.semanticscholar.org/graph/v1/paper/batch',
             params={'fields': ['abstract', 'title']},
@@ -62,6 +99,18 @@ class PaperDataset():
         self.paper_data['title'] = titles
     
     def extract_ideas(self, extract_prompt: str) -> None:
+        """
+        Extract research ideas from paper abstracts using LLM inference.
+
+        Uses the provided prompt template to extract concise ideas from each
+        paper's abstract. The ideas are parsed from the model's response using
+        XML-style tags (<idea>...</idea>).
+
+        Parameters
+        ----------
+        extract_prompt : str
+            Path to the prompt template file for idea extraction.
+        """
         prompt_template = extract_str(extract_prompt)
         ideas = []
         for abstract in tqdm(self.paper_data['abstract'], desc="Extracting ideas"):
@@ -73,11 +122,36 @@ class PaperDataset():
         self.paper_data['idea'] = ideas
     
     def export_to_csv(self, filename: str) -> None:
+        """
+        Export the paper dataset to a CSV file.
+
+        Parameters
+        ----------
+        filename : str
+            Path where the CSV file should be saved.
+        """
         df = pd.DataFrame(self.paper_data)
         df.to_csv(filename, index=False)
     
     @classmethod
     def load_from_csv(cls, filename: str, model: str='openai/gpt-oss-120b', client: ollama.Client | None=None):
+        """
+        Load a PaperDataset from a previously saved CSV file.
+
+        Parameters
+        ----------
+        filename : str
+            Path to the CSV file to load.
+        model : str, optional
+            Model identifier for future inference (default is 'openai/gpt-oss-120b').
+        client : ollama.Client | None, optional
+            Ollama client for local inference, if applicable (default is None).
+
+        Returns
+        -------
+        PaperDataset
+            A new PaperDataset instance loaded with data from the CSV file.
+        """
         df = pd.read_csv(filename)
         dataset = cls(
             paper_ids = df['paper_id'].tolist(),
@@ -96,6 +170,29 @@ class PaperDataset():
 class RankingDataset():
     def __init__(self, paper_dataset: PaperDataset, model: str, log: str, client: ollama.Client|None=None, epochs: int=1, 
                  ranking_prompt: str='model-elicitation/prompts/judge_ideas_goodhart.md', extract_choice_prompt: str='model-elicitation/prompts/extract_choice.md'):
+        """
+        Initialize a RankingDataset for pairwise comparison of paper ideas.
+
+        Parameters
+        ----------
+        paper_dataset : PaperDataset
+            Dataset containing papers and their extracted ideas to rank.
+        model : str
+            Model identifier for LLM inference used in judging comparisons.
+        log : str
+            Path to the log file for recording comparison details and errors.
+        client : ollama.Client | None, optional
+            Ollama client for local inference, if applicable (default is None).
+        epochs : int, optional
+            Number of epochs (complete passes through pairwise comparisons)
+            to perform (default is 1).
+        ranking_prompt : str, optional
+            Path to the prompt template for judging idea comparisons
+            (default is 'model-elicitation/prompts/judge_ideas_goodhart.md').
+        extract_choice_prompt : str, optional
+            Path to the prompt template for extracting the judge's choice
+            (default is 'model-elicitation/prompts/extract_choice.md').
+        """
         self.model: str = model
         self.client: ollama.Client | None = client
         self.paper_dataset: PaperDataset = paper_dataset
@@ -105,11 +202,41 @@ class RankingDataset():
         self.judge_rankings(ranking_prompt, extract_choice_prompt)
     
     def append_to_log(self, message: str) -> None:
+        """
+        Append a message to the ranking log file.
+
+        Parameters
+        ----------
+        message : str
+            The message to append to the log file. The model name and separator
+            lines are automatically added.
+        """
         with open(self.log, 'a') as f:
             message += "="*80 + '\nmodel: ' + self.model + '\n'
             f.write(message + '\n' + "="*80 + '\n')
     
     def judge_rankings(self, ranking_prompt, extract_prompt) -> None:
+        """
+        Perform pairwise comparisons of paper ideas using LLM judgment.
+
+        Conducts multiple epochs of pairwise comparisons between ideas, using
+        the specified model to judge which idea is better. Handles errors
+        gracefully and saves progress even if the process is interrupted.
+
+        Parameters
+        ----------
+        ranking_prompt : str
+            Path to the prompt template for judging idea comparisons.
+        extract_prompt : str
+            Path to the prompt template for extracting the choice from the
+            judge's response.
+
+        Raises
+        ------
+        Exception
+            If inference fails during comparison, saves collected rankings and
+            raises an exception with details about the failure point.
+        """
         ranking_prompt_template = extract_str(ranking_prompt)
         extract_choice_template = extract_str(extract_prompt)
         rankings: List[Tuple[str, str]] = []
@@ -152,10 +279,37 @@ class RankingDataset():
                 self.append_to_log(f"Collected {len(rankings)} total comparisons before completion/failure.\n")
     
     def export_to_csv(self, filename: str) -> None:
+        """
+        Export the ranking data to a CSV file.
+
+        Parameters
+        ----------
+        filename : str
+            Path where the CSV file should be saved.
+        """
         self.ranking_data.to_csv(filename, index=False)
     
     @classmethod
     def load_from_csv(cls, filename: str, paper_dataset: PaperDataset, model: str='openai/gpt-oss-120b', client: ollama.Client | None=None):
+        """
+        Load a RankingDataset from a previously saved CSV file.
+
+        Parameters
+        ----------
+        filename : str
+            Path to the CSV file containing ranking data.
+        paper_dataset : PaperDataset
+            The paper dataset associated with these rankings.
+        model : str, optional
+            Model identifier for future inference (default is 'openai/gpt-oss-120b').
+        client : ollama.Client | None, optional
+            Ollama client for local inference, if applicable (default is None).
+
+        Returns
+        -------
+        RankingDataset
+            A new RankingDataset instance loaded with data from the CSV file.
+        """
         df = pd.read_csv(filename)
         ranking_dataset = cls(
             paper_dataset = paper_dataset,
@@ -215,6 +369,33 @@ def get_elo_rankings(ranking_dataset: RankingDataset, k_factor: float = 32.0, in
 
 async def get_elo_rankings_for_model(model: str, paper_dataset: PaperDataset, output_dir: str, epochs: int=10, client: ollama.Client|None=None,
                                      ranking_prompt: str='model-elicitation', extract_choice_prompt: str='model-elicitation/prompts/extract_choice.md') -> None:
+    """
+    Asynchronously generate ELO rankings for a paper dataset using a specified model.
+
+    Runs pairwise comparisons and computes ELO rankings in a separate thread to
+    avoid blocking the event loop. Saves both the raw ranking comparisons and
+    computed ELO scores to CSV files.
+
+    Parameters
+    ----------
+    model : str
+        Model identifier for LLM inference used in judging comparisons.
+    paper_dataset : PaperDataset
+        Dataset containing papers and their extracted ideas to rank.
+    output_dir : str
+        Directory path where output files (rankings.csv, elo.csv, ranking.log)
+        will be saved.
+    epochs : int, optional
+        Number of epochs for pairwise comparisons (default is 10).
+    client : ollama.Client | None, optional
+        Ollama client for local inference, if applicable (default is None).
+    ranking_prompt : str, optional
+        Path to the prompt template for judging comparisons
+        (default is 'model-elicitation').
+    extract_choice_prompt : str, optional
+        Path to the prompt template for extracting choices
+        (default is 'model-elicitation/prompts/extract_choice.md').
+    """
     # Run the blocking operations in a separate thread
     def _run_blocking():
         log_file = output_dir + 'ranking.log'
@@ -229,6 +410,32 @@ async def get_elo_rankings_for_model(model: str, paper_dataset: PaperDataset, ou
 class Experiment:
     def __init__(self, name: str, paper_dataset: PaperDataset, models: List[Tuple[str, str]], epochs: List[int]=[10], client: ollama.Client|None=None,
                  ranking_prompt: str='model-elicitation/prompts/judge_ideas_goodhart.md', extract_choice_prompt: str='model-elicitation/prompts/extract_choice.md'):
+        """
+        Initialize an experiment for running ELO ranking across multiple models and epochs.
+
+        Sets up the directory structure and saves metadata for tracking experimental
+        configurations.
+
+        Parameters
+        ----------
+        name : str
+            Name of the experiment, used for output directory naming.
+        paper_dataset : PaperDataset
+            Dataset containing papers to rank.
+        models : List[Tuple[str, str]]
+            List of (model_id, model_name) tuples where model_id is the identifier
+            for inference and model_name is used for directory naming.
+        epochs : List[int], optional
+            List of epoch counts to test (default is [10]).
+        client : ollama.Client | None, optional
+            Ollama client for local inference, if applicable (default is None).
+        ranking_prompt : str, optional
+            Path to the prompt template for judging comparisons
+            (default is 'model-elicitation/prompts/judge_ideas_goodhart.md').
+        extract_choice_prompt : str, optional
+            Path to the prompt template for extracting choices
+            (default is 'model-elicitation/prompts/extract_choice.md').
+        """
         self.name = name
         self.paper_dataset = paper_dataset
         self.models = models
@@ -245,6 +452,12 @@ class Experiment:
         self.save_metadata()
     
     def save_metadata(self) -> None:
+        """
+        Save experiment configuration metadata to a JSON file.
+
+        Stores information about the experiment including name, models, epochs,
+        paper dataset, and prompt paths for reproducibility.
+        """
         metadata = {
             'name': self.name,
             'models': [model for model, _ in self.models],
@@ -257,6 +470,17 @@ class Experiment:
             json.dump(metadata, f, indent=4)
     
     async def run(self, tg: asyncio.TaskGroup) -> None:
+        """
+        Execute the experiment by creating ranking tasks for all model/epoch combinations.
+
+        Creates asynchronous tasks within the provided TaskGroup for each combination
+        of model and epoch count specified in the experiment configuration.
+
+        Parameters
+        ----------
+        tg : asyncio.TaskGroup
+            The TaskGroup to which ranking tasks will be added for concurrent execution.
+        """
         for model, model_name in self.models:
             for epoch in self.epochs:
                 output_dir = f"model-elicitation/data/{self.name}/{model_name}/{epoch}-epochs/"

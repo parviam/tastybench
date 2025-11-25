@@ -471,3 +471,2193 @@ PROJECT 1
 model: gpt-5.1
 
 ================================================================================
+Epoch 5, Comparison 7:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+You should pursue **Project 2**.
+
+Here’s the reasoning, framed specifically for your goal of improving math/coding reasoning via RL:
+
+---
+
+## High‑level recommendation
+
+**Project 2 is more likely to yield:**
+
+- Cleaner empirical signals about *reasoning* improvement
+- A publishable methodological contribution in RL for LLMs
+- Practical impact for math/coding tasks in current research ecosystems
+
+Project 1 is interesting and intellectually elegant, but it is:
+
+- More speculative in terms of reliable gains on hard reasoning benchmarks
+- Harder to evaluate cleanly (many confounds in merging representations)
+- Methodologically messier to stabilize and interpret
+
+---
+
+## Comparative analysis
+
+### 1. Alignment with your stated goal: RL for reasoning (math/coding)
+
+**Project 2: RL for self‑correction**
+
+- Directly uses RL as the *core* mechanism to improve reasoning.
+- Targets *multi‑turn, self‑correcting behavior*, which is exactly how math and coding tasks benefit:
+  - Write a solution → test/inspect → critique/fix → repeat.
+- Easy to test on:
+  - GSM8K, MATH, AIME: multi‑step math reasoning
+  - HumanEval, MBPP: code generation + self‑debugging
+- The RL signal is naturally tied to correctness (e.g., unit tests, exact match, or verifier scores).
+
+**Project 1: System 1/System 2 merging**
+
+- The goal (short, high‑quality reasoning traces) is aligned in spirit, but the method is primarily *representation surgery*, not RL.
+- Improvements on math/coding depend on:
+  - Whether the SVD / task‑vector directions align meaningfully with reasoning abstractions.
+  - Whether merged weights preserve fidelity to both intuitive and deliberate regimes.
+- You could use RL on top of this, but that’s no longer the core of the project.
+
+**Verdict:** For “improving LLM reasoning with RL,” Project 2 is more direct and conceptually cleaner.
+
+---
+
+### 2. Technical tractability and failure modes
+
+**Project 2:**
+
+- Main difficulties:
+  - Avoiding policy collapse / over‑optimization.
+  - Designing reward shaping, bonuses, and regularization to encourage genuine self‑correction.
+  - Getting stable online RL on top of large sequence models.
+- But these are *well‑known, actively discussed* problems in RLHF/RLAIF and model‑based RL. You can:
+  - Start from PPO/GRPO/other common RL-on-LLM recipes.
+  - Reuse infra from open‑weight RL frameworks (TRL, OpenRLHF, etc.).
+  - Use clean, measurable signals like pass@k, test pass rates.
+
+**Project 1:**
+
+- Main difficulties:
+  - Defining “System 1” vs “System 2” in a way that maps to measurable subspaces.
+  - Getting SVD / task‑vector / activation‑informed merging to *not* degrade base capabilities.
+  - Avoiding brittle behavior where the merged model:
+    - Hallucinates “reasoning‑like” traces that are actually worse.
+    - Becomes unstable under distribution shift or longer contexts.
+- Debugging is harder:
+  - When it fails, you don’t know whether the problem is in the decomposition, the subspace alignment, the merge weighting, or the readout dynamics during decoding.
+  - You have weaker ground truth against which to optimize.
+
+**Verdict:** Project 2 has known RL pitfalls but clearer levers to fix them, while Project 1 risks deep, under‑constrained engineering and interpretability challenges.
+
+---
+
+### 3. Experimental clarity and publishability
+
+**Project 2:**
+
+You can design a very clean core paper:
+
+- **Problem:** LLMs struggle to reliably self‑correct under their own distribution without supervision.
+- **Method:**
+  1. Multi‑turn RL pre‑phase to avoid behavior collapse and bootstrap a correction policy.
+  2. Regularized online RL with a reward bonus that:
+     - Rewards successful self‑correction.
+     - Penalizes degenerate “always‑retract” or “always‑agree” behavior.
+  3. Entirely self‑generated correction traces (no external labels, no multiple models).
+- **Claims you can validate:**
+  - Improved multi‑turn reasoning vs.:
+    - Static CoT
+    - Simple non‑RL self‑critique (e.g., “reflect then answer” baselines)
+  - Better robustness under adversarial prompts that try to derail the correction loop.
+  - Possibly improved performance in few‑shot / low‑supervision domains, where external reward models are weak.
+
+This is directly legible to venues like NeurIPS/ICLR/ICML/ACL, because it fits into:
+- RL for LLMs
+- Self‑training / self‑correction
+- Online learning and distribution shift
+
+**Project 1:**
+
+- To be publishable at a top venue, you likely need:
+  - A strong theoretical or mechanistic story about the subspaces you’re manipulating, or
+  - Very strong empirical gains on reasoning benchmarks vs. standard CoT + RL baselines.
+- Risk:
+  - You could get moderate gains, but reviewers ask:
+    - Why SVD vs. other merging / LoRA / adapters / MoE / routing?
+    - Why “System 1/2” is the right framing rather than just “short vs long decoding styles”?
+- The core contribution can look like a clever but somewhat arbitrary *representation surgery heuristic*, which is harder to sell without a strong interpretability angle or big empirical win.
+
+**Verdict:** Project 2 has a more straightforward, clearly scoped contribution in the current LLM+RL discourse.
+
+---
+
+### 4. Resource and infra requirements
+
+**Project 2:**
+
+- Needs:
+  - RL training infra (which you probably already care about as an RL+LLM researcher).
+  - Automated reward signals (unit tests, verifiers, exact match, constraint checks).
+- It is also naturally *scalable*:
+  - Can start with 1–3B parameter models on modest compute, get signals.
+  - Then, if results are promising, scale to larger models or distributed RL setups.
+
+**Project 1:**
+
+- Needs:
+  - Two or more specialized models or decoding regimes (“intuitive” vs. “deliberate”) to define your subspaces.
+  - A lot of experiments around layer selection, SVD rank, merge coefficients, etc.
+- Even if compute cost of inference is reduced in the end, *research* cost is high:
+  - You’re effectively doing model surgery and needing many iterations to not damage capabilities.
+
+**Verdict:** Project 2 is easier to scale up/down experimentally; Project 1 likely demands more surgical experimentation per model/version.
+
+---
+
+### 5. Long‑term extensibility
+
+**Project 2:**
+
+- Naturally extends to:
+  - Planning and tool‑use: self‑correction not just over text, but over tool calls / code execution.
+  - Safety and alignment: self‑correction wrt harmful outputs, false statements, etc., with reward from automated or learned verifiers.
+  - Active learning: using RL signals to decide *what to ask itself* (meta‑self‑correction).
+- Provides a reusable framework: “RL for multi‑turn self‑correction under the model’s own distribution” is a building block you can apply widely.
+
+**Project 1:**
+
+- Extends to:
+  - Other forms of mixture‑of‑style behavior (e.g., concise vs. verbose, creative vs. literal).
+  - Interpretability work on subspaces carrying different reasoning styles.
+- It’s exciting if you want to systematically study representation merging and style control, but less central to *RL for reasoning* as a line of work.
+
+**Verdict:** If your long‑term identity is “RL for LLM reasoning,” Project 2 is a better foundation.
+
+---
+
+## When Project 1 might be better
+
+You might choose **Project 1** instead if:
+
+- Your main research interest is *mechanistic interpretability or representation surgery* and “System 1/2 reasoning” serves more as a conceptual anchor than a strict RL target.
+- You have:
+  - Strong access to multiple distinct fine‑tuned models (e.g., one optimized for fast responses, one for CoT) and
+  - Time/compute to iterate on subspace and weight‑merging schemes.
+- You want to publish in venues/communities focusing on:
+  - Model merging / task vectors / latent steering,
+  - Mechanistic / subspace interpretability.
+
+Then Project 1 can be a good fit, but it’s a different research identity.
+
+---
+
+## Concrete next step if you choose Project 2
+
+To make this actionable:
+
+1. **Pick a core benchmark pair:**
+   - Math: GSM8K + MATH (or AIME‑style test set).
+   - Coding: HumanEval + MBPP with unit tests.
+
+2. **Define a minimal baseline:**
+   - Base model with:
+     - Direct answer
+     - CoT
+     - Simple self‑critique (“think, then reflect, then answer”) with no RL.
+
+3. **Implement your two‑phase RL:**
+   - Phase 1 (bootstrapping):
+     - Multi‑turn RL where the model is rewarded for:
+       - Generating a corrected answer that passes tests / matches oracle.
+       - Avoiding trivial patterns (e.g., “always change the answer”).
+   - Phase 2 (online RL with reward bonus):
+     - Run the model in its own self‑correction loop.
+     - Reward bonus for evidence of effective correction (e.g., going from failing to passing tests; or moving toward ground truth under some verifier).
+     - Regularize KL to the base policy and maybe a penalty on excessive turns / verbosity.
+
+4. **Measure:**
+   - Final accuracy (math/coding) vs. baselines.
+   - Improvement conditioned on initial answer being wrong (true self‑correction).
+   - Robustness: performance when initial samples are deliberately perturbed / misled.
+
+That gives you a crisp, RL‑centric, empirically grounded paper.
+
+---
+
+**Bottom line:**  
+Given your goal—improving LLM reasoning (math/coding) with reinforcement learning—**Project 2 is the better bet**: conceptually aligned, methodologically grounded, and easier to turn into a strong, well‑scoped contribution.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Epoch 6, Comparison 21:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+You should pursue **Project 1**.
+
+Here’s a concise comparison framed around impact, novelty, and research leverage.
+
+---
+
+## 1. Research substance & novelty
+
+**Project 1 (two‑stage cross‑domain + HR + GRPO)**  
+- Combines:
+  - **Curriculum / staged training**: math → code is a strongly motivated sequence for compositional reasoning.
+  - **Cross‑domain joint optimization**: lets you study transfer and interference between math and coding skills.
+  - **History Resampling (HR)**: principled way to reuse past trajectories with filtering/re‑weighting to improve sample efficiency and stability.
+  - **Group Relative Policy Optimization (GRPO)**: modern alternative to standard PPO-style RL, already aligned with LLMs.
+
+This gives you multiple research knobs:
+- How math reasoning ability transfers to coding (and vice versa).
+- How best to select and re‑weight trajectories for reasoning tasks (e.g., based on difficulty, diversity, partial correctness).
+- How cross‑domain training shapes internal representations and generalization.
+
+If executed well, this can say something *non‑trivial and publishable* about:
+- General‑purpose reasoning curricula for LLMs.
+- Efficient replay / resampling strategies tailored to chain‑of‑thought style RL.
+
+**Project 2 (ReMax / value‑free RLHF)**  
+- Core idea: **variance reduction + no value network** for sequence‑level RL (REINFORCE with clever baselines).
+- Benefits:
+  - Lower memory footprint.
+  - Simpler implementation and hyper‑parameters relative to PPO + value model.
+- Conceptually: this is an **algorithmic/engineering simplification** with a clear but narrower contribution: “we can match PPO‑like performance with a simpler REINFORCE‑style algorithm.”
+
+It’s useful, but:
+- The underlying idea—variance‑reduced REINFORCE/baselines to avoid value nets—is not conceptually new in RL, only newly packaged for LLM RLHF.
+- The space is already getting crowded with “simplified PPO alternatives” for LLM RLHF.
+
+**Net:** Project 1 gives more room for *genuinely new scientific insights* about reasoning, transfer, and training paradigms. Project 2 is more incremental and optimization‑oriented.
+
+---
+
+## 2. Alignment with your goal: better math & coding reasoning
+
+**Project 1** is directly structured around improving math and coding reasoning:
+- Explicit math→code curriculum matches the hypothesis that math skills scaffold code reasoning (and possibly vice versa).
+- HR lets you aggressively focus on *hard or informative reasoning trajectories* instead of generic RLHF preferences.
+- Cross‑domain GRPO is naturally suited for:
+  - Multi‑objective optimization (math accuracy, coding correctness, length penalties, style, etc.).
+  - Studying domain interference and synergy.
+
+You can design evaluations like:
+- Does training on math first change how the model solves unseen coding benchmarks (e.g., HumanEval, Codeforces‑like tasks) compared to code‑only RL?
+- Does HR improve robustness on out‑of‑domain reasoning tasks (new math contests, code generation under constraints)?
+- What kinds of historical trajectories are most beneficial (near‑misses? diverse solution paths? long chains of thought?)?
+
+**Project 2**, while it can be *applied* to math & code, is mainly about:
+- “How to do RLHF more simply/cheaply while preserving reward optimization.”
+- It doesn’t inherently structure the problem to target deeper reasoning, curriculum, or compositionality.
+
+You’d still need a separate, more interesting story about *what* you’re training for and *how* that improves reasoning.
+
+---
+
+## 3. Impact vs effort
+
+**Project 1 – Pros**
+- Higher potential impact and conceptual payoff.
+- Can produce:
+  - Algorithmic contributions (HR for LLM RL + GRPO variants).
+  - Empirical insights (cross‑domain transfer, curriculum design, trajectory selection).
+- Very well aligned with current frontier interest: “How do we train LLMs to be better general reasoners across domains?”
+
+**Project 1 – Cons / Risks**
+- More complex pipeline:
+  - Multi‑stage training.
+  - Cross‑domain reward design for math and code.
+  - HR/GRPO implementation and tuning.
+- More moving parts → more failure modes and debugging.
+
+**Project 2 – Pros**
+- Cleaner, narrower scope; likely faster to get to a working system.
+- Implementation is relatively straightforward if you know REINFORCE and have an RLHF pipeline.
+- Strong engineering contribution if you’re in a setting that really cares about GPU budget and simplicity.
+
+**Project 2 – Cons**
+- Contribution is mostly about *efficiency and simplicity* rather than new understanding of reasoning.
+- Harder to make the paper “feel deep,” unless you push very hard on theoretical analysis or large‑scale empirical comparisons.
+- The space is competitive: many variants of PPO‑alternatives for LLM RLHF.
+
+---
+
+## 4. What to do depending on your constraints
+
+If your priority is:
+- **Advancing understanding of reasoning and transfer** → choose **Project 1**.
+- **Shipping a practical RLHF algorithm that’s easy to maintain** → choose **Project 2**.
+- **Strong research paper potential in top venues (NeurIPS/ICLR/ICML/MLSys‑ish)** with a reasoning‑centric narrative → **Project 1** has better upside.
+
+Given you’re “an AI researcher trying to improve LLM reasoning,” and not just optimizing infra, **Project 1 is the better fit**.
+
+---
+
+## 5. How to scope Project 1 so it’s tractable
+
+To keep it manageable, I’d recommend:
+
+1. **Start with single domain + HR + GRPO**
+   - Begin on math only (e.g., GSM8K → MATH, or synthetic math tasks).
+   - Implement GRPO + HR with trajectory‑level rewards (e.g., exact match, partial credit from a verifier).
+   - Show:
+     - HR improves sample efficiency and stability vs naive replay / no replay.
+
+2. **Add coding as the second stage**
+   - Move to a coding benchmark (e.g., HumanEval, MBPP) with execution‑based rewards.
+   - Compare:
+     - Code‑only RL vs math‑then‑code RL.
+   - Analyze transfer:
+     - Does math‑then‑code RL lead to better performance at fixed compute?
+     - Does it improve generalization to harder or out‑of‑distribution tasks?
+
+3. **Cross‑domain joint RL**
+   - Alternate math and code episodes, or mix them in a curriculum schedule.
+   - Study:
+     - Performance gains/losses in each domain.
+     - Whether HR must be domain‑aware (different filters/weights for math vs code).
+
+You can later incorporate bits of Project 2’s spirit (e.g., variance‑reduction tricks) if needed, but they’d be secondary to the main story.
+
+---
+
+**Recommendation:** Pursue **Project 1**. It is more aligned with your goal of improving reasoning, offers richer scientific questions (curriculum, cross‑domain transfer, trajectory selection), and gives you a clearer path to a distinctive, high‑impact research contribution.
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Epoch 7, Comparison 35:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+You should pursue **Project 2**.
+
+Here’s a concise comparison tailored to your goal (improving LLM reasoning on math/coding via RL) and to likely research impact.
+
+---
+
+## Core research value
+
+**Project 1 (RLVR on single exemplars)**  
+- Main idea: powerful if it truly shows that *very few verifiable exemplars* can reshape reasoning behavior across categories.  
+- However, RL with verifiable rewards for math is already relatively crowded (RL from verifiers/checkers, process-based rewards, etc.).  
+- The “single exemplar” angle is interesting but somewhat brittle:  
+  - Hard to show robust generalization without it looking like “just another clever regularization/conditioning trick.”  
+  - Risk that results are highly sensitive to the exemplar choice and problem distribution.  
+- Novelty is incremental unless you can show extreme data efficiency with strong and broad generalization.
+
+**Project 2 (multi‑turn online RL for self‑correction)**  
+- Main idea: a *general-purpose* method for teaching models to self-correct, online, using only their own traces.  
+- Directly addresses a central, open problem: **how to get models to reliably improve themselves using their own rollouts**, without external supervision or extra models.  
+- Much more extensible: can apply to math, coding, reasoning, tool use, safety, and interactive agents.  
+- Clarifies a very relevant conceptual issue:  
+  - How to avoid behavior collapse in online RL on a model’s own distribution.  
+  - How to design reward bonuses/regularization that make “self-correction” converge rather than drift.
+
+From a research contribution standpoint, **Project 2 is more likely to yield a generally useful algorithmic framework and conceptual insights**, not just a specialized trick for math.
+
+---
+
+## Feasibility and experimental clarity
+
+**Project 1: RLVR with single exemplars**  
+Pros:
+- Simple to implement: policy gradient with entropy + verifiable reward.  
+- Clean evaluation on math benchmarks (GSM8K, MATH, etc.).  
+- Easy baseline comparisons (SFT, RL with more data, CoT, etc.).
+
+Cons:
+- To make it interesting, you must demonstrate:  
+  - Strong out-of-distribution generalization from extremely few exemplars.  
+  - Robustness to which exemplar is chosen.  
+- Negative outcome risk: you may find “it helps, but not that much,” which is less publishable and easy to subsume into existing RL-from-verifier papers.
+
+**Project 2: multi-turn online self-correction RL**  
+Pros:
+- Very rich experimental space:  
+  - Ablate multi-turn RL initialization vs. not.  
+  - Different reward-bonus designs.  
+  - Different numbers of correction turns and interaction patterns.  
+- Even partial success (e.g., stable gains on modest tasks) is already interesting, because very few clean, principled frameworks exist for **online self-correcting RL** with only one model.
+
+Cons:
+- Algorithmic design is more delicate:  
+  - You must prevent collapse (mode-dropping, degenerate corrections).  
+  - Need a careful credit assignment scheme over multiple turns.  
+- Training might be more compute-expensive due to multi-turn interaction.
+
+If you have moderate compute and are comfortable with RL infrastructure, **Project 2 is feasible** and has more room for meaningful ablations and theory.
+
+---
+
+## Alignment with current frontier directions
+
+Across math, coding, and broader reasoning, frontier work is moving toward:
+
+- **Interactive, multi-step reasoning** (tool calls, multi-turn dialogues, scratchpads).  
+- **Self-improvement / self-training / self-correction** under the model’s own distribution.  
+- Reducing dependence on labeled data or complex ensembles.
+
+Project 2 sits squarely at this frontier: it’s about **online, self-referential training of a single model**. That is strategically well-aligned with where LLM research is going.
+
+Project 1 is closer to existing “RL with verifiable reward on math” lines, which are important but somewhat saturated.
+
+---
+
+## Risk profile and upside
+
+**Project 1:**  
+- Lower implementation risk, but higher risk of “unexciting” results.  
+- Upside depends entirely on how striking the data-efficiency and generalization claims are.
+
+**Project 2:**  
+- Higher algorithmic/engineering complexity.  
+- But multiple potential win modes:
+  - Demonstrating a stable general framework for self-corrective RL.  
+  - Insights about initialization (multi-turn RL) vs. naive online RL.  
+  - New metrics and analysis of correction dynamics over turns.  
+- Even if gains are modest, the *framework* and analysis are publishable.
+
+---
+
+## Clear recommendation
+
+Pursue **Project 2: the multi-turn online RL framework for self-correction**.
+
+If you want to hedge:
+
+- Start with a **smaller, math-focused version of Project 2** (e.g., multi-turn self-correction on GSM8K/MATH with verifiable rewards), so you can still leverage some of the ideas from Project 1 (verifiable reward, entropy regularization) inside a multi-turn loop.  
+- Use that as a pilot to debug the online RL dynamics, then generalize to coding and more open-ended reasoning tasks.
+
+But as a primary research direction, for impact, novelty, and alignment with where the field is heading, **Project 2 is the better bet.**
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Epoch 9, Comparison 13:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+You’ll get more useful, broadly applicable progress on LLM reasoning from **Project 2 (entropy minimization)** than from the web‑navigation agent in Project 1.
+
+Here’s a structured comparison and a clear recommendation.
+
+---
+
+## 1. Alignment with your goal: “improving LLM reasoning (math, coding) via RL”
+
+**Project 2 (Entropy minimization)**  
+- Directly acts on the *distributional behavior* of LLMs—how they allocate probability mass—which is central for:
+  - Math: you want the model to gravitate towards a single coherent chain of reasoning instead of scattering probability mass over many half‑baked ones.
+  - Coding: you want deterministic, confident, syntactically consistent completions rather than high‑entropy “creative” code.
+- EM‑FT and EM‑RL are domain‑agnostic; they can be applied to math/coding corpora or model self‑talk traces and then evaluated rigorously on reasoning benchmarks (GSM8K, MATH, HumanEval, etc.).
+- EM‑INF lets you test ideas *immediately* at inference time without costly data collection or RL environments.
+
+**Project 1 (Web navigation)**  
+- Web navigation is a *very specific* environment:
+  - Good for research on perception, grounding, and hierarchical policies.
+  - But the work you do on HTML simplification, DOM‑action interfaces, and navigation rewards may not transfer cleanly to math or coding.
+- RL signal is about *task completion in a browser*, not about correctness of reasoning per se.
+- It can still help reasoning indirectly (e.g., task decomposition, tool use), but the fit to math/coding is weaker and more indirect than Project 2.
+
+**Verdict on alignment:**  
+For math and coding specifically, Project 2 is tightly aligned and directly tunable to those domains; Project 1 is more about agents and web environments than core reasoning.
+
+---
+
+## 2. Novelty and research contribution
+
+**Project 2: EM‑FT / EM‑RL / EM‑INF**
+
+Strong research angles:
+
+- **Theory + practice bridge:**  
+  - There’s a long‑standing intuition that “good reasoning = sharper, more confident distributions on correct tokens” (e.g., lower entropy where the model *should* be confident).
+  - But explicit, systematic *entropy‑regularization as the main objective* in modern LLMs is underexplored.
+- **Unsupervised / self‑supervised RL**:  
+  - EM‑RL where *negative entropy is the only reward* is conceptually interesting: RL that shapes internal uncertainty structure rather than behavior in an external environment.
+  - This touches on calibration, exploration vs exploitation, and distributional sharpness in generative models.
+- **Three‑layered design (train‑time, RL, inference‑time):**  
+  - Having EM‑FT, EM‑RL, and EM‑INF in one framework lets you do strong ablation studies:
+    - Which component actually drives reasoning gains?
+    - Does too much entropy reduction cause “over‑confident wrong answers”?
+- If you couple entropy minimization with *accuracy‑aware constraints* (e.g., only minimize entropy when self‑consistency suggests high correctness), you can do very publishable work on “confidence shaping” for LLM reasoning.
+
+**Project 1: Web navigation + HTML simplification + hybrid data**
+
+Also solid, but more crowded:
+
+- Web agents and browser tasks are an active area (WebArena, WebVoyager, MiniWob++ etc.). There are already:
+  - DOM simplification / abstraction schemes.
+  - Hybrid human/AI curriculum pipelines and RL fine‑tuning on web tasks.
+- Your twist—explicit HTML simplification and curriculum learning with a human+AI data pipeline—is valuable, but:
+  - You’ll be competing directly with multiple labs already doing similar web‑agent RL with scaled data and infrastructure.
+  - Novelty is likely to reside in engineering details and empirical curves, less in a clean conceptual contribution.
+
+**Verdict on novelty:**  
+Project 2 offers a cleaner and more widely applicable conceptual story (“how shaping entropy affects reasoning”), with clearer room for a strong theoretical + empirical paper. Project 1 is technically rich but in a saturated niche.
+
+---
+
+## 3. Feasibility and resource demands
+
+**Project 2:**
+
+- **Data**:  
+  - Can use *unlabeled* data or self‑generated model traces.
+  - For math/coding, you can focus on existing benchmarks + synthetic problem generation.
+- **Infrastructure**:  
+  - EM‑FT: basically standard LM fine‑tuning with a custom loss term (cross‑entropy + λ·(−entropy) or just entropy term).
+  - EM‑RL: can be implemented using PPO/GRPO‑like frameworks, with reward = −entropy. No environment rollout complexity.
+  - EM‑INF: just a logit transformation at test time (e.g., adaptive temperature / entropy penalty).
+- **Risk**:  
+  - Main risk is that naive entropy minimization leads to:
+    - Degenerate, repetitive text.
+    - Over‑confident but wrong answers.
+  - But that’s scientifically interesting: characterizing *when and how* entropy reduction helps or harms reasoning is itself worthy of publication.
+
+**Project 1:**
+
+- **Environment complexity**:  
+  - Need a stable web environment (simulated browser, DOM API, or WebArena/MiniWob environment).
+  - Need robust HTML simplification pipeline that doesn’t break tasks.
+- **Data collection**:  
+  - Human–AI hybrid pipeline means:
+    - Designing annotation interfaces.
+    - Managing quality of human trajectories and verifying task success.
+  - Curriculum learning requires careful task design and scheduling.
+- **RL**:  
+  - High‑variance, sparse rewards.
+  - Credit assignment over long sequences of browser actions.
+  - Much more engineering to get stable learning signals compared to EM‑RL which only needs model outputs.
+- **Risk**:  
+  - Large chance of “works okay but not better than bigger models / prior web‑agent work” given resource asymmetries.
+  - High dependency on environment quirks and engineering detail, which may limit reproducibility impact.
+
+**Verdict on feasibility:**  
+Project 2 is much lighter in environment/engineering overhead and fits well with standard LLM fine‑tuning pipelines. Project 1 is substantially heavier and more brittle, especially without a large team and infra.
+
+---
+
+## 4. Evaluation clarity
+
+**Project 2:**
+
+- Direct metrics on reasoning:
+  - Math: GSM8K, MATH, AIME/AMC‑style problems, self‑consistency variants.
+  - Coding: HumanEval, MBPP, Codeforces‑like problems.
+- Diagnostic metrics:
+  - Entropy distribution before/after.
+  - Calibration curves (ECE/Brier).
+  - Self‑consistency vs. accuracy: does lower entropy correlate with correctness?
+  - Diversity vs. accuracy in multi‑sample reasoning.
+- You can clearly answer:
+  - Does reducing entropy improve top‑1 reasoning accuracy?
+  - Does it make the model more brittle or more reliable?
+  - Is there an optimal entropy regime?
+
+**Project 1:**
+
+- Metrics are more entangled:
+  - Task success rates on web benchmarks.
+  - Maybe “reasoning” proxies like number of steps, subtree coverage, etc.
+- Harder to separate:
+  - Gains due to better reasoning vs. better HTML preprocessing vs. clever action space design.
+- Much less direct readout on math/coding improvements.
+
+**Verdict on evaluation:**  
+Project 2 gives you clean, interpretable, and domain‑relevant evaluation for reasoning tasks; Project 1 gives noisy, indirect signals.
+
+---
+
+## 5. Long‑term leverage for you as a researcher
+
+Working on **entropy‑shaping for LLMs (Project 2)** positions you to:
+
+- Develop general tools for:
+  - Confidence shaping / calibration.
+  - Distributional control (temperature analogs with learning).
+  - Self‑supervised RL objectives at scale.
+- Connect to multiple threads:
+  - Self‑consistency, debate, verifier‑guided decoding.
+  - Risk‑sensitive decision‑making and safety (over‑confident errors).
+  - “Deliberate vs. fast” modes of reasoning.
+- Use the same methodology in:
+  - Math, coding, instruction following, long‑form QA, tool‑using agents (by coupling EM‑RL with task‑conditioned episodes).
+
+Web‑navigation expertise (Project 1) is also valuable, but narrower and more environment‑locked.
+
+---
+
+## Concrete direction if you choose Project 2
+
+To make it maximally compelling and safe from “trivial entropy collapse”:
+
+1. **Start with inference‑time only (EM‑INF)**  
+   - Implement a family of entropy‑reduction schemes:
+     - Adaptive temperature based on running entropy.
+     - Penalize high entropy at “decisive” tokens (e.g., near equation steps, code tokens).
+   - Evaluate on math & coding benchmarks for accuracy vs. diversity.
+
+2. **Add EM‑FT with *guardrails***  
+   - Fine‑tune on self‑generated CoT traces for math/coding with loss:
+     - L = CE(data) + λ · H(tokens) but only on tokens where self‑consistency or a verifier indicates likely correctness.
+   - Compare to naive global entropy minimization to show the importance of conditional entropy reduction.
+
+3. **EM‑RL with structured reward**  
+   - Start with pure −entropy reward to study its effect on:
+     - Per‑token entropy histograms.
+     - Reasoning depth / length / branching.
+   - Then extend to two‑term rewards:
+     - R = α·(−entropy) + β·(correctness proxy)  
+       where correctness proxy = pass@k, verifier score, or self‑consistency.
+
+4. **Key research questions to answer**
+   - Under what conditions does entropy reduction:
+     - Increase reasoning accuracy?
+     - Cause brittle over‑confidence?
+   - Is there a “sweet spot” entropy regime that maximizes math/coding accuracy?
+   - How does entropy shaping interact with sampling strategies (temperature, top‑p, nucleus, self‑consistency)?
+
+This gives you a clean narrative and multiple publishable ablations.
+
+---
+
+## Final recommendation
+
+You should pursue **Project 2: entropy‑minimization for LLM outputs**.
+
+It is:
+
+- More directly connected to improving math and coding reasoning.
+- Conceptually cleaner, with clear theoretical and empirical hooks.
+- Easier to implement and iterate on with standard LLM infra.
+- Easier to evaluate rigorously on reasoning benchmarks.
+- More broadly impactful as a foundational technique for controlling model confidence and behavior.
+
+If you still like the “agent” angle from Project 1, you can later apply your entropy‑shaped models to tool‑use or web‑agent settings, but as a core research project focused on reasoning and RL, Project 2 is the stronger and more leverageable choice.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Epoch 10, Comparison 5 was unclear. Skipping.
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+You’re comparing (1) offline RL from an LLM’s own rollouts (ReST) vs. (2) building a massive verified‑QA dataset + generative verifier + “Zero RL” directly on base models. You want a recommendation specifically for improving math/coding reasoning.
+
+Here’s the short, actionable recommendation first, then a breakdown:
+
+**Recommendation: Do Project 2 *if* you can realistically invest in building/curating a strong verifiable‑QA corpus and a good verifier.  
+Do Project 1 if your compute/data budget is tighter and you want a more incremental, algorithmic RL contribution that reuses existing data and policies.**
+
+If your main goal is *maximizing reasoning capabilities* (math/coding) rather than purely method novelty, Project 2 has higher upside but is more operationally demanding.
+
+---
+
+## Summary comparison
+
+### Project 1 – ReST‑style offline RL on self‑generated data
+
+**Core idea:**  
+1. Start from a reasonably strong initial policy (LLM).  
+2. Generate trajectories (solutions/answers) to tasks.  
+3. Get human (or heuristic) preferences/ratings.  
+4. Run offline RL to learn from this fixed batch and update the policy.
+
+**Pros:**
+- **Methodologically clean**: well‑defined offline RL problem with lots of algorithmic levers to pull (conservative/offline RL, importance weighting, value regularization, etc.)
+- **Data‑efficient**: explicit aim is reuse of existing trajectories; you can squeeze more out of expensive human‑rated or tool‑generated data.
+- **Lower infra burden**: you rely primarily on an existing model and existing tasks; no need to crawl and curate web‑scale data.
+- **Good for research clarity**: ablations on RL algorithms, regularization, batch design, etc., are straightforward and publishable.
+
+**Cons (for math/coding reasoning):**
+- **Ceiling limited by rollout + preference quality**: If your initial model is weak on deep reasoning, its own rollouts may not contain sufficiently good reasoning traces; you may mostly learn to be “slightly better at what it already does.”
+- **Offline RL brittleness**:  
+  - Distribution shift between training batch and updated policy can cause overestimation and degeneracy.  
+  - Requires careful design (e.g., conservative Q‑learning, behavior regularization) to avoid exploiting “gaps” in the batch.
+- **Alignment to preferences vs. actual correctness**: If your reward is preference‑based (human ratings, synthetic heuristics), you risk optimizing for “looks correct” rather than “is mathematically correct,” which is especially dangerous in math and coding.
+
+**Best suited for you if:**
+- You want to contribute new RL algorithms/insights for LLMs.  
+- You have a decent base model and some existing dataset of math/coding problems + scores/labels (e.g., from execution or tests).  
+- You want a controlled, algorithm‑heavy project rather than a data/infra‑heavy one.
+
+---
+
+### Project 2 – Verifiable, multi‑domain Q&A dataset + generative verifier + Zero RL
+
+**Core idea:**  
+1. **Construct a large multi‑domain QA dataset** with *verifiable* answers (via scraping/crawling, formal problems, tests, etc.).  
+2. **Train a generative verifier** that uses chain‑of‑thought and context, rather than static rules, to judge correctness.  
+3. **Apply “Zero RL”**: directly RL‑train base LLMs from scratch (or nearly so) on this reward signal, skipping intermediate supervised fine‑tuning, to improve reasoning generality.
+
+**Pros (strong for math/coding):**
+- **Correctness‑oriented reward**:  
+  - For math: you can use symbolic solvers, unit tests, or numeric checks as ground truth to train the verifier.  
+  - For coding: you can use test suites, static analysis, run‑time checks, etc.  
+  Verifier then generalizes beyond simple pass/fail.
+- **Directly optimizes reasoning behavior**:  
+  - Chain‑of‑thought‑aware verifier can reward high‑quality intermediate reasoning, not just the final answer.  
+  - Allows you to favor systematic problem solving rather than shortcuts or lucky guesses.
+- **Potentially higher performance ceiling**:  
+  - A good verifier + large high‑quality dataset can push models to systematically explore more complex reasoning patterns.  
+  - Comparable in spirit to what’s empirically worked best in contemporary frontier RL‑for‑reasoning efforts.
+
+**Cons:**
+- **Heavy data/infra cost**:  
+  - Web crawling, cleaning, deduplicating, decontaminating (to avoid test leakage), and validating answers is a nontrivial engineering effort.  
+  - For math/coding, you may need a fair bit of tool integration (executors, solvers).
+- **Verifier training is itself a hard problem**:  
+  - Needs careful design to avoid reward hacking.  
+  - Must be robust to subtle reasoning errors and adversarial outputs.  
+  - Training and validating the verifier can become a whole project on its own.
+- **Zero‑RL on base models is compute‑expensive**:  
+  - Skipping supervised fine‑tuning usually means RL has to do more “shaping” from scratch.  
+  - You may need substantial steps and careful curriculum to avoid instability.
+
+**Best suited for you if:**
+- You care primarily about *actual improvement in general‑purpose reasoning* rather than purely algorithmic elegance.  
+- You have access to decent compute + some engineering/data support.  
+- You want to create shared infrastructure (dataset + verifier) that can underpin many future projects.
+
+---
+
+## Focusing on math and coding reasoning
+
+For **math and coding**, two properties matter most:
+
+1. **Ground‑truth verifiability**:  
+   - You can often check correctness automatically: run code; compare final numeric result; use theorem/proof checkers or symbolic tools in some domains.
+   - This makes a powerful, high‑fidelity reward signal possible.
+
+2. **Sensitivity to shallow vs. deep reasoning**:  
+   - It’s easy for models to overfit to pattern‑matching or lucky shortcuts.  
+   - You want an evaluation and reward mechanism that *cares about the reasoning process*, not just surface‑level answers.
+
+Project 2 aligns more closely with both:
+
+- You can directly harness execution/test‑based ground truth to train a verifier that:
+  - Rewards correct intermediate reasoning (e.g., correct decomposition into subproblems, intermediate lemmas) and penalizes subtle logical slips.
+  - Can be adapted to new domains (algebra, combinatorics, dynamic programming, systems design) by conditioning on domain context.
+
+- RL on top of such a verifier can:
+  - Encourage exploration of longer chains of thought.  
+  - Penalize spurious short “guesses” that pass naive heuristic filters but fail deeper checks.
+
+By contrast, Project 1’s offline RL from self‑rollouts is excellent if:
+- You already have a strong code/math model generating reasonably good traces and you want to refine it.  
+But it’s weaker as a *primary engine* for pushing raw base models toward strong reasoning, because:
+- The training signal is tied to the quality/diversity of your initial rollouts.  
+- If you’re starting from mediocre reasoning, you risk compressing mediocre patterns rather than discovering qualitatively better strategies.
+
+---
+
+## Decision guidance based on constraints
+
+Answer these for yourself; I’ll map to a recommendation:
+
+1. **Compute and engineering capacity**
+   - Can you realistically run large‑scale crawling, cleaning, and verification infrastructure?
+   - Can you maintain a verifier training pipeline plus RL training on a base LLM?
+
+   - If **yes** → Project 2.  
+   - If **no** → Project 1 is more realistic and still interesting.
+
+2. **Primary novelty target**
+   - Are you aiming for **methodological RL contributions** (offline RL algorithms, stability, theoretical insights)? → Project 1.  
+   - Are you aiming for **large jumps in real‑world reasoning performance** and reusable assets (datasets/verifiers)? → Project 2.
+
+3. **Time horizon and risk tolerance**
+   - Need a more controlled, shorter‑horizon project with clear milestones and ablations? → Project 1.  
+   - Comfortable with a more ambitious, infra‑heavy project with higher upside but more risk? → Project 2.
+
+4. **Access to good evaluators**
+   - Have strong automatic evaluators (test suites, contest‑style math problems with known solutions, etc.)? → Project 2 leverages this exceptionally well.  
+   - If you only have noisy or sparse preference data, Project 1 might be easier to stand up.
+
+---
+
+## Concrete “if I were you” recommendation
+
+Given that you’re an AI researcher and your explicit aim is **improving LLM reasoning on math and coding with RL**:
+
+- **If you have moderate-to-strong compute and at least some engineering bandwidth**:  
+  I would **pursue Project 2**.  
+  - It’s better aligned with correctness‑oriented domains.  
+  - It builds long‑lasting infrastructure (verifier + dataset).  
+  - It positions you close to the frontier of RL‑driven reasoning improvements.
+
+- **If you are more constrained on infra/compute or want a more tightly scoped, algorithmic project**:  
+  I would **pursue Project 1**, but with a strong emphasis on:
+  - Using *execution‑based rewards* where possible (run code, check math answers).  
+  - Incorporating conservative/offline RL techniques to keep things stable.  
+  - Careful study of how offline RL interacts with chain‑of‑thought traces for math/coding.
+
+If you tell me your approximate compute budget, how many people can realistically work on data/infra, and your preferred publication venue type (theory‑leaning vs system/empirical), I can give a more specific “Project X with Y modifications” recommendation.
+</transcript>
+Response:
+UNCLEAR
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Epoch 10, Comparison 27:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+You should pursue **Project 1**.
+
+Here’s a structured comparison and why I think Project 1 is the better bet, especially for a researcher focused on *advancing* LLM reasoning (math, coding, multimodal) rather than just packaging an existing trick.
+
+---
+
+## High-level differentiation
+
+- **Project 1:**  
+  *Core contribution*: A *training-time* method (dataset + RL) to **alter the model’s internal reasoning behavior**, especially in a multimodal setting, with a novel GRPO-based reward targeting *quality of reflection*.
+
+- **Project 2:**  
+  *Core contribution*: A *prompting/inference-time* procedure for **iterative self-critique to improve code/command generation**, avoiding explicit rewards and heavy training.
+
+Both are about “self-reflection”, but:
+- Project 1: changes the model’s *policy* and internal habits of reasoning.
+- Project 2: changes the *procedure* we wrap around a mostly fixed policy.
+
+From a research novelty + impact standpoint, that distinction is critical.
+
+---
+
+## Criteria-by-criteria comparison
+
+### 1. Novelty and research contribution
+
+**Project 2** resembles (and will be compared to):
+- “Reflexion”-style methods (Shinn et al.), Self-Refine, Tree-of-Thoughts/CoT-SC, and other critique-improve loops.
+- Many recent papers use “LLM-as-a-critic” to iteratively refine code, plans, or tool calls.
+
+Your specific framing (“few demonstrations, no task‑specific reward function”) is nice, but:
+- The core mechanism—LLM critiques its own output and iteratively improves—is well-trodden.
+- Novelty would need to come from **clever engineering details or extensive empirical evaluation**, which makes it more incremental than conceptual.
+
+**Project 1** taps into:
+- Reflection-based training (e.g., Self-Refine, RLAIF with rationale supervision), but extends it to:
+  - **Multimodal reasoning**, which is significantly less saturated.
+  - **Explicit RL optimization** over reflection *quality* (concise, cognitively meaningful, non-redundant) via GRPO.
+  - A structured *reflection dataset* that could itself be a valuable artifact.
+
+This is closer to what would be considered a “training paradigm” contribution, not just a prompting trick. It opens room for:
+- Analysis of how reflection signals affect internal reasoning patterns.
+- New reward designs specialized for reflections (vs task outcomes).
+
+**Verdict**: Project 1 is more likely to yield a **substantively novel, publishable direction**; Project 2 is more incremental unless you introduce a clearly new mechanism on top.
+
+---
+
+### 2. Alignment with “improving reasoning” (math, coding)
+
+**Project 2**:
+- Very natural for **coding / command synthesis**.
+- Less naturally generalizable to pure math reasoning or multimodal tasks, unless you design domain-specific critique prompts.
+- Improvement mostly comes from *search* (iterated refinement) rather than a more fundamentally capable model. That’s useful, but less intellectually satisfying if your goal is deeper reasoning ability.
+
+**Project 1**:
+- Directly defines a **training signal for reasoning quality** through reflections.
+- Once the reflection skill is internalized:
+  - The model can deploy that skill at inference (even with fewer steps).
+  - You can test it on math, coding, and multimodal reasoning tasks (e.g., chart QA, visual math problems, code from diagrams).
+- The GRPO reward lets you incorporate not only correctness but also *structure of thought* as a learnable target.
+
+**Verdict**: For *general reasoning capability*—not just better inference-time search in code—Project 1 is better aligned.
+
+---
+
+### 3. Multimodality and future relevance
+
+**Project 2** is mainly text/code-centric. You can stretch it to multimodal tasks, but:
+- The critique loop is usually text-on-text: “here is code, here is why it’s wrong.”
+- Extending that loop into robust **multimodal reasoning** (e.g., visual inspection, spatial reasoning) is nontrivial and underexplored.
+
+**Project 1** is explicitly **multimodal**:
+- You can study how reflection differs between:
+  - Text-only math/coding tasks.
+  - Image+text reasoning tasks (diagrams, UI screenshots, charts).
+- This fits the current research frontier where major labs are trying to get MLLMs to *really reason* over images, UIs, and complex multimodal scenes.
+- A reflection-focused RL scheme *for multimodal models* is still relatively underexplored and would likely attract attention.
+
+**Verdict**: Project 1 is more forward-looking and distinctive in a multimodal world.
+
+---
+
+### 4. RL and reward design opportunities
+
+**Project 2** explicitly avoids task-specific rewards. That’s a strength in practicality, but it also limits:
+- Your ability to **study RL dynamics**, reward shaping, and policy improvement in detail.
+- Any substantial contribution to the RL-for-LLMs research agenda.
+
+**Project 1** embraces RL:
+- GRPO-based optimization over a *reflection-quality reward* is a clear research contribution:
+  - How do you formalize “concise, cognitively meaningful, non-redundant” reflections?
+  - Can you show that optimizing this reflection reward leads to better task performance than optimizing task reward alone?
+- You can compare:
+  - Supervised fine-tuning on reflection data vs
+  - SFT + GRPO on reflection reward vs
+  - Direct optimization on task success only.
+- This is exactly the kind of empirical disentangling that the field currently lacks.
+
+**Verdict**: Project 1 offers **richer RL and reward-design questions**, which is more publishable in both ML and RL communities.
+
+---
+
+### 5. Practicality, difficulty, and risk
+
+**Project 2** – Pros:
+- Logistically simpler:
+  - No RL needed.
+  - Mostly prompt engineering + evaluation pipeline.
+- Cheaper to run: you can do this with API calls and a few-shot setup.
+- Faster iteration: ideal if you want a low-risk, high-chance-of-working project.
+
+Cons:
+- To make it publishable, you’ll need:
+  - Strong baselines (e.g., existing critic-refine or sampling methods for code).
+  - Clear, significant gains on established code benchmarks.
+- Many groups are already doing variants of this; risk of being “yet another self-critique loop”.
+
+**Project 1** – Pros:
+- Conceptually stronger and more original.
+- Can yield:
+  - A new dataset (reflections),
+  - A new RL recipe for reflection,
+  - And a broadly applicable training method for MLLMs.
+
+Cons:
+- Heavier engineering:
+  - Need an advanced MLLM to generate reflections and initial answers.
+  - Need infrastructure for RL (GRPO or similar) at scale.
+  - Reward design and tuning might be finicky.
+- You’ll need either local training resources or good access to fine-tuning APIs that support RL-ish methods.
+
+**Verdict**:
+- If your environment has **reasonable compute and training infra**, Project 1 is a great fit.  
+- If you are severely compute-constrained and limited to black-box API calls, Project 2 is safer but less impactful.
+
+---
+
+### 6. Publication and long-term research trajectory
+
+**Project 1** positions you to:
+- Publish in venues interested in:
+  - LLM reasoning,
+  - RL for LLMs,
+  - Multimodal learning.
+- Build a **research line**:
+  - Variants of the reflection reward,
+  - Analysis of internal representations before/after reflection training,
+  - Scaling laws for reflection depth vs performance,
+  - Transfer from multimodal reflection training to pure text reasoning.
+
+**Project 2** is more:
+- System/agent oriented.
+- Attractive if your goal is a **practical agent** that can solve computer tasks with minimal supervision.
+- Follow-ups might be:
+  - Combining self-critique with tools,
+  - Integration into agent frameworks,
+  - Latency/efficiency improvements.
+
+If your career goal is to be recognized for **methodological advances in LLM training for reasoning**, Project 1 is more aligned.
+
+---
+
+## Clear recommendation
+
+Given your stated focus—*improving LLM reasoning capabilities such as math and coding with reinforcement learning*—and assuming you have at least moderate access to training resources:
+
+> **You should pursue Project 1.**
+
+Rationale in a sentence:
+- It is more novel, better aligned with RL-centric research, extends naturally to multimodal reasoning (a high-impact frontier), and can produce both a method and a dataset with strong publication potential.
+
+---
+
+## If you still like parts of Project 2
+
+You can integrate the spirit of Project 2 into Project 1:
+
+- Use the **recursive critique loop** as a *generator of reflection trajectories* for your dataset in Project 1.
+- Then:
+  - Train the policy to imitate not only single-step reflections but **multi-step refinement traces**.
+  - Design your GRPO reward to favor reflection patterns that empirically led to better downstream answers in these trajectories.
+
+That gives you:
+- The practical strengths of Project 2 (iterative self-critique)  
+- Wrapped inside the more principled, training-time framework of Project 1.
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Epoch 12, Comparison 5:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+You should pursue **Project 2**.
+
+Here’s a structured comparison and why Project 2 is the better choice for your goals.
+
+---
+
+## 1. Alignment with your stated goal
+
+Your aim: *“improving LLM reasoning capabilities such as math and coding tasks with reinforcement learning.”*
+
+- **Project 1 (ReST / offline RL)**  
+  - Strongest fit when:
+    - You have a fixed dataset of model samples + preference labels.
+    - You care about *data efficiency* and *stability* of offline training.
+    - The domain has relatively well‑shaped preferences (e.g., translation quality, stylistic alignment).
+  - Weaker fit for:
+    - Complex, multi-step reasoning with brittle reward signals (math, code), where exploration and interactive data collection often matter.
+    - Understanding *which RL algorithmic choices* actually help with reasoning.
+
+- **Project 2 (Algorithmic comparison on reasoning)**  
+  - Directly targeted at:
+    - *Reasoning tasks* (math, coding) with RL.
+    - Systematically probing how different feedback-driven algorithms behave: Expert Iteration, PPO, Return‑Conditioned RL.
+    - Studying sparse vs dense rewards, heuristic vs learned reward models, scaling with model size, and the effect of prior SFT.
+  - This will produce *actionable, generalizable insights* about RL for reasoning, rather than being tied to a single training paradigm.
+
+**Verdict:** Project 2 is conceptually better aligned with your core scientific question: how to make RL actually work for reasoning in LLMs.
+
+---
+
+## 2. Scientific contribution and novelty
+
+- **Project 1**
+  - ReST / offline RL for LMs has clear precedent in recent work:
+    - Offline RL over model‑generated trajectories and preference labels is actively explored (variants of ReST, RLAIF, offline RLHF, etc.).
+  - Novelty levers:
+    - Better offline RL algorithms or regularization for language.
+    - New data‑collection schemes or preference modeling.
+  - Risk:
+    - You may end up re‑deriving or modestly tweaking known methods (e.g., KL‑regularized policy improvement on static data), which is less compelling unless you have a *very strong* new offline RL angle (e.g., provable guarantees, major empirical gains, or a highly novel dataset).
+
+- **Project 2**
+  - The field still lacks **clear, comparative, empirical baselines** for:
+    - How Expert Iteration vs PPO vs Return-Conditioned RL compare on reasoning.
+    - How reward sparsity/density and reward-model quality affect each algorithm.
+    - How scaling and initialization (base vs SFT) interact with RL updates.
+  - Strong contribution:
+    - A careful, large‑scale comparison, with consistent tasks and evaluation, could become a *reference paper* for RL methods on LLM reasoning, similar in spirit to benchmark‑style contributions (but with algorithmic insight, not just a dataset/benchmark).
+
+**Verdict:** Project 2 has higher potential to produce *field-shaping* insights if executed rigorously.
+
+---
+
+## 3. Technical difficulty vs payoff
+
+- **Project 1**
+  - Challenges:
+    - Getting offline RL to behave well with high‑dimensional, off‑policy language data is nontrivial: distributional shift, overestimation, and collapse to narrow modes.
+    - You’ll spend a lot of time on stability tricks, regularization, and hyperparameters that may not generalize or be of broad scientific interest.
+  - Payoff:
+    - Likely a strong systems paper if you can show *clear, consistent gains* over standard SFT or RLHF at lower cost.
+    - But the line between “another practical tweak to RLHF” and a publishable, novel algorithm can be thin.
+
+- **Project 2**
+  - Challenges:
+    - Significant engineering: multiple algorithms, reward types, model sizes, evaluation harness for reasoning tasks.
+    - Need to keep the comparison *fair, reproducible, and well‑controlled*.
+  - Payoff:
+    - Even if no algorithm emerges as dominant, a *negative or nuanced result* (e.g., “PPO underperforms simple Expert Iteration given noisy rewards and limited compute”) is still valuable, because:
+      - It guides practitioners.
+      - It clarifies what matters most: reward quality? search? initialization?
+    - Easier to extract clean takeaways and ablations that are interesting regardless of exact numbers.
+
+**Verdict:** Project 2 has more robust payoff for the same or slightly higher engineering cost, and negative results remain publishable and informative.
+
+---
+
+## 4. Career and positioning value (as an AI/RL researcher)
+
+- **Project 1**
+  - Positions you as:
+    - Someone advancing a particular RLHF/Offline RL training paradigm.
+    - More incremental if your main novelty is “we do offline RL over model samples and preferences,” unless you push algorithmic boundaries.
+  - Good if:
+    - You already have a unique dataset or partnership (e.g., high‑quality human preference labels).
+    - You want to specialize in *offline RL theory/algorithms* applied to LMs.
+
+- **Project 2**
+  - Positions you as:
+    - A researcher with a *holistic* understanding of RL for LLMs.
+    - Someone who can say, with evidence, “Here’s what works and why, across methods and regimes.”
+  - Benefits:
+    - You’ll internalize which knobs matter (reward shaping, exploration, SFT, search) — crucial for leading future projects.
+    - Easy to spin off multiple follow‑ups: hybrid methods, improved reward modeling, task‑specific adaptations, or new benchmarks informed by your findings.
+
+**Verdict:** For long‑term impact and visibility as an “RL-for-LLMs and reasoning” expert, Project 2 is stronger.
+
+---
+
+## 5. Risk profile and feasibility
+
+- **When Project 1 might dominate:**
+  - You have:
+    - A large, high‑quality preference dataset already collected.
+    - Limited ability to run many separate training runs (i.e., offline/batch work is cheaper than interactive RL).
+    - A concrete application (e.g., code synthesis within a company) where offline RL on logs is exactly what’s needed.
+  - Then: ReST / offline RL is a natural fit and can give immediate practical benefit.
+
+- **For a typical research setting (PhD/postdoc/independent):**
+  - You likely:
+    - Can run multiple mid‑sized models and RL experiments.
+    - Have access to public math/coding benchmarks and can instrument them for rewards.
+  - In this environment, **comparative algorithmic work (Project 2)** is both feasible and high-yield.
+
+---
+
+## 6. How to shape Project 2 for maximum impact
+
+If you choose Project 2, I recommend:
+
+1. **Nail down a focused task suite**  
+   - A few math benchmarks (e.g., GSM8K, MATH) and coding tasks (e.g., HumanEval, MBPP).
+   - Make sure you can auto‑grade or reliably reward (unit tests for code, symbolic/heuristic checks for math).
+
+2. **Design a clear comparison grid**
+   - Algorithms: Expert Iteration, PPO, Return‑Conditioned RL (and possibly a strong “no-RL” baseline like better SFT or rejection sampling).
+   - Reward types:
+     - Sparse (0/1 correctness) vs dense (step bonuses, intermediate reasoning, etc.).
+     - Heuristic vs learned reward model.
+   - Model regimes:
+     - Base vs SFT‑initialized.
+     - Maybe 2–3 model sizes to observe scaling.
+
+3. **Pre‑commit to key questions**
+   - Examples:
+     - Does Expert Iteration outperform PPO when rewards are noisy but verifiable at the end?
+     - Does Return‑Conditioned RL help with exploration in sparse‑reward math tasks?
+     - How much of the gain comes from search vs direct policy gradients?
+     - Is a small but good reward model more valuable than moving to a bigger policy model?
+
+4. **Deliver strong qualitative + quantitative analysis**
+   - Not just scores, but:
+     - Error type breakdown.
+     - Sensitivity to reward imperfections.
+     - Stability and sample efficiency curves.
+
+This will make the paper useful both to practitioners (“what should I actually run?”) and theorists (“what failure modes matter in practice?”).
+
+---
+
+## Final recommendation
+
+Pursue **Project 2**.
+
+It is better aligned with your stated objective (improving LLM reasoning with RL), has higher potential for broadly impactful, generalizable insights, and positions you as a central voice in how RL should actually be used to enhance reasoning in large language models. Project 1 is attractive if you have very specific offline data or deployment constraints, but as a primary research direction, Project 2 is the stronger choice.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Epoch 13, Comparison 19:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+You should pursue **Project 1**.
+
+Here’s a structured comparison and why I’d recommend it.
+
+---
+
+## 1. Scientific focus and clarity of contribution
+
+### Project 1: Outcome‑based exploration for RL‑fine‑tuning LLMs
+- **Core idea**: Improve RL for reasoning (math/coding) by explicitly shaping exploration *at the level of final answers*, via:
+  - A **historical exploration bonus** (UCB-style) based on how often an answer has been seen before.
+  - A **batch exploration penalty** to diversify answers produced in the same batch.
+- **Contribution is sharply framed**:
+  - Directly tackles a known bottleneck in RL for reasoning LLMs: **mode collapse / lack of exploration in answer space**.
+  - Integrates cleanly into existing RLHF/RLAIF or GRPO-style setups.
+  - Naturally produces clear baselines: “RL w/o exploration bonuses” vs “RL + outcome‑based exploration.”
+
+You are essentially asking:  
+> How much can better principled exploration alone improve reasoning RL on top of current LLMs?
+
+This is crisp, easy to ablate, and relevant to current practice.
+
+---
+
+### Project 2: Diffusion language models as reasoning agents + diffu‑GRPO
+- **Core ideas (several at once)**:
+  1. Take **masked diffusion LMs**, adapt them to reasoning via masked SFT.
+  2. Introduce **self‑improvement behavior** in a masked SFT stage.
+  3. Invent **diffu‑GRPO**, a critic‑free policy‑gradient scheme adapted to diffusion.
+  4. Argue that this preserves and exploits the **coarse‑to‑fine generation paradigm** for reasoning.
+- This is **ambitious and multifaceted**, but:
+  - You’re simultaneously making a bet on an **architecture (diffusion LMs)** that is not yet standard in reasoning tasks.
+  - The RL algorithmic novelty and the underlying model novelty can interact in complicated ways, making it harder to isolate which component helps.
+  - Evaluation might be muddied: is performance due to the diffusion model, the SFT design, or diffu‑GRPO?
+
+In short: very cool, but “two hard problems at once”:  
+1) make diffusion LMs competitive for reasoning, and  
+2) invent a new RL algorithm for them.
+
+---
+
+## 2. Feasibility, risk, and time to “publishable signal”
+
+### Project 1
+- **Engineering feasibility**:
+  - You can layer outcome‑based exploration on top of:
+    - Standard autoregressive LLMs you already have,
+    - Existing GRPO/PPO-style infrastructure.
+  - The main new machinery:
+    - A system to track **answer frequencies** historically (e.g., hashing final outputs),
+    - Batch‑wise uniqueness penalties at training time.
+- **Experimental loop is simple**:
+  - Start with a known RL baseline for math/coding.
+  - Turn on historical exploration bonus → check win on GSM8K/MATH/HumanEval/MBPP.
+  - Turn on batch penalty → measure diversity vs performance.
+  - Systematically ablate bonus strength, memory window, etc.
+- **Risk profile**:
+  - Low‑to‑moderate.  
+  - Even if gains are modest, you can cleanly characterize:
+    - When/where exploration bonuses help,
+    - How they interact with standard RLHF setups,
+    - Whether they resist reward hacking/mode collapse.
+  - This is “directly actionable” for people currently running RL for math/coding.
+
+### Project 2
+- **Engineering complexity**:
+  - You need: a **diffusion language model** implementation that performs well enough on text, with masked denoising steps, and is efficient to train with RL.
+  - You must adapt policy gradients to a **multi‑step diffusion process** (likelihood over trajectories in latent space or mask states), and make this actually stable.
+  - Tooling, libraries, and community experience are much thinner than for autoregressive LLM + PPO/GRPO.
+- **Risk profile**:
+  - High. Several possible failure modes:
+    - Diffusion LMs may lag current autoregressive LLMs on reasoning, making the comparison unflattering.
+    - RL on diffusion steps may be unstable/too slow, making large‑scale experiments hard.
+    - You might end up showing “it works” but not “it is clearly better than straightforward autoregressive RL.”
+  - Time to first convincing result is longer, with many more “unknown unknowns.”
+
+---
+
+## 3. Alignment with current research frontier
+
+### Where the field currently is:
+- State‑of‑the‑art reasoning capabilities (math, coding) are dominated by:
+  - **Autoregressive** models + **RL-style training** (e.g., GRPO, variants of PPO, DPO-like objectives plus RL, etc.).
+- Two pressing practical problems:
+  1. Scaling RL reliably,
+  2. Avoiding collapse in solution diversity and brittle exploitation of the reward signal.
+
+### How each project fits:
+
+- **Project 1**:
+  - Directly plugs into the current RL-for-reasoning stack.
+  - The UCB‑style exploration idea is grounded in classic bandit theory but adapted to **LLM answer space** — this is attractive conceptually and marketable (“bandits for LLM reasoning”).
+  - Outcome‑based exploration is exactly what many practitioners are currently hacking informally via entropy bonuses, diverse decoding, etc.; you’re providing a principled, evaluated framework.
+
+- **Project 2**:
+  - Conceptually fresh (diffusion for reasoning), but orthogonal to where most current industrial and open‑source tooling is.
+  - If diffusion LMs don’t clearly beat standard LLMs on reasoning, reviewers and practitioners may question the practical relevance, regardless of algorithmic elegance.
+
+---
+
+## 4. Evaluation, ablations, and story strength
+
+### Project 1: Easier to produce a tight story
+You can neatly structure a paper as:
+
+1. **Motivation**: RL‑finetuned LLMs under‑explore in answer space; this hurts math/coding generalization and robustness.
+2. **Method**:
+   - Historical UCB‑style bonuses on **final answers** (not token‑level).
+   - Batch‑level diversity penalties to avoid local collapse at training time.
+3. **Theoretical intuition**:
+   - Relate to bandits / count-based exploration, but tailored to structured outputs.
+4. **Experiments**:
+   - Multiple tasks (GSM8K, MATH, HumanEval, etc.).
+   - Baselines: SFT, vanilla RL, RL + entropy reg, RL + your exploration.
+   - Ablations: historical vs batch components, effect of rarity measure, effect on overfitting.
+5. **Analysis**:
+   - How exploration changes the **distribution** of intermediate reasoning chains (not just final accuracy).
+   - Robustness to distribution shift (harder test sets, adversarial prompts).
+
+You can produce a clear set of takeaways even if performance improvements are moderate, because your question is well-defined and central: *Does principled outcome‑space exploration matter for RL‑reasoning LLMs?*
+
+### Project 2: Harder to disentangle contributions
+Your story is at risk of fragmenting:
+
+- If diffusion+diffu‑GRPO works well:
+  - You still need strong baselines: same‑capacity autoregressive LLM with comparable SFT+RL.
+- If it doesn’t outperform, reviewers could interpret it as: “interesting, but why abandon autoregressive models for this?”
+- Ablations become large and expensive:
+  - Diffusion vs autoregressive,
+  - With vs without diffu‑GRPO,
+  - With vs without masked SFT self‑improvement,
+  - Coarse‑to‑fine vs one‑shot decoding.
+
+That’s a lot of moving parts for one project.
+
+---
+
+## 5. Strategic considerations for you as a researcher
+
+Given you’re an AI researcher focusing on **improving LLM reasoning with RL**:
+
+- **Project 1** gives you:
+  - Fast iteration with standard tools, existing checkpoints.
+  - Results that are immediately interpretable and usable by others in RLHF/RLAIF/GRPO pipelines.
+  - A solid platform to later explore more sophisticated exploration schemes, curriculum learning, or integration with process/step‑level rewards.
+
+- **Project 2** is more of a “long bet”:
+  - If you already have deep experience and tooling with diffusion LMs for language, and a long runway, it could become a high‑impact line.
+  - But as a primary project meant to produce clear results in LLM reasoning with RL, it’s a much riskier vehicle.
+
+---
+
+## Recommendation
+
+Pursue **Project 1** as your main project.
+
+If you are excited about Project 2, consider:
+
+- Keeping it as a **follow‑up or side exploration** once you have:
+  - A strong RL‑reasoning baseline from Project 1, and
+  - Clarity on exactly what you want diffusion to buy you (e.g., better handle multi‑step deliberation, editing intermediate reasoning, or uncertainty quantification).
+
+But for a focused, impactful, and feasible next step in improving LLM reasoning with RL, **Project 1 is the better choice.**
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Epoch 14, Comparison 33:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+You should pursue **Project 2** (self‑evolving web‑interaction curriculum with outcome‑supervised RL), unless you have a very specific empirical pipeline and strong access to large‑scale, high‑quality software evolution data and evaluation partners in industry. Here’s a concise, research‑oriented comparison and recommendation.
+
+---
+
+## High‑level comparison
+
+### Project 1 – SWE‑RL on software evolution data
+
+**Pros**
+
+- **Clear, valuable domain**: Software engineering is an “aspirational” use case; better LLMs for code and bug‑fixing are highly impactful and easy to benchmark.
+- **Rich structured signals**: Commits, diffs, issues, and PR discussions give dense supervision about reasoning sequences, refactor steps, and error modes.
+- **Feasible reward shaping**: Rule‑based similarity between model output and ground‑truth patches (plus tests) is practical for RL; you can piggyback on:
+  - test outcomes (pass/fail),
+  - patch similarity,
+  - static analysis or linters.
+- **Stronger story for “recovering developer reasoning”**: The mapping from problem → patch sequence → discussion is an interpretable approximation to the underlying reasoning.
+
+**Cons / Risk**
+
+- **Reward quality is brittle**: Simple similarity‑based rewards can overfit to surface forms (e.g., near‑duplicate patches) and miss “different but valid” solutions, especially in refactor tasks.
+- **Credit assignment is non‑trivial**: Developer reasoning is spread across commits, code review comments, and implicit context; constructing a clean RL environment is messy.
+- **Data curation burden** is huge:
+  - Aligning issues ↔ PRs ↔ diffs ↔ tests,
+  - Filtering out noisy/irrelevant commits,
+  - Normalizing heterogeneous repos.
+- **General reasoning gains are less guaranteed**: Improved coding ≠ improved abstract reasoning, unless you very carefully design multi‑step reasoning and explanation modeling into the training setup.
+
+**Best version of this project**
+
+It becomes compelling if you:
+
+- Build a **clean benchmark**: “Given an issue and repo snapshot, propose a patch; evaluate via tests and code review‑like heuristics.”
+- Use **multi‑objective rewards**: tests passing, code style / safety, patch size regularization, alignment with commit message intent.
+- Explicitly train for **chain‑of‑thought or stepwise edits** (e.g., plan → edit steps → final patch) instead of only final diffs.
+
+But this requires strong infra, careful data engineering, and often some access to private datasets or industry partners to be truly novel.
+
+---
+
+### Project 2 – Self‑evolving RL curriculum on web interaction
+
+**Pros**
+
+- **Naturally suited to RL**: Web tasks are sequential decision problems with clear environment dynamics and terminal rewards (task done vs failed).
+- **Addresses a frontier capability**: Tool‑using, agentic models that can operate the web are a major active research direction. Strong contribution potential.
+- **Self‑improving training loop**:
+  - Failed attempts generate new tasks or modifications.
+  - You can mine failure modes to densify hard cases and measure robust generalization.
+- **Cleaner outcome‑supervised reward**:
+  - Success/partial success comes from environment state (page reached, form submitted, item located).
+  - You can augment with heuristic shaping: progress toward goal state, DOM/URL similarity, etc.
+- **Better story for curriculum learning and generalization**:
+  - Tasks can be automatically scaled in difficulty.
+  - You can study transfer across sites/layouts and robustness to DOM changes.
+
+**Cons / Risk**
+
+- **Engineering heavy**: Need a web agent environment (browser automation, DOM parsing, sandboxing), logging, and replay.
+- **Evaluation complexity**: Need a good benchmark of web tasks; otherwise you’re optimizing in a somewhat synthetic environment.
+- **Partial observability and brittleness**: DOM changes, dynamic scripts, CAPTCHAs, etc. You’ll need to constrain domain or use mock sites.
+
+**Best version of this project**
+
+It becomes strong if you:
+
+- Ground it in or extend an existing environment (e.g., WebArena‑like, MiniWoB++, or your own sandboxed multi‑site environment).
+- Implement **self‑curriculum** concretely:
+  - From a failed trajectory, derive new tasks: subgoals, perturbed initial states, or “minimal change” variants that isolate the failure.
+- Use **outcome‑supervised RM + RL**:
+  - Train a reward model on human or heuristic labels of “trajectory quality” or “progress.”
+  - Combine with policy gradient or offline RL over stored trajectories.
+- Show **emergent improvements in planning**:
+  - Longer‑horizon success rates,
+  - Fewer unnecessary actions,
+  - Better adaptation to unseen websites.
+
+---
+
+## Which is better for *improving LLM reasoning* and publishable research?
+
+For *reasoning* broadly construed (math, coding, decision‑making), **Project 2 has a clearer path to demonstrating genuine RL‑driven reasoning and planning**, because:
+
+1. **Sequential decision‑making is explicit**  
+   Web tasks force explicit stepwise action selection under uncertainty, with clear intermediate states. This is closer to canonical RL formulations than one‑shot code generation from static data.
+
+2. **Curriculum learning is core to the contribution**  
+   A self‑evolving curriculum is a principled way to:
+   - Focus training on failure modes,
+   - Study how task difficulty scaling affects reasoning depth,
+   - Analyze sample efficiency and generalization.
+
+3. **Generalization and robustness are easier to probe**  
+   You can:
+   - Hold out websites, goal types, or UI layouts;
+   - Measure how well the policy generalizes to new interaction patterns;
+   - Test transfer from simpler to more complex tasks.
+
+4. **Less dependence on messy, real‑world static data**  
+   While web environments are messy, you control the environment. In SWE‑RL you inherit all the messiness of real repository histories and must reverse‑engineer tasks from past human behavior.
+
+5. **Stronger narrative for the community right now**  
+   There’s increasing focus on:
+   - Tool‑augmented LLMs,
+   - LLM agents that can operate browsers/APIs,
+   - RL‑trained agents that improve through interaction, not just static corpora.
+   
+   A self‑evolving curriculum with outcome‑supervised RM fits nicely into this narrative.
+
+---
+
+## When to choose Project 1 instead
+
+Project 1 is the better choice if:
+
+- You have privileged access to large, high‑quality internal software engineering data (issues, PRs, tests, reviews).
+- You can build a **new, challenging benchmark** for code‑reasoning RL on real evolution data (not just another “fix this bug” dataset).
+- You want a more direct route to **industry‑ready coding agents**, less emphasis on environment design.
+
+If you don’t have those advantages, it’s easy for SWE‑RL to become “fine‑tuning on code changes with heuristic rewards,” which is incremental and hard to differentiate from existing code‑LLM + RL work.
+
+---
+
+## Concrete recommendation
+
+Given your description and typical academic resource constraints:
+
+- **Primary recommendation**:  
+  Pursue **Project 2**: self‑evolving curriculum for web‑interaction tasks with outcome‑supervised RL.
+  
+- **Angle to emphasize**:
+  - Formalize how failed attempts generate new tasks (task graph, subgoal mining, or perturbation strategies).
+  - Show that this curriculum outperforms static task sets for:
+    - sample efficiency,
+    - long‑horizon success,
+    - generalization to new websites/tasks.
+  - Use open‑source LLMs to keep it reproducible and impactful.
+
+If you’d like, I can next help you (a) refine the concrete technical design for Project 2 (environment, reward model, RL algorithm choice), or (b) shape 2–3 publishable hypotheses to structure the work.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Epoch 16, Comparison 11:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+You should pursue **Project 2 (VeriFree)**.
+
+Here’s a direct comparison along the axes that typically matter for an AI researcher working on reasoning (math, coding) with RL.
+
+---
+
+## 1. Scientific novelty & potential impact
+
+**Project 1 – ReMax (REINFORCE + variance reduction, no value net)**  
+- Incremental but solid: improves usability and efficiency of a *known* paradigm (RLHF via policy gradient).  
+- Main contribution is algorithmic cleanliness: no value net, fewer hyperparameters, easier to implement and scale.  
+- Conceptual novelty is moderate: variance‑reduction for REINFORCE is a well‑trodden area; the pitch is more in *engineering + practicality* than in changing what LLMs can do.
+
+**Project 2 – VeriFree (implicit verifier via RL on reference answers)**  
+- Conceptually bolder: folds “policy + verifier” into one model via a variational objective.  
+- If it works, this gets at a central open question: *Can we get strong reasoning and self‑evaluation without explicit verifiers or external checkers?*  
+- This is much closer to current frontier questions in math/coding RL (self‑consistency, internal verification, chain‑of‑thought validation, etc.).
+
+**Verdict**: **Project 2** has higher scientific upside and is more likely to produce a publishable, interesting contribution beyond “better RL training recipe”.
+
+---
+
+## 2. Relevance to reasoning tasks (math, coding)
+
+**Project 1**  
+- Primarily improves the *training pipeline* (memory, stability, simplicity).  
+- It will help you run RL on math/coding tasks more cheaply, but doesn’t directly tackle:  
+  - answer checking,  
+  - exploring solution spaces,  
+  - internal verification,  
+  - handling sparse/structured rewards.
+
+**Project 2**  
+- Directly engages with the crux of math/coding RL: *evaluation and verification*.  
+- “Maximize probability of reference answers” under a variational RL view can be tested on:  
+  - exact-match math problems (GSM8K, MATH),  
+  - code generation with unit tests hidden (e.g., competitive programming datasets),  
+  - settings where the model must internally decide whether a solution is good.  
+- You can design experiments where the model’s *implicit verifier* is probed:  
+  - ask the model to rate or edit its own solutions,  
+  - test robustness to adversarially perturbed solutions,  
+  - study calibration of its internal accept/reject boundary.
+
+**Verdict**: For advancing *reasoning* rather than just *infrastructure*, **Project 2** is clearly better aligned.
+
+---
+
+## 3. Practical difficulty & risk
+
+**Project 1**  
+- Lower conceptual risk: REINFORCE + variance reduction is predictable.  
+- Engineering is straightforward: you can base it on existing RLHF implementations and ablate the value head.  
+- Lower chance of a complete “negative result”; you’ll almost surely get *something* that works.
+
+**Project 2**  
+- Higher research risk:  
+  - You need to make the variational framing precise and stable.  
+  - There’s a real chance that “implicit verifier” behavior is weak or fragile.  
+- But the failure modes are still publishable if you analyze *why* a unified policy+verifier struggles (e.g., identifiability issues, mode collapse on reference answers, poor exploration).
+
+**Verdict**: **Project 1** is safer and more incremental. **Project 2** is riskier but higher reward.
+
+---
+
+## 4. Evaluation & contribution clarity
+
+**Project 1**  
+You’d likely evaluate on:  
+- Training stability and sample efficiency versus PPO / standard RLHF.  
+- Memory and wall‑clock improvements.  
+- Final performance on math/coding benchmarks, but as *endpoints*, not focus.
+
+Risk: the contribution reads as “slight improvement over PPO with less GPU use”, which is useful but easy to be overshadowed by continual recipe tuning in industry labs.
+
+**Project 2**  
+You can cleanly pose and test strong, interesting questions:  
+- Does the unified model learn a non‑trivial internal acceptance criterion?  
+- Does it generalize its implicit verification to out‑of‑distribution reasoning tasks?  
+- Does it outperform simple baselines (e.g., direct cross‑entropy on references, or RL with explicit reward models) in:  
+  - solution correctness,  
+  - self‑consistency across samples,  
+  - calibration of its own confidence?
+
+These are more “conceptual result”–friendly and attractive to top venues.
+
+---
+
+## 5. Your profile as an AI researcher
+
+Given that you are *already* an AI researcher, you probably benefit more from:
+
+- Tackling a conceptually interesting, underexplored angle (implicit verifiers, variational framing)  
+- Even with higher risk, as long as you design the project so that both success and failure are informative.
+
+ReMax is great if your near‑term goal is “robust, scalable RL pipeline for many downstream tasks.”  
+VeriFree is better if your goal is to *advance understanding of how LLMs can internally verify and reason*.
+
+---
+
+## Suggested refinement if you choose Project 2
+
+To de‑risk it and make it crisp:
+
+1. **Start from a strong supervised baseline**  
+   - Train with standard next‑token cross‑entropy on reference solutions.  
+   - Then add your RL objective that *reweights* trajectories toward reference answers, framed variationally.
+
+2. **Design explicit probes for the “implicit verifier”**  
+   - Give the model candidate solutions (some correct, some subtly wrong) and ask for:  
+     - binary accept/reject, or  
+     - a scalar “correctness” score.  
+   - Test before and after RL training.
+
+3. **Compare against an explicit verifier baseline**  
+   - Train a separate verifier model (or a classifier head) on the same data, and compare:  
+     - accuracy in recognizing correct solutions,  
+     - effect on downstream RL‑enhanced reasoning.
+
+4. **Apply to math and code specifically**  
+   - Use settings where error types are rich: off‑by‑one bugs, boundary conditions, algebraic slips, etc., to really stress the implicit verifier.
+
+This lets you publish something interesting even if full “VeriFree” doesn’t beat all baselines: you’ll have evidence about when and how internal verification emerges (or fails to).
+
+---
+
+## Bottom line
+
+- If you want **lower risk, more engineering‑oriented impact**: choose **Project 1 (ReMax)**.  
+- If you want **higher scientific payoff, more direct relevance to reasoning and verification**, and you can tolerate research risk: choose **Project 2 (VeriFree)**.
+
+Given your stated goal—improving LLM reasoning on math and coding via RL—I recommend you pursue **Project 2 (VeriFree)**.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Epoch 17, Comparison 25:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+You should pursue **Project 1 (ProRL)**.
+
+Here’s a concise comparison oriented toward an AI researcher thinking about novelty, impact, and tractability for *reasoning-specific* RL on LLMs.
+
+---
+
+## 1. Alignment with your stated goal
+
+Your aim: *improving LLM reasoning capabilities such as math and coding via RL*.
+
+### Project 1: ProRL
+- Directly targets **reasoning** (math/coding) and **exploration of new solution modes**.
+- Prolonged RL with KL control + reference resets is exactly about pushing the model *beyond* what standard sampling from the base model can reach.
+- Very compatible with current “reasoning via RL” trends (DeepSeek-R1, OpenAI o1-like training, etc.): long-horizon credit assignment, chain-of-thought improvements, curriculum-like task suites.
+
+### Project 2: ReST-style offline RL
+- Optimizes **preference alignment** from a fixed dataset, good for general helpfulness or translation.
+- Works best when rewards reflect human preferences on *already plausible* samples.
+- It’s less naturally suited to discovering **novel reasoning strategies** that aren’t in the dataset, because it’s inherently constrained to the support of the offline data.
+
+**Conclusion:** For math/coding reasoning specifically, ProRL is a more direct fit.
+
+---
+
+## 2. Potential impact and novelty (2024–2025 landscape)
+
+### Project 1: ProRL
+- Hot area: long-horizon RL for reasoning, KL-regularized policy optimization, iterative ref-policy resets.
+- Novel directions you can explore:
+  - How long can we push RL before catastrophic drift without KL constraints?
+  - Strategies for **resetting the reference policy**: when, how aggressively, and with what metrics (reward plateau, diversity metrics, entropy, etc.).
+  - Empirical analysis: Are there solution patterns that literally never appear in base-model sampling but emerge only after many RL updates?
+- Strong contributions are possible both in:
+  - Practical scaling recipes (how to stably prolong RL),
+  - Theoretical/empirical understanding of exploration in the reasoning space.
+
+### Project 2: ReST
+- Offline RL for LMs has been actively explored; much of the novelty now is in:
+  - Better offline RL algorithms robust to distributional shift (CQL, conservative objectives, etc.),
+  - Better data curation & preference labels.
+- It’s easier to publish something, but the frontier feels **incremental** unless you bring a new offline-RL method or very novel data.
+
+**Conclusion:** ProRL has a higher ceiling for impactful, distinctive work on reasoning.
+
+---
+
+## 3. Technical risk and feasibility
+
+### Project 1: ProRL
+- **Challenges:**
+  - Risk of reward hacking / mode collapse / overoptimization when RL is prolonged.
+  - Need robust KL-control and good reward design for math/coding correctness and reasoning quality.
+  - Requires online RL infra: fast sampling, online logging, distributed training.
+- **Upside:**
+  - You can start relatively small (7B or smaller) and study:
+    - Different KL schedules,
+    - Different reset intervals,
+    - How exploration metrics evolve.
+  - Clear, inspectable metrics: pass@k, code execution success, formal test sets.
+
+### Project 2: ReST
+- **Challenges:**
+  - Offline RL is notoriously brittle to distributional shift; if your target behavior differs from your dataset’s support, improvement can stall or degrade.
+  - For reasoning, if the dataset doesn’t contain high-quality multi-step solutions, you mostly just re-weight mediocre reasoning.
+- **Upside:**
+  - Simpler infra: you collect a dataset once, then treat it as a static batch.
+  - Compute-efficient: you can reuse data heavily.
+  - Existing libraries/recipes from offline RL can be adapted.
+
+**Conclusion:** ReST is easier infrastructurally, but ProRL has higher payoff; the risks are manageable with careful design, especially if you already have RL infra or access to it.
+
+---
+
+## 4. How much can each push beyond the base model?
+
+- **ProRL:** By design, explores **new regions of behavior space**:
+  - Extended training + KL control + ref resets encourages discovering rare but high-reward reasoning patterns.
+  - This is precisely how you get behaviors “not reachable” by naive sampling.
+- **ReST:** Fundamentally limited by the **support of your dataset**:
+  - You mainly re-weight or interpolate among what you already have.
+  - Without an iterative generate→evaluate→expand loop, you don’t systematically “push out” into new solution modes.
+
+For “emergent” reasoning improvements, ProRL is the better tool.
+
+---
+
+## 5. Recommendation and suggested framing
+
+Pursue **Project 1 (ProRL)**, and frame it as:
+
+> “How far can we push LLM reasoning via prolonged RL when we explicitly manage KL divergence and periodically refresh the reference policy? Can we systematically discover reasoning behaviors that never appear under standard decoding from the base model?”
+
+Concrete angles you can take:
+- Ablations:
+  - No resets vs fixed-interval resets vs adaptive resets (based on reward saturation or diversity metrics).
+  - Different KL schedules (constant, annealed, trust-region-style).
+- Analyses:
+  - Emergence of new solution strategies in math/coding not present in base outputs.
+  - Trade-off between sample efficiency and degree of distributional shift.
+- Practical recipe:
+  - “A robust protocol for long-horizon RL on reasoning tasks,” usable by others training math/coding-specialist LLMs.
+
+If you still want to keep an offline element, you can **fold in ideas from Project 2** later:
+- Use data from ProRL trajectories as an offline buffer for secondary training.
+- Or run a small offline RL step as a “stabilization” or “conservative refinement” phase after aggressive online exploration.
+
+But as a primary project focused on improving reasoning, **ProRL is the stronger, more frontier-aligned choice.**
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Epoch 19, Comparison 3:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+You should pursue **Project 1** unless you have very concrete reasons (funding, career goals, access to financial partners) to specialize in finance right now. Here’s why, framed from an AI research and impact standpoint.
+
+---
+
+## Core recommendation
+
+- **Pick Project 1** if your primary goals are:
+  - advancing general‑purpose LLM reasoning (math, coding, broader domains),
+  - publishing in top venues with broadly applicable methods,
+  - building reusable RL infrastructure and algorithms.
+
+- **Pick Project 2** only if you:
+  - specifically want to specialize in *financial* reasoning,
+  - have or can secure real‑world financial use cases / data access,
+  - care more about an applied, domain‑specific system than about general methods.
+
+---
+
+## How the projects compare
+
+### 1. Scientific novelty and generality
+
+**Project 1: Multi‑turn online RL for self‑correction**
+
+- Tackles a central problem: *how to get models to improve themselves using only their own trajectories* (no external labels, no multiple models).
+- Multi‑turn online RL with reward‑bonus for self‑correction is:
+  - Methodologically interesting (stability, distribution shift, exploration vs collapse),
+  - Generalizable across domains: math, coding, logic, tool use, etc.
+- Potential to contribute:
+  - New RL algorithms for language models (online, self‑play‑like, or “self‑bootstrapping”),
+  - Theoretical/empirical analysis of stability, collapse, mode‑covering regularization.
+- Much more likely to produce a paper framed as:
+  - “A General Framework for Online Self‑Correction in LLMs”
+  - or “Self‑Supervised Reinforcement Learning for Multi‑Turn Reasoning.”
+
+This is “research‑y” in a way that can appeal to NeurIPS/ICLR/ICML/ACL reviewers.
+
+**Project 2: Financial reasoning distilled model**
+
+- Stronger as an *application* paper than a methods paper.
+- Uses an existing model (DeepSeek‑R1) and an established recipe:
+  - distillation / data extraction,
+  - domain‑specific SFT + RL,
+  - compact 7B deployment target.
+- Technical novelty is more limited:
+  - The most distinctive part is the *financial domain* and possibly the dataset construction.
+  - The two‑stage (SFT+RL) architecture is relatively standard unless you introduce something significantly new in the RL setup or decision‑making formulation.
+- Easier to tell a product/industry story than a pure research one.
+
+If your priority is *general methods research*, Project 1 is decidedly stronger.
+
+---
+
+### 2. Impact on reasoning (math, coding, general problems)
+
+**Project 1**
+
+- Directly aimed at *improving reasoning processes themselves*:
+  - Multi‑turn interactions,
+  - Self‑correction,
+  - Learning under the model’s own distribution (online).
+- Likely to benefit math and coding tasks because:
+  - These domains often require iterative refinement and error checking.
+  - Self‑correction traces can encode problem decomposition, verification, and debugging.
+- If you design your reward to capture “fixing previous errors” or “increasing consistency with earlier constraints,” you get a general reasoning booster.
+
+**Project 2**
+
+- Improves reasoning *within finance*:
+  - Quantitative analysis, risk/reward trade‑offs, multi‑step financial decisions.
+- Some techniques may transfer (e.g., how you structure decision‑making, RL reward design), but the work is by design domain‑specific.
+- For math and coding, you’d need to redo the dataset and part of the pipeline.
+
+For broad reasoning capabilities (beyond finance), Project 1 is much better aligned.
+
+---
+
+### 3. Feasibility and engineering complexity
+
+**Project 1: Multi‑turn online RL**
+
+- Engineering challenges:
+  - Building an online RL pipeline for LLMs (experience collection, replay or on‑policy rollouts, stability under distribution shift).
+  - Handling *multi‑turn traces* (state representation, credit assignment).
+  - Avoiding behavior collapse with a regularized objective and reward‑bonus design.
+- But:
+  - You can start small (e.g., 1–3B model on math/coding benchmarks, simple reward: correctness checkers, unit tests, SMT solvers, etc.).
+  - Infrastructure you build is reusable for many later RL projects.
+- Compute:
+  - Potentially heavy but manageable if you constrain model size and task set.
+  - Online RL requires continuous sampling; you’ll want decent but not insane resources.
+
+**Project 2: Financial domain distillation**
+
+- Key difficulties:
+  - Extracting / curating a *high‑quality* financial reasoning dataset from DeepSeek‑R1:
+    - need reliable prompts, filters, and quality control (hallucinations and fabrications are costly in finance),
+    - potential legal/ethical/IP questions around re‑distilling from a larger model depending on license.
+  - Getting good reward signals for complex financial decisions:
+    - often no ground truth labels,
+    - rewards may need simulators, backtesting, or expert heuristics.
+- Compute:
+  - Might be more modest at runtime (7B target),
+  - but training still involves SFT + RL, and potentially domain simulators or backtests.
+
+Overall, Project 1’s challenges are more algorithmic and generic; Project 2’s are more around data quality and reward design in an inherently noisy domain.
+
+---
+
+### 4. Publication and career positioning
+
+**Project 1**
+
+- Stronger for:
+  - “LLM reasoning,” “RL for language,” “self‑improvement,” “self‑correction,” “online RL” lines of work.
+- Contributions can be:
+  - New RL formulation + algorithm,
+  - Ablations across domains (math, coding, maybe reasoning benchmarks),
+  - Analysis of how self‑correction emerges and when it fails.
+- Good for building a profile as a *methods researcher* in LLM reasoning and RL.
+
+**Project 2**
+
+- Stronger for:
+  - Applied ML / FinTech / industry‑oriented work,
+  - Possibly systems + domain‑specific modeling.
+- Great if you want:
+  - To work in quantitative finance, trading, asset management, or financial analytics,
+  - To show “Here is a smaller, domain‑tuned model that outperforms general LLMs on finance.”
+
+If you are early‑to‑mid career and want breadth and flexibility, Project 1 positions you better in the core LLM+RL research ecosystem.
+
+---
+
+### 5. Risks and “failure modes”
+
+**Project 1 risks**
+
+- The method might:
+  - Not significantly outperform a strong baseline (e.g., offline RLHF or simple rejection sampling + SFT).
+  - Be fragile to hyperparameters or only work in narrow settings.
+- Mitigation:
+  - Choose tasks with automatic verifiers (math, coding) to get crisp rewards.
+  - Compare to strong but feasible baselines (offline RL from good traces, simple self‑training).
+  - Start with small models and ablations; scale only once the signal is clear.
+
+**Project 2 risks**
+
+- Dataset quality:
+  - Distilled data from DeepSeek‑R1 may encode subtle errors or biases that are hard to detect.
+  - Risk of overfitting to synthetic data that doesn’t match real‑world finance.
+- Reward issues:
+  - Many financial tasks don’t have clear ground truth; backtests can be noisy or misleading.
+  - Results may be hard to evaluate convincingly without real proprietary data.
+- Mitigation:
+  - Focus on sub‑domains with verifiable ground truth (e.g., balance sheet reasoning, instrument pricing with known formulas, structured Q&A).
+  - Keep the claims narrow and well‑specified (“model outperforms baselines on these well‑defined benchmarks”).
+
+From a risk‑adjusted standpoint, Project 1’s evaluation is easier to make rigorous.
+
+---
+
+## Concrete decision rule
+
+Go with **Project 1** if:
+
+- You want to push *general* reasoning and RL for LLMs.
+- You care about methodological novelty and broad impact.
+- You have or can get:
+  - a modest RL training setup,
+  - automatic reward functions (math solvers, code execution, unit tests).
+
+Consider **Project 2** instead if:
+
+- You have a strong external driver:
+  - collaboration with a financial institution,
+  - access to proprietary financial datasets or simulators,
+  - a clear downstream product/use case.
+- You explicitly want to specialize in financial AI and are less focused on core methods.
+
+---
+
+## If you choose Project 1: a minimal, strong plan
+
+- Start with a 1–3B model on:
+  - math benchmarks (GSM8K, MATH subset) or
+  - coding benchmarks with unit tests (e.g., HumanEval‑style tasks).
+- Design:
+  - Multi‑turn environment: model proposes → checks → proposes fix → etc.
+  - Reward: correctness + bonus for successful corrections relative to previous attempts.
+  - Regularization: KL or other constraints to avoid collapse from online updates.
+- Baselines:
+  - SFT only,
+  - offline RL from best‑of‑N rollouts,
+  - simple self‑improvement via re‑training on successful corrections (no RL).
+- Show:
+  - Improved success rates over baselines,
+  - Analysis of how many correction steps are actually useful,
+  - Robustness across two domains (e.g., math + code) to emphasize generality.
+
+---
+
+**Bottom line:**  
+For an AI researcher focused on improving LLM reasoning and wanting maximum methodological and long‑term impact, **Project 1 is the better choice.**
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Epoch 20, Comparison 17:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+You should pursue **Project 2** unless you have a very strong *strategic* reason to focus narrowly on finance (e.g., a specific client, product, or grant that depends on it). From a research‑impact and career‑leverage standpoint, Project 2 is the better bet.
+
+Below is a concise comparison and the reasoning behind that recommendation.
+
+---
+
+## High‑level comparison
+
+**Project 1 – Financial RL + Distillation (7B, domain‑specific)**  
+- Pros:  
+  - Clear application: complex financial reasoning and decision‑making.  
+  - Technically tractable: SFT + RL on a 7B model is a well‑understood pipeline.  
+  - Likely to show strong performance gains on a narrow benchmark (e.g., equity analysis, credit risk, portfolio optimization with constraints).  
+- Cons:  
+  - Less novel methodologically: it’s “DeepSeek‑R1, but specialized and distilled + RL,” which is incremental relative to current R1/GRPO/DeepSeek‑style work.  
+  - Results will be hard to generalize as a *research contribution* beyond “RL works well in this domain.”  
+  - Your work is tightly coupled to a single vertical; if finance constraints change (data, regulation, market), the research value decays quickly.
+
+**Project 2 – System 1 + System 2 integration via weight/activation methods**  
+- Pros:  
+  - Methodological novelty: task‑vector alignment, SVD, activation‑guided merging is very much “frontier LLM research.”  
+  - Generality: a unified System 1+2 mechanism is applicable to math, coding, planning, tool use, and beyond.  
+  - High research signal: can produce insights about how “fast intuition” vs. “slow reasoning” are encoded in weights and activations.  
+  - If successful, offers a new paradigm: long‑to‑short reasoning without full RL or long CoT, with clear computational benefits.  
+- Cons:  
+  - Harder: merging weights/activations in a controlled way without catastrophic interference is non‑trivial.  
+  - Evaluation complexity: you’ll need careful experimental design to prove that your mechanism really balances System 1/2, not just “another LoRA/merge trick.”  
+  - More tooling and ablations needed to make the story convincing.
+
+---
+
+## Impact on “improving LLM reasoning capabilities”
+
+Your stated goal is explicitly about **math and coding** reasoning with RL‑style ideas, not just financial decision‑making.
+
+- **Project 1** absolutely can improve reasoning, but in *one domain* and mainly via known levers: distillation + domain SFT + RL. You can probably show strong wins on:
+  - financial QA, narrative reasoning (“assess this 10‑K”),  
+  - numerical/temporal reasoning in markets,  
+  - scenario analysis, risk constraints, etc.  
+  But this doesn’t fundamentally change our understanding of reasoning or transfer much to math/coding outside finance.
+
+- **Project 2** explicitly targets the core cognitive split we care about for math/coding:
+  - System 1: fast approximate “intuitive” code/solution guesses.  
+  - System 2: deliberate chain‑of‑thought, error‑checking, decomposition.  
+  If you can design a mechanism that:
+  - lets the model **choose** when to be intuitive vs deliberate,  
+  - produces **short, distilled reasoning traces** that retain System‑2 quality,  
+  - and does so via *weight/activation‑level mechanisms* rather than heavy pipelines,  
+  then you have something directly relevant to math, coding, proof search, formal reasoning, etc.
+
+In terms of **field‑level contribution on reasoning**, Project 2 is much more aligned.
+
+---
+
+## Novelty and publishability
+
+If you care about top‑tier venues or long‑term research credit:
+
+- **Project 1**  
+  - Likely framed as: “Domain‑specific RL‑tuned 7B model for financial reasoning distilled from DeepSeek‑R1.”  
+  - Novelty hinge points would be minor: how you select/distill traces, how you design the RL reward, maybe some task architecture tricks.  
+  - Risk: reviewers may see it as incremental application of standard R1‑style recipes, unless you add a substantial methodological twist (e.g., new reward shaping, safety‑constrained RL, interpretable decision traces).
+
+- **Project 2**  
+  - Disentangling and recombining System 1/2 behavior using:
+    - task vectors (directional shifts in parameter space),  
+    - SVD or other low‑rank decompositions of “reasoning directions,”  
+    - and activation‑informed integration
+  - This can produce multiple publishable angles:
+    - empirical: a unified model that matches System‑2 reasoning with significantly shorter traces and lower compute;  
+    - mechanistic: identifying low‑dimensional subspaces corresponding to deliberate reasoning vs intuition;  
+    - methodological: a generic pipeline to merge high‑reasoning and high‑speed behaviors without RL fine‑tuning.  
+  - This matches what conferences/journals currently view as “core progress” in reasoning and model understanding.
+
+Project 2 has clearly higher upside in novelty and generality.
+
+---
+
+## Technical risk vs reward
+
+- **Project 1 risk profile**  
+  - Engineering‑heavy, risk‑moderate. You know roughly what to do:
+    - Distill high‑quality financial traces from DeepSeek‑R1.  
+    - SFT a 7B backbone.  
+    - Apply RL (GRPO/PPO‑style) with domain‑specific rewards.  
+  - Main risk: your gains over a strong baseline might be modest (e.g., +3–5 points on domain benchmarks), making the result less inspiring as a “step change” in reasoning.
+
+- **Project 2 risk profile**  
+  - Research‑heavy, higher conceptual risk, but more outsized upside.  
+  - Key challenges and failure modes:
+    - Task vectors / SVD directions for “System 2” might not be cleanly separable and may entangle with general knowledge.  
+    - Integrating System 2 behavior may inflate verbosity or destabilize System 1 performance.  
+    - You must define clear metrics for “reasoning quality at fixed or reduced token budget.”  
+  - But even partial success is publishable:
+    - e.g., evidence that certain low‑rank directions dramatically increase chain‑of‑thought usage, or that activation‑gated merges can selectively trigger longer reasoning where needed.
+
+If your goal includes *advancing understanding* and not just delivering a performant niche model, Project 2 is the higher‑leverage risk.
+
+---
+
+## How your skills and interests change the choice
+
+Some decision pivots you can use:
+
+Choose **Project 1** if:
+- You have privileged access to financial data or partners who care about immediate deployment.  
+- You want a **shippable product** more than a deep methodological contribution.  
+- You prefer solid, engineering‑heavy work where pipelines are known and risk is mostly around implementation scale and evaluation quality.
+
+Choose **Project 2** if:
+- You want to publish research that is broadly cited in **reasoning, interpretability, and model editing**.  
+- You’re excited by linear mode connectivity, model merging, LoRA/task vectors, and activation steering.  
+- You’re comfortable with more exploratory ablations and less guaranteed “SOTA on X benchmark” at the outset.
+
+---
+
+## Concrete recommendation
+
+Given your description—an AI researcher interested in **comparing** projects for improving LLM reasoning in math and coding—I recommend you pursue:
+
+> **Project 2: System 1 + System 2 integration via task‑vector / SVD / activation‑informed weight integration.**
+
+It is:
+- More general across domains (math, coding, planning, possibly finance later).  
+- More novel and likely to yield publishable, reusable methods.  
+- Better aligned with fundamental questions about how reasoning emerges and can be steered in LLMs.
+
+You can always apply the insights from Project 2 to a **financial** setting afterward, potentially absorbing much of what Project 1 would have given you but with stronger underlying tools and understanding.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Collected 719 total comparisons before completion/failure.
+================================================================================
+model: gpt-5.1
+
+================================================================================

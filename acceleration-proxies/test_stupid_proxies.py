@@ -4,6 +4,7 @@ from scipy import stats
 import seaborn as sns
 import matplotlib.pyplot as plt
 import argparse
+from pathlib import Path
 
 def _pairwise_pvalues(df, method):
     """Calculate pairwise p-values for Pearson or Spearman correlation."""
@@ -39,7 +40,7 @@ def plot_heatmap(corr, pvals, title, filename):
     plt.savefig(filename, dpi=300, bbox_inches='tight')
     plt.close()
 
-def main(csv_file='citation_ranking.csv'):
+def main(csv_file='citation_ranking.csv', output_dir='stupid_proxies/'):
     # Load the CSV file
     df = pd.read_csv(csv_file)
 
@@ -71,17 +72,20 @@ def main(csv_file='citation_ranking.csv'):
     print("\nSpearman p-values:")
     print(spearman_pvals)
 
-    plot_heatmap(pearson_corr, pearson_pvals, "Pearson correlation of rankings", "pearson_heatmap.png")
-    plot_heatmap(spearman_corr, spearman_pvals, "Spearman correlation of original values", "spearman_heatmap.png")
+    plot_heatmap(pearson_corr, pearson_pvals, "Pearson correlation of rankings", output_dir + "/pearson_heatmap.png")
+    plot_heatmap(spearman_corr, spearman_pvals, "Spearman correlation of original values", output_dir + "/spearman_heatmap.png")
 
-    pearson_corr.to_csv('stupid_proxies/pearson_correlation.csv')
-    pearson_pvals.to_csv('stupid_proxies/pearson_pvalues.csv')
-    spearman_corr.to_csv('stupid_proxies/spearman_correlation.csv')
-    spearman_pvals.to_csv('stupid_proxies/spearman_pvalues.csv')
+    Path(output_dir).mkdir(exist_ok=True)
+    pearson_corr.to_csv(output_dir + 'pearson_correlation.csv')
+    pearson_pvals.to_csv(output_dir + 'pearson_pvalues.csv')
+    spearman_corr.to_csv(output_dir + 'spearman_correlation.csv')
+    spearman_pvals.to_csv(output_dir + 'spearman_pvalues.csv')
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Test stupid proxies with correlation analysis')
-    parser.add_argument('csv_file', nargs='?', default='citation_ranking.csv',
+    parser.add_argument('--csv_file', default='citation_ranking.csv',
                         help='Path to the CSV file to analyze (default: citation_ranking.csv)')
+    parser.add_argument('--output_dir', default='stupid_proxies/',
+                        help='Directory to save results (default: stupid_proxies/)')
     args = parser.parse_args()
-    main(args.csv_file)
+    main(args.csv_file, args.output_dir)

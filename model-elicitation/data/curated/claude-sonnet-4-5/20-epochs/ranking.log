@@ -256,3 +256,497 @@ PROJECT 2
 model: claude-sonnet-4-5-20250929
 
 ================================================================================
+Epoch 7, Comparison 35:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+# Clear Recommendation: Pursue Project 2
+
+Here's my analysis:
+
+## Why Project 2 is the stronger choice:
+
+### 1. **Grounded, Verifiable Rewards**
+- Static analysis provides **objective, reliable feedback** (syntax correctness, coverage, test smells)
+- Project 1's self-scoring is fundamentally circular—if the model can't solve the problem correctly, why would its evaluation be trustworthy?
+- You avoid the core weakness of self-play: **garbage-in, garbage-out**
+
+### 2. **Clearer Path to Impact**
+- Unit test generation has **immediate practical value** and clear success metrics
+- Easier to demonstrate improvements and publish results
+- Strong industry interest = potential for collaboration/funding
+
+### 3. **More Tractable Research Problem**
+- Bounded domain makes debugging and iteration faster
+- Can validate against existing test suites and established code quality tools
+- Project 1 risks months chasing unstable self-improvement dynamics
+
+### 4. **Better Foundation for Future Work**
+- Success with Project 2 can inform broader reasoning improvements
+- The infrastructure (RL + static analysis) transfers to other domains
+- Project 1's approach has been explored (e.g., STaR, ReST) with mixed results—diminishing returns without additional innovations
+
+## The Critical Flaw in Project 1:
+The "judge better than generate" observation breaks down for **reasoning tasks**. Models struggle to evaluate mathematical correctness or find subtle logical errors—that's why we need external verifiers (formal proofs, test execution). Self-scoring on hard reasoning problems often just amplifies existing biases.
+
+**Bottom line**: Project 2 gives you reliable signal to actually improve reasoning capabilities. Project 1 risks sophisticated ways to be confidently wrong.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: claude-sonnet-4-5-20250929
+
+================================================================================
+Epoch 9, Comparison 13:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+# Clear Recommendation: Pursue Project 2
+
+## Why Project 2 is the stronger choice:
+
+**1. Broader Impact & Applicability**
+- Project 2 tackles **multi-turn reasoning**, which is fundamental to complex math proofs, iterative coding (debugging, refactoring), and interactive problem-solving
+- Project 1 is limited to single-turn mathematical reasoning, which is already well-explored territory (e.g., DeepMind's work, OpenAI's process reward models)
+
+**2. Novel Technical Contribution**
+- The hierarchical RL architecture (high-level value aggregation + low-level policy) addresses a genuine gap in current LLM RL methods
+- Most existing RLHF/RL approaches (including RLVR variants) are single-turn; extending to long-horizon tasks is an open problem
+- Project 1's "training on single exemplars" is interesting but incremental—similar ideas exist in few-shot RL for LLMs
+
+**3. Scalability to Real-World Tasks**
+- Coding and advanced math often require **iterative refinement** (getting feedback, fixing errors, building on partial solutions)
+- Project 2's framework naturally handles this; Project 1 would need significant extensions
+
+**4. Research Risk vs. Reward**
+- Project 1 has lower technical risk but also lower ceiling—you might achieve modest improvements on math benchmarks
+- Project 2 is more ambitious but addresses a problem the community actively needs solved, giving you higher-impact publication potential
+
+## Key Challenge to Address in Project 2:
+The main difficulty will be **credit assignment** across long horizons and **sample efficiency**. Ensure you have:
+- A good off-policy algorithm choice (e.g., soft Q-learning variants)
+- Mechanisms to handle sparse rewards effectively
+- Computational resources for the two-level optimization
+
+## Bottom Line:
+If you want to make a meaningful contribution to LLM reasoning that extends beyond incremental benchmark improvements, **Project 2 positions you to solve a more fundamental problem** that will remain relevant as models tackle increasingly complex, multi-step tasks.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: claude-sonnet-4-5-20250929
+
+================================================================================
+Epoch 10, Comparison 27:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+# Clear Recommendation: Pursue Project 2
+
+## Key Reasoning
+
+**Project 2 is the stronger choice** because it addresses a more fundamental and widely applicable problem in LLM reasoning while building on established infrastructure.
+
+## Why Project 2 Wins
+
+### 1. **Broader Applicability**
+- Works with standard autoregressive LLMs (GPT-style models) that dominate the field
+- Multi-turn reasoning is critical for math, coding, agent tasks, and interactive problem-solving
+- Immediately applicable to existing deployed models
+
+### 2. **Addresses a Real Gap**
+- Current RL methods (PPO, DPO, GRPO) struggle with credit assignment over long horizons
+- Your hierarchical approach directly tackles the "which turn helped?" problem
+- High research and commercial demand for better multi-turn reasoning
+
+### 3. **Lower Technical Risk**
+- Builds on proven autoregressive architecture
+- Can leverage existing infrastructure (transformers, sampling methods)
+- Clearer path to validation and iteration
+
+### 4. **More Impactful Publications**
+- Multi-turn RL is a hot topic with clear benchmarks (MATH, HumanEval, agent tasks)
+- Easier to demonstrate clear improvements over baselines
+- Larger potential research community impact
+
+## Why Project 1 is Riskier
+
+- **Niche architecture**: Masked diffusion LMs haven't proven superior for reasoning tasks
+- **Dual innovation risk**: Novel architecture + novel RL algorithm = compounded risk
+- **Limited baseline ecosystem**: Fewer models, datasets, and evaluation frameworks
+- **Unclear advantages**: Why would coarse-to-fine generation help reasoning specifically?
+
+## Suggested Path Forward
+
+Start with **Project 2**, then if successful, consider whether diffusion models could benefit from your hierarchical RL insights as a follow-up.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: claude-sonnet-4-5-20250929
+
+================================================================================
+Epoch 12, Comparison 5:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+# Clear Recommendation: Pursue Project 1
+
+## Key Reasoning
+
+**Project 1 is the stronger choice** for advancing LLM reasoning capabilities in math and coding. Here's why:
+
+## Advantages of Project 1
+
+1. **Novel contribution**: The reflection-focused approach with GRPO and anti-redundancy rewards is more innovative. Self-reflection mechanisms are an emerging frontier in reasoning research.
+
+2. **Direct reasoning improvement**: Explicitly training models to critique and refine their own outputs creates a more robust reasoning loop—critical for multi-step math and coding problems.
+
+3. **Multimodal edge**: Building reflection capabilities into MLLMs positions you at the intersection of two hot research areas, increasing publication/impact potential.
+
+4. **Quality over quantity**: The conciseness reward addresses a real problem (verbose, repetitive model outputs) while maintaining reasoning quality.
+
+## Limitations of Project 2
+
+1. **Incremental advancement**: ReST is essentially a well-explored offline RL approach. You'd be applying existing techniques rather than developing new methodology.
+
+2. **Generic framework**: While useful, it's not specifically designed for reasoning tasks—it's more about general alignment, which is crowded research territory.
+
+3. **Data efficiency concerns**: Pure offline RL without the iterative reflection component may require more data to achieve similar reasoning gains.
+
+## Caveat
+
+Choose Project 2 only if you:
+- Have limited computational resources (offline RL can be more efficient)
+- Need faster time-to-publication with lower risk
+- Are specifically interested in alignment research rather than reasoning architectures
+
+**Bottom line**: Project 1 offers better novelty, specificity to reasoning tasks, and potential for high-impact contributions.
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: claude-sonnet-4-5-20250929
+
+================================================================================
+Epoch 13, Comparison 19:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+# Clear Recommendation: Pursue Project 2 (SWE-RL)
+
+## Key Reasons:
+
+### 1. **Market Readiness & Impact**
+- **Project 2** targets real-world software engineering—a massive, immediate market need with clear monetization paths
+- **Project 1** explores masked diffusion LLMs, which have minimal adoption compared to autoregressive models (GPT, Llama, etc.)
+
+### 2. **Technical Risk**
+- **Project 2** builds on proven architectures (Llama 3) and established RL techniques with incremental innovation
+- **Project 1** requires validating *two* risky bets: (a) masked diffusion models can compete with autoregressive LLMs, and (b) your novel diffu-GRPO algorithm works effectively
+
+### 3. **Data & Evaluation Advantage**
+- **Project 2** has abundant, naturally-occurring training data (GitHub, code repositories) with objective evaluation metrics
+- **Project 1** relies on distillation from existing models and lacks a clear, unique data advantage
+
+### 4. **Generalization Claims**
+- Both claim to improve general reasoning, but **Project 2** has a clearer path: software engineering inherently requires multi-step reasoning, planning, and debugging—skills that transfer well
+- **Project 1's** transfer story is less obvious: why would the coarse-to-fine generation paradigm specifically help reasoning?
+
+### 5. **Publication & Career Value**
+- **Project 2** addresses a hot area (AI for code) with practical results that attract both academic and industry attention
+- **Project 1** may struggle for relevance if masked diffusion models remain a research curiosity
+
+## Bottom Line:
+Unless you have strong evidence that masked diffusion models will become competitive with autoregressive LLMs, **Project 2 offers better risk-adjusted returns** for advancing LLM reasoning capabilities.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: claude-sonnet-4-5-20250929
+
+================================================================================
+Epoch 14, Comparison 33:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+# Clear Recommendation: Pursue Project 1 (SWE-RL)
+
+## Key Reasons:
+
+### 1. **Stronger Foundation for General Reasoning**
+Project 1 directly targets your stated goal of improving math and coding reasoning. Software engineering data contains rich logical structures, algorithms, and problem-solving patterns that transfer well to mathematical reasoning. Project 2's web interaction focus is narrower and less directly applicable to math/coding tasks.
+
+### 2. **Data Abundance & Quality**
+- **Project 1**: Massive, high-quality datasets exist (GitHub, GitLab, etc.) with verified ground truth (working code, merged PRs, resolved issues)
+- **Project 2**: Web interaction data is messier, requires extensive infrastructure to collect/verify, and ground truth is often ambiguous
+
+### 3. **More Tractable Reward Signal**
+Project 1's similarity-based reward is:
+- Lightweight and computationally efficient
+- Well-defined (code either works or doesn't)
+- Proven in similar work (e.g., AlphaCode)
+
+Project 2's outcome-supervised reward for web tasks is:
+- Harder to define (when is a web task "solved"?)
+- Requires complex environment simulation
+- More prone to reward hacking
+
+### 4. **Better Research Timeline**
+Project 1 can show results faster:
+- Existing benchmarks (HumanEval, MBPP, SWE-bench)
+- Clear baselines to compare against
+- Iterative improvement path
+
+Project 2 requires building infrastructure before research can begin.
+
+### 5. **Higher Impact Potential**
+Software engineering reasoning has broader applications and a larger research community actively working on adjacent problems, making your contributions more valuable and visible.
+
+## Bottom Line:
+**Choose Project 1** unless you have specific compelling reasons (existing web infrastructure, unique data access) that make Project 2 uniquely feasible for you.
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: claude-sonnet-4-5-20250929
+
+================================================================================
+Epoch 16, Comparison 11:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+# Recommendation: Pursue Project 2 (ProRL)
+
+## Clear Winner: Project 2
+
+Project 2 is the stronger choice for advancing LLM reasoning capabilities. Here's why:
+
+## Key Advantages of Project 2
+
+**1. Fundamental Research Contribution**
+- Addresses a **core limitation** in RL fine-tuning: mode collapse and reward hacking
+- The periodic reference policy reset is novel and tackles distribution drift
+- Directly extends reasoning capabilities beyond base model limitations
+
+**2. Broader Applicability**
+- Works across **diverse reasoning tasks** (math, coding, logic)
+- The methodology transfers to any reasoning domain
+- Creates a generalizable framework, not a domain-specific solution
+
+**3. Scientific Impact**
+- Explores the **frontier of what models can learn** through RL
+- Tests whether extended training truly expands capability vs. just optimizing existing skills
+- Publishable at top-tier venues (NeurIPS, ICML, ICLR)
+
+## Limitations of Project 1
+
+**1. Narrow Scope**
+- Focuses specifically on **vulnerability analysis** (one task within coding)
+- Semantic reward for comments is useful but not breakthrough research
+- More of an application/engineering project than reasoning research
+
+**2. Incremental Innovation**
+- Combines existing techniques (instruction tuning + RL + code analysis)
+- Doesn't address fundamental questions about RL for reasoning
+- Limited theoretical insights
+
+**3. Evaluation Challenges**
+- Security vulnerabilities are harder to benchmark systematically
+- Subjective quality assessments for explanations
+- Smaller impact on general reasoning capabilities
+
+## Bottom Line
+
+If your goal is **advancing LLM reasoning research**, Project 2 offers:
+- Deeper scientific questions
+- Generalizable methodology
+- Higher-impact publications
+- Foundation for future work
+
+Project 1 is valuable for **practical applications** but won't significantly advance our understanding of how RL improves reasoning.
+
+**Pursue Project 2.**
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: claude-sonnet-4-5-20250929
+
+================================================================================
+Epoch 17, Comparison 25:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+# Recommendation: Pursue Project 2
+
+Here's my clear reasoning:
+
+## Why Project 2 is the Stronger Choice:
+
+**1. Broader Impact & Scalability**
+- Multimodal capabilities are increasingly essential for real-world applications
+- Long-context scaling addresses a fundamental bottleneck in LLM reasoning
+- The long-to-short transfer directly solves the deployment efficiency problem
+
+**2. More Practical Architecture**
+- Deliberately simplified approach (no MCTS, no separate reward models) means faster iteration
+- Easier to reproduce and build upon by the research community
+- Lower computational overhead makes it more accessible
+
+**3. Novel Contribution with Clear Value**
+- The long-to-short distillation is an elegant solution to the reasoning/efficiency tradeoff
+- Combines multiple high-value research directions (multimodal, long-context, efficient RL)
+
+## Why Project 1 is Riskier:
+
+**1. Narrow Focus**
+- Exploration bonuses are well-studied in RL; the novelty is incremental
+- May only provide marginal improvements over existing methods
+- Limited to answer diversity without addressing underlying reasoning quality
+
+**2. Potential Issues**
+- Encouraging rare answers could amplify incorrect reasoning paths
+- UCB-style bonuses may be unstable with the massive action spaces of LLMs
+- Batch diversity penalties might conflict with finding correct solutions in math/coding
+
+**3. Unclear ROI**
+- The exploration problem in LLM RL is less critical than efficiency and capabilities
+- Likely produces incremental improvements rather than step-change results
+
+## Bottom Line:
+
+Project 2 tackles multiple high-impact problems simultaneously with a principled, practical approach. It's more likely to produce publishable, influential results and advance the field meaningfully. Project 1 feels like optimizing a secondary problem.
+
+**Go with Project 2.**
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: claude-sonnet-4-5-20250929
+
+================================================================================
+Epoch 19, Comparison 3:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+# Clear Recommendation: Pursue **Project 1 (ReST)**
+
+Here's why:
+
+## Key Advantages of Project 1:
+
+**1. Proven Track Record for Reasoning Tasks**
+- Offline RL approaches like ReST have demonstrated strong empirical results on math and coding benchmarks (PaLM 2, Gemini)
+- Dataset generation → filtering → training cycle is well-suited for domains with verifiable correctness
+
+**2. Data Efficiency & Iteration Speed**
+- Generate data once, experiment with multiple training configurations
+- Can curate high-quality reasoning trajectories through outcome-based filtering
+- Easier to debug: separate data collection from policy learning
+
+**3. Practical Scalability**
+- No need for online rollouts during training (major infrastructure simplification)
+- Better for reasoning tasks where evaluation is expensive
+- Easier to incorporate external verification (unit tests, proof checkers)
+
+## Why Project 2 is Less Suitable:
+
+**1. Mismatch with Your Domain**
+- ReMax optimizes for RLHF efficiency, but reasoning tasks benefit more from outcome-based RL (verifiable rewards) than preference-based learning
+- Variance reduction matters less when you have ground-truth correctness signals
+
+**2. Limited Differentiation**
+- Removing value networks is interesting but incremental
+- PPO alternatives already exist (DPO, IPO) with stronger adoption
+
+**3. Research Saturation**
+- RLHF efficiency is crowded; several groups working on similar optimizations
+
+## Bottom Line:
+For **math and coding specifically**, you want quality synthetic data + verification, not RLHF efficiency. Project 1 aligns better with successful reasoning scaling strategies (e.g., o1's likely approach) and gives you clearer publishable contributions.
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: claude-sonnet-4-5-20250929
+
+================================================================================
+Epoch 20, Comparison 17:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+# Clear Recommendation: Pursue Project 1
+
+## Bottom Line
+**Project 1** is the stronger choice for your stated goal of improving LLM reasoning capabilities in math and coding tasks.
+
+## Key Reasons
+
+### 1. **Direct Alignment with Your Goal**
+- Project 1 explicitly targets reasoning improvement through RL with verifiable examples
+- Project 2 is primarily an infrastructure/systems project about *how* to train (federated learning), not *what* improves reasoning
+
+### 2. **Clearer Research Contribution**
+- Project 1 investigates a concrete scientific question: "Does cross-domain RL transfer improve reasoning better than in-domain training?"
+- Project 2 solves an engineering challenge but lacks a novel insight about reasoning itself
+
+### 3. **More Immediate Impact**
+- The reasoning corpus and findings from Project 1 can be published, shared, and built upon by the community
+- Project 2's value depends on whether federated learning is actually needed for your use case (unclear from your description)
+
+### 4. **Feasibility & Control**
+- Project 1: You control the entire pipeline and can iterate quickly
+- Project 2: Requires multiple entities, privacy-constrained data, and complex coordination—significant overhead
+
+## When Project 2 Would Make Sense
+
+Only choose Project 2 if:
+- You have concrete federated learning partnerships already established
+- Privacy constraints are a *genuine requirement* (not hypothetical)
+- Your primary research interest is systems/infrastructure rather than reasoning capabilities
+
+## Action Item
+Unless you have compelling reasons to build federated infrastructure, **go with Project 1** and focus your energy on understanding what makes RL effective for reasoning tasks.
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: claude-sonnet-4-5-20250929
+
+================================================================================
+Collected 720 total comparisons before completion/failure.
+================================================================================
+model: claude-sonnet-4-5-20250929
+
+================================================================================

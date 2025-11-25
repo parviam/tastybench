@@ -223,3 +223,166 @@ PROJECT 2
 model: gpt-5.1
 
 ================================================================================
+Epoch 13, Comparison 19:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+Project 2 is more likely to achieve the higher citation velocity.
+
+Reasoning:
+
+- **Scope and generality**:  
+  - Project 1 focuses on a *specific* reward‑modeling strategy (token‑level reward from an error‑rewriting task with minimum edits). It’s valuable but more niche: mainly relevant to people working on fine‑grained credit assignment and error localization in reasoning.  
+  - Project 2 proposes a *general RL optimization framework* (decoupled clipping, adaptive data sampling, efficient policy optimization, integrated into verl). That kind of “infrastructure/algorithmic” contribution is applicable to almost any RL‑fine‑tuned LLM project (safety, alignment, reasoning, conversational tuning, etc.), which broadens its citation base.
+
+- **Types of citations**:  
+  - Project 1 will be cited mostly by works that explicitly do token‑level or explanation‑based RL, reward modeling, or error‑correction–style reasoning.  
+  - Project 2 can be cited by:  
+    - Any paper doing large‑scale RLHF or RLAIF on LLMs.  
+    - Any implementation work using the verl framework.  
+    - Methodology/benchmark papers that need a “strong RL baseline.”  
+  This tends to generate more, and faster, follow‑on citations.
+
+- **“Enabling tech” effect**:  
+  Methods that make large‑scale RL training more stable, efficient, and reproducible (like Project 2) often become *default baselines* or standard practice. That status strongly boosts early citation velocity, particularly if the method is easy to plug into existing codebases.
+
+- **Novelty vs. adoption**:  
+  Project 1 is more conceptually novel in reward design; Project 2 is more about practical, robust training improvements. In practice, widely adoptable training improvements tend to accumulate citations faster than specialized reward‑design ideas, even if both are solid contributions.
+
+Prediction: **Project 2 (DAPO with decoupled clipping + adaptive data selection in verl) would have the higher citation velocity.**
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Epoch 14, Comparison 33:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+Project 1 is expected to have the higher citation velocity.
+
+Reasoning:
+- Project 1 proposes a generally applicable framework (offline RL / ReST for aligning generative models with human preferences). That kind of method paper is broadly relevant across many domains (chat assistants, coding, math, translation, safety/alignment), so many later works can cite it as a foundational technique.
+- Project 2 is narrower: it targets financial reasoning with a domain‑specific distilled dataset and a 7B model. Even if it’s strong within finance/FinRL, its appeal is mostly to a specialized subcommunity, so its citation base is smaller.
+- In practice, broadly useful algorithmic or training‑framework contributions almost always accumulate citations faster than domain‑specific applications of those ideas.
+
+So, project 1 should have the higher citation velocity.
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Epoch 16, Comparison 11:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+Project 2 is more likely to have the higher citation velocity.
+
+Reasoning (brief):
+- Project 2 (DAPO) tackles a central, broadly applicable problem: making large‑scale RL training of LLMs more stable, efficient, and reproducible. Methods that improve training infrastructure and optimization (e.g., better policy update rules, clipping strategies, data selection) tend to be adopted widely across many subsequent RLHF/RL-from-feedback works, leading to high citation rates.
+- Project 1 focuses on a more specific exploration strategy (outcome‑based exploration via rarity bonuses and batch diversity). While useful, it is more niche: it directly targets exploration behavior rather than the core RL training pipeline. Such contributions are typically cited when people work on exploration or diversity, but they are less often used as default components in large training stacks.
+- DAPO’s emphasis on “large‑scale,” “reproducible,” and “high‑performance” RL training, plus integration into a framework (verl), makes it more likely to become a base reference for many follow‑up empirical papers, toolkits, and benchmarks.
+
+Prediction: Project 2 (DAPO) achieves higher citation velocity than Project 1.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Epoch 17, Comparison 25:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+Project 1 is more likely to achieve higher citation velocity.
+
+Reasoning:
+
+- **Broader methodological relevance.** Project 1 systematically compares several core RL-for-LLM algorithms (Expert Iteration, PPO, return‑conditioned RL), reward types (sparse vs dense, heuristic vs learned), and training regimes (with/without SFT, different sizes/initializations). That kind of “benchmarking and ablation” paper tends to become a standard reference any time someone:
+  - chooses an RL algorithm for LLM reasoning,
+  - justifies a particular reward design, or
+  - compares against prior RL-for-LLM setups.
+
+- **Generality over specificity.** Project 2 introduces a more specific recipe (multimodal, long‑context RL with long‑to‑short CoT transfer and a simplified RL stack). That’s attractive, but narrower: it’s most directly relevant when someone does multimodal reasoning, long-context RL, or CoT distillation. By contrast, algorithmic and reward comparisons in Project 1 cut across almost all RL-on-LLM work.
+
+- **Citation patterns in similar work.** Historically, papers that:
+  - provide *comparative* evaluations of core methods, and
+  - give practitioners guidance on “what works when”
+tend to be cited frequently and quickly, because they become a default “related work” anchor even for projects that don’t adopt any specific trick in detail.
+
+So, while both could be impactful, the more general and comparative nature of Project 1 should produce a higher rate of citations shortly after publication.
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Epoch 19, Comparison 3:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+Project 1 is more likely to achieve a higher citation velocity.
+
+Reasoning:
+
+- **Breadth of applicability:** Project 1 proposes a general, task‑agnostic self‑improvement framework (LLM as its own student and teacher with self‑scored RL). This is useful for virtually any NLP or reasoning task, so many subfields (NLP, RL, alignment, evaluation, theory) can cite it.
+- **Conceptual novelty and simplicity:** “LLM self‑training via its own scoring function” is a clean, reusable idea that is easy to reference whenever discussing self‑improvement, self‑play, or unsupervised RL for LLMs. That typically drives faster and broader citation.
+- **Lower dependency on domain‑specific data:** Project 2 depends on rich software‑engineering change histories and tooling. Its impact and ease of adoption are constrained to code/SE communities, which, while sizable, are narrower than the general LLM research audience.
+- **Citation style:** Project 2 is an applied, domain‑focused framework (SWE reasoning). Such work can be influential, but usually has slower, more field‑specific uptake compared to a general training principle like Project 1.
+
+Prediction: **Project 1 has the higher citation velocity.**
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Epoch 20, Comparison 17:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+Project 2 almost certainly achieves higher citation velocity.
+
+Reasoning:
+- It directly targets a highly active frontier topic: improving LLM reasoning via chain-of-thought, trial-and-error exploration, and self-verification—methods that are central to current work on math/coding benchmarks and “agentic” LLMs.
+- It introduces a clearly scalable recipe (synthetic CoT, exploration, oversampling, inference-time scaling) that many later papers can plug into, extend, or compare against. That typically drives fast, broad uptake and thus rapid citations.
+- Project 1 (offline RL for preference alignment/ReST) is impactful but sits closer to an incremental improvement on RLHF-style alignment and sample efficiency; that space is somewhat more mature and crowded, diluting citation velocity compared to novel, widely reusable reasoning-scaling strategies.
+
+Prediction: Project 2 has the higher citation velocity.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Collected 720 total comparisons before completion/failure.
+================================================================================
+model: gpt-5.1
+
+================================================================================

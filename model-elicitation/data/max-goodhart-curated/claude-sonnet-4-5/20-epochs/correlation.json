@@ -1,0 +1,9 @@
+{
+  "correlation": 0.15884305357989564,
+  "p_value": 0.34771925415505317,
+  "n_samples": 37,
+  "label1": "paper_id",
+  "label2": "paperId",
+  "target1": "elo_rating",
+  "target2": "b"
+}

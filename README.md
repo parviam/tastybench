@@ -194,7 +194,7 @@ Model identifiers follow the format:
 
 ## Data
 
-The `model-elicitation/data/` directory contains the expirements we've run so far!
+The `model-elicitation/data/` directory contains the experiments we've run so far!
 
 ## Contributing
 

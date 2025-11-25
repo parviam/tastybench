@@ -88,36 +88,27 @@ def compare_ranking_correlation(df1, df2, label1, target1, label2, target2, outp
     
     return results
 
+if __name__ == "__main__":
 
-model_dirs = [
-    'model-elicitation/data/curated/gpt-oss-20b/20-epochs',
-    'model-elicitation/data/curated/gpt-oss-20b/50-epochs',
-    'model-elicitation/data/curated/gpt-oss-120b/20-epochs',
-    'model-elicitation/data/curated/gpt-oss-120b/50-epochs',
-    'model-elicitation/data/curated/llama-3-70b/20-epochs',
-    'model-elicitation/data/curated/llama-3-70b/50-epochs',
-    'model-elicitation/data/goodhart-curated/gpt-oss-20b/20-epochs',
-    'model-elicitation/data/goodhart-curated/gpt-oss-20b/50-epochs',
-    'model-elicitation/data/goodhart-curated/gpt-oss-120b/20-epochs',
-    'model-elicitation/data/goodhart-curated/gpt-oss-120b/50-epochs',
-    'model-elicitation/data/goodhart-curated/llama-3-70b/20-epochs',
-    'model-elicitation/data/goodhart-curated/llama-3-70b/50-epochs',
-    'model-elicitation/data/max-goodhart-curated/gpt-oss-20b/20-epochs',
-    'model-elicitation/data/max-goodhart-curated/gpt-oss-20b/50-epochs',
-    'model-elicitation/data/max-goodhart-curated/gpt-oss-120b/20-epochs',
-    'model-elicitation/data/max-goodhart-curated/gpt-oss-120b/50-epochs',
-    'model-elicitation/data/max-goodhart-curated/llama-3-70b/20-epochs',
-    'model-elicitation/data/max-goodhart-curated/llama-3-70b/50-epochs',
-]
-
-for model_dir in tqdm(model_dirs):
-    compare_ranking_correlation(
-        df1=pd.read_csv(model_dir + '/elo.csv'),
-        df2=pd.read_csv('model-elicitation/data/llm_rl_yix_curate.csv'),
-        label1='paper_id',
-        target1='elo_rating',
-        label2='paperId',
-        target2='b',
-        title=model_dir.split('/')[-2],
-        output_dir=model_dir + '/'
-    )
+    model_dirs = [
+        'model-elicitation/data/curated/claude-sonnet-4-5/20-epochs',
+        'model-elicitation/data/goodhart-curated/claude-sonnet-4-5/20-epochs',
+        'model-elicitation/data/max-goodhart-curated/claude-sonnet-4-5/20-epochs',
+        'model-elicitation/data/curated/gemini-2-5-pro/20-epochs',
+        'model-elicitation/data/goodhart-curated/gemini-2-5-pro/20-epochs',
+        'model-elicitation/data/max-goodhart-curated/gemini-2-5-pro/20-epochs',
+        'model-elicitation/data/curated/gpt-5-1/20-epochs',
+        'model-elicitation/data/goodhart-curated/gpt-5-1/20-epochs',
+        'model-elicitation/data/max-goodhart-curated/gpt-5-1/20-epochs',
+    ]
+    for model_dir in tqdm(model_dirs):
+        compare_ranking_correlation(
+            df1=pd.read_csv(model_dir + '/elo.csv'),
+            df2=pd.read_csv('model-elicitation/data/llm_rl_yix_curate.csv'),
+            label1='paper_id',
+            target1='elo_rating',
+            label2='paperId',
+            target2='b',
+            title=model_dir.split('/')[-2],
+            output_dir=model_dir + '/'
+        )
