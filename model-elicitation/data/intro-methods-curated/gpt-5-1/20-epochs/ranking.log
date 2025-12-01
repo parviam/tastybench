@@ -1,0 +1,335 @@
+Epoch 1, Comparison 1:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+Project 2 (SWE-RL / Llama3-SWE-RL-70B) almost certainly has the higher citation velocity.
+
+Reasoning:
+
+- Topical focus and audience size:  
+  • Project 2 targets real-world software engineering (SWE-bench, GitHub PRs, bug fixing), an area that directly interests both ML and SE communities and many applied groups.  
+  • Project 1 (RLMEC) is a more method-centric RL-for-token-level-rewards paper, mainly of interest to RL/LLM training researchers for math/reasoning.
+
+- Association with a prominent model and benchmark:  
+  • Project 2 is explicitly tied to Llama-3.3-70B and SWE-bench Verified, framing itself as “first RL approach for SE tasks with software evolution data” and “state-of-the-art among medium-sized models.” That kind of “SWE-bench SOTA with open Llama” claim tends to get cited heavily by later SWE-bench and code-agents work.  
+  • Project 1 improves reasoning on standard QA/math benchmarks using relatively modest 7B/13B models—useful, but less of a focal reference point than “best open SWE-bench model.”
+
+- Practical impact and reuse:  
+  • SWE-RL defines a simple, fully rule-based reward built on GitHub PR diffs and a publicly deployable scaffold (Agentless Mini). This is straightforward to adapt or compare against in future SWE-bench / program-repair / code-RL papers, driving citations.  
+  • RLMEC’s generative reward model with minimum-edit constraints is more complex to reproduce and less obviously plug-and-play for practitioners; it’s more niche as an internal RL technique.
+
+- Cross-domain relevance:  
+  • Project 2 emphasizes that training only on SE tasks improves out-of-domain math, code, and general understanding. That “RL on SWE improves general reasoning” result is attractive for many follow-up works that study transfer and domain-specific RL, increasing its citation base.  
+  • Project 1 focuses tightly on better supervision granularity; its novelty is clear, but mainly within the RLHF / process-supervision community.
+
+Putting these together, Project 2 is positioned at a more visible intersection (LLMs + SWE-bench + Llama 3 + RL with rule-based rewards) and is more likely to be cited quickly and broadly.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Epoch 3, Comparison 1:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+Project 1 almost certainly has the higher citation velocity.
+
+Reasoning:
+
+- Project 1 is a broad survey of “reinforcement learning–enhanced LLMs,” covering RLHF, RLAIF, DPO, reward modeling, datasets, and benchmarks (RewardBench, Prometheus 2, etc.). Surveys and umbrella overviews in a rapidly moving area tend to attract many citations quickly because:
+  - They are useful as a single go‑to reference.
+  - They summarize and categorize many other works, so almost any new RL-for-LLMs paper can justify citing them in the background.
+
+- Project 2 (Fin-R1) is a domain‑specific model: a 7B-parameter RL-enhanced reasoning LLM for finance. Even if technically strong, its primary audience is narrower (financial NLP / FinTech and Chinese/English financial reasoning), and such vertical models are typically cited mainly by:
+  - Subsequent finance‑focused LLM papers.
+  - A smaller subset of RL/LLM methodology work that needs a financial case study.
+
+- Project 1 also appears to be written explicitly as a comprehensive survey “bridging a knowledge gap” in RL‑enhanced LLMs and referencing many prominent systems (DeepSeek-R1, o1-like models, Magpie, UltraFeedback, Skywork-Reward, etc.). That kind of positioning strongly correlates with fast, broad uptake across math, coding, alignment, and evaluation papers.
+
+Given those factors, the general, survey‑style Project 1 should accumulate citations faster and thus have the higher citation velocity than the specialized financial model paper, Project 2.
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Epoch 5, Comparison 1:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+Project 2 almost certainly has the higher citation velocity.
+
+Reasoning:
+
+- **Scope and generality**:  
+  - Project 2 is a general, method-focused study of RL algorithms (PPO, Expert Iteration, return-conditioned RL) for improving LLM reasoning on math/code tasks.  
+  - Project 1 (Fin-R1) is a domain-specific financial reasoning model and dataset, primarily of interest to finance/FinNLP subcommunities.
+
+- **Perceived centrality to the field**:  
+  - Project 2 directly targets a core, widely discussed question in 2024–2025: “How should we use RL (and RLHF-style methods) to improve LLM reasoning?” and benchmarks multiple algorithms. That makes it a natural citation for almost any paper on RL for reasoning, RLHF methodology, training dynamics, or evaluation of reasoning LLMs.  
+  - Fin-R1 is primarily a *consumer* of those ideas (DeepSeek-R1-style RL, GRPO) in a vertical application; such papers typically attract fewer citations outside their domain.
+
+- **Benchmarking and comparability**:  
+  - Project 2 runs controlled comparisons across model sizes, reward types, and algorithms, generating general insights (e.g., Expert Iteration vs PPO, sample complexity, exploration issues). Those are “anchor” results that later work will cite when justifying algorithmic choices or discussing limitations of PPO/RLHF.  
+  - Project 1 reports strong results on financial benchmarks, but those benchmarks are niche compared to GSM8K, MATH, broad code benchmarks, etc., and its main novelty is a vertical-domain model/dataset rather than a general training insight.
+
+- **Audience size**:  
+  - Project 2 is relevant to nearly all researchers working on RLHF, RL for LLMs, math/coding reasoning, and training dynamics.  
+  - Project 1 is mainly relevant to people building LLMs specifically for finance (or vertical-domain reasoning), a markedly smaller audience.
+
+Given these factors, the general RL-for-reasoning study (Project 2) should accumulate citations faster after publication than the specialized financial reasoning model (Project 1).
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Epoch 7, Comparison 1:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+Project 1 almost certainly had the higher citation velocity.
+
+Reasons:
+
+- **Topical centrality:** Project 1 directly targets one of the hottest areas in current LLM research: improving math/code reasoning via large‑scale RL (RLVR) and hybrid RL+SFT schemes. It cites and positions itself relative to o‑series, DeepSeek-R1, Gemini 2.5, etc., which are widely watched and heavily cited lines of work. Methods that improve reasoning benchmarks like AIME, OlympiadBench, and MATH500 at scale tend to get rapid, broad citations throughout the LLM community.
+
+- **Benchmark- and method-focused:** ReLIFT is framed as a general training recipe (interleaving RL and online SFT), shown to work on popular open models (Qwen2.5-Math, Llama 3.1) and standard reasoning benchmarks. Such “recipe” papers typically get cited not just in math-reasoning work, but in any follow‑on training or scaling effort.
+
+- **Field scope:** The audience is the full LLM / alignment / reasoning community, which is much larger and faster-moving in publication volume than the security‑oriented code-vulnerability niche that Project 2 targets.
+
+- **Trend alignment:** The introduction ties into actively evolving concepts like RLVR, GRPO, process-free RL, and comparisons to pure SFT; these are currently central to how labs build frontier models. That gives strong incentive for both academic and industrial groups to cite it quickly.
+
+Project 2 (SecRepair) is solid but niche: it’s focused on C/C++ vulnerability repair, a specific security application, and uses an LLM (CodeGen2) plus RL only in a narrow subtask (comment generation). That work is more likely to be cited mainly within software security and code LLM subcommunities and at a slower pace.
+
+Prediction: **Project 1 (ReLIFT-style hybrid RL+SFT for math reasoning) has the higher citation velocity.**
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Epoch 9, Comparison 1:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+Project 1 (Kimi k1.5 with RL and long‑CoT) almost certainly has the higher citation velocity.
+
+Reasoning:
+
+- Project 1 is a full-stack, state-of-the-art “o1‑style” RL reasoning system with very strong headline results (AIME, MATH500, Codeforces, MathVista, multimodal, long-context RL, new policy optimization, test-case generation, CoT reward models, etc.). This kind of capability paper is central to the current LLM race and is highly citable for:
+  - benchmarking and performance comparison,
+  - RL training recipes,
+  - long‑context reasoning methods,
+  - multimodal RL setups,
+  - long‑to‑short transfer techniques.
+
+- Project 2 is a more specialized, largely empirical study of *model merging for long‑to‑short reasoning*. It is valuable and likely to attract citations within:
+  - model-merging / task-vector literature,
+  - work on long‑to‑short CoT compression and “overthinking” mitigation.
+
+  But it is narrower and more “technique-comparison”–oriented; such papers typically see a lower citation rate than a flagship capability paper that defines or matches the state of the art.
+
+- Project 1 also serves as a reference implementation of RL‑trained reasoning models similar in ambition to DeepSeek‑R1 or OpenAI o1, which are widely discussed and cited across many subareas (alignment, evaluation, RL algorithms, systems). Project 2’s contributions, while solid, plug into an already niche subfield (merging) and are less likely to be the *first* citation choice for most new papers on reasoning or RL.
+
+Prediction: Project 1 (the Kimi k1.5 RL long‑CoT paper) has the higher citation velocity.
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Epoch 11, Comparison 1:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+Project 2 (Multi-round Thinking / test-time scaling) is likely to have the higher citation velocity.
+
+Reasoning:
+
+- **Topical alignment with a dominant trend.** Project 2 is directly framed around test-time scaling, DeepSeek-R1, and OpenAI o1-style reasoning. These are extremely high-visibility topics in 2024–2025 and tightly connected to what many groups are actively trying to reproduce or extend. Work that “explains” or improves o1/R1-style behavior tends to attract fast citations.
+
+- **Method accessibility and generality.** Multi-round Thinking is a very simple, model-agnostic inference-time strategy that can be dropped into almost any existing system without retraining. Such “low-friction” ideas (like self-consistency, majority voting, tree-of-thought, etc.) historically get cited frequently and quickly because:
+  - they’re easy to try,
+  - they can be used as baselines,
+  - they are relevant across math, coding, QA, and alignment papers.
+
+- **Benchmark and ecosystem integration.** Project 2 reports results on current “hot” benchmarks (AIME 2024, GPQA-Diamond, LiveCodeBench, MATH-500) and on widely used, named models (DeepSeek-R1, QwQ-32B, Qwen-based distills). That increases the chance that later benchmark or model papers will reference it.
+
+- **Project 1 (R³: Reverse Curriculum RL)** is technically interesting and more involved algorithmically, but:
+  - It requires specialized RL training infrastructure and access to demonstrations, making adoption and reproduction more expensive.
+  - It focuses on a particular training method rather than a drop‑in evaluation-time technique.
+  - Such RL-for-reasoning training methods tend to get a steadier, more modest citation rate compared to simple, broadly usable test-time methods.
+
+Given these factors, I’d predict that, post-publication, **Project 2 achieved a higher citation rate per unit time than Project 1.**
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Epoch 13, Comparison 1:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+Project 2 (ReLIFT) almost certainly has the higher citation velocity.
+
+Reasoning:
+
+- Conceptual contribution: ReLIFT proposes a clearly named, general training framework that interleaves RL and online SFT with an explicit, simple recipe. That kind of “named method + general training recipe” tends to become a standard baseline and be cited broadly whenever people discuss RL vs SFT for reasoning models.
+
+- Positioning in the literature: The ReLIFT paper explicitly:
+  - Analyzes RL vs SFT training dynamics.
+  - Benchmarks against many named strong baselines (SimpleRL-Zero, OpenReasoner-Zero, PRIME-Zero, Oat-Zero, LUFFY, etc.).
+  - Claims new SOTA on multiple widely used reasoning benchmarks with a popular open model (Qwen2.5-Math-7B) and validates on multiple other base models.
+  This is precisely the type of work other groups must cite when they introduce new RL/SFT variants, new math models, or new training pipelines.
+
+- Practical impact: ReLIFT:
+  - Uses relatively modest data and compute.
+  - Provides a drop-in training strategy applicable to many open models.
+  That increases uptake and thus citations by practitioners and follow‑up academic work.
+
+- Project 1’s contribution is narrower: “Multi-round Thinking” is a test-time prompting strategy (iteratively re-answer using only the prior final answer). It’s simple and useful, but:
+  - It’s primarily a decoding/inference trick rather than a training framework.
+  - Its gains, while real, are incremental and tied to specific high-end RL-trained models like DeepSeek-R1/QwQ-32B.
+  - Such decoding tricks are often mentioned as variants of reflection / self-consistency rather than as a central baseline that every RL/SFT paper must compare to.
+  That typically yields fewer and slower citations than a widely applicable training algorithm.
+
+Given how the two projects are framed and the kinds of problems they solve, ReLIFT (project 2) is much more likely to have become a standard reference in later RL-for-reasoning and math-model training papers, so it should have the higher citation velocity.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Epoch 15, Comparison 1:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+Project 2 (SRPO for multimodal self-reflective reasoning) almost certainly has the higher citation velocity.
+
+Reasoning:
+
+- **Topical breadth and demand:**  
+  - Project 2 targets *multimodal* reasoning (vision–language, MathVista, MMMU-Pro, etc.) with a general RL + reflection method (SRPO). Multimodal CoT and self-reflection are hot, broadly relevant topics that many groups are actively extending; this tends to drive faster and wider citation.  
+  - Project 1 (WebRL) is focused on *web agents in WebArena*—important, but more niche: it requires a specific environment, browser automation, and evaluation setup, which limits how many groups can easily build directly on it.
+
+- **Method generality vs. system specificity:**  
+  - SRPO is framed as a general training recipe (reflection-oriented SFT + reflection-aware GRPO) applicable to standard MLLMs like Qwen2.5-VL-7B/32B across multiple benchmarks. That makes it easy to port and cite for many follow‑up works on RL for reasoning, reflection, or multimodal tasks.  
+  - WebRL is tightly bound to WebArena, WebRL’s ORM, and web navigation; its main impact is on LLM-as-web-agent research rather than the larger reasoning/RL-for-LLMs area.
+
+- **Connection to existing high‑velocity threads:**  
+  - SRPO explicitly builds on and compares to GRPO, GPT‑o1/o4‑mini, reflection‑style reasoning, and math/vision benchmarks—areas that have many concurrent papers and survey-style works, which boosts citation counts.  
+  - WebRL compares to DigiRL/AWR/etc. but remains anchored in a single application class (web agents), which has fewer concurrent papers overall.
+
+- **Benchmark prominence:**  
+  - MathVista, MMMU(-Pro), and similar multimodal benchmarks are widely used for “reasoning” leaderboards; work that achieves SOTA there is often cited broadly.  
+  - WebArena(-Lite) is recognized but still relatively specialized; outside of web-agent work, it is less standard as a benchmark.
+
+Given these factors, the project introducing **SRPO (project 2)** is predicted to have the **higher citation velocity** after publication.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Epoch 17, Comparison 1:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+Project 2 (ProRL / Nemotron-Research-Reasoning-Qwen-1.5B from NVIDIA) very likely has the higher citation velocity.
+
+Reasons:
+
+- Topical centrality: Project 2 directly targets the hot question in today’s LLM/RL community—whether RL truly expands reasoning capabilities (esp. in math and code) and how far “reasoning scaling” can go. That’s a core, widely discussed topic touching OpenAI o1, DeepSeek-R1, etc. Project 1 is more niche: multi-agent RL for collaborative LLMs, which is active but has a smaller audience.
+
+- Benchmark/results appeal: Project 2 reports strong, broad benchmarks (math, coding, STEM, logic, instruction following), claims “world’s best 1.5B reasoning model,” and releases weights. That combination (state‑of‑the‑art numbers + open model) tends to drive quick adoption and many citations across math/coding RL, evaluation papers, and new reasoning models.
+
+- Industry affiliation and framing: It’s an NVIDIA-branded reasoning model with a clean, reusable RL “recipe” (ProRL). That typically gets more attention in follow‑on industry and academic work than a specialized MARL methodology for multi-LLM debate.
+
+- Reusability: ProRL and the Nemotron-Reasoning-Qwen-1.5B checkpoint are directly usable as baselines or starting points for any RL-on-reasoning project; MAPoRL is more of a systems/training paradigm that’s harder to plug in and requires multi-agent infrastructure.
+
+Given these factors, I predict Project 2 has accrued citations faster after release than Project 1.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Epoch 19, Comparison 1:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+Project 1 almost certainly has (and will have) the higher citation velocity.
+
+Reasoning:
+
+- **Scope and generality**:  
+  - Project 1 (ProRL / Nemotron-Research-Reasoning-Qwen-1.5B) targets *general reasoning* across math, code, logic, STEM, and instruction following, and explicitly addresses a hot, widely discussed question: “Does RL actually expand reasoning capability or just reweight existing solutions?”  
+  - Project 2 (Fin-R1) is a *domain-specific* application in finance, valuable but inherently narrower and less broadly reusable for most LLM/RL papers.
+
+- **Positioning within the RL-for-reasoning debate**:  
+  - Project 1 directly challenges recent high-profile claims that RL doesn’t yield new reasoning capabilities, and provides methodological contributions (ProRL recipe, KL control, reference policy resetting, long-horizon RL training) that are likely to be cited by anyone working on RL scaling for reasoning.  
+  - Project 2 mainly adapts existing techniques (distillation from DeepSeek-R1, GRPO, SFT+RL) to a vertical domain, so it’s more likely to be cited in financial AI and domain-LLM works than in core RL/LLM methodology papers.
+
+- **Artifact attractiveness**:  
+  - Project 1 releases what it calls “the world’s best 1.5B reasoning model” that rivals a 7B reasoning model, which is very attractive as a lightweight general reasoning baseline; that tends to drive many follow-on comparisons and thus citations.  
+  - Fin-R1 is a strong 7B financial model with impressive benchmark performance, but its appeal is mostly to those doing financial NLP or domain LLMs, a smaller slice of the community.
+
+- **Benchmark and ecosystem integration**:  
+  - Project 1 evaluates on mainstream reasoning benchmarks (AIME, AMC, MATH, Olympiad, GPQA, coding suites, Reasoning Gym). These benchmarks are widely used, so later papers working on math/coding/reasoning RL are more likely to cite it.  
+  - Project 2 is evaluated on financial benchmarks (FinQA, ConvFinQA, etc.), which are narrower and less central in the LLM reasoning literature.
+
+Given these factors, Project 1 is far more likely to accumulate citations faster and from a broader range of RL/LLM/reasoning papers.
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: gpt-5.1
+
+================================================================================
+Collected 500 total comparisons before completion/failure.
+================================================================================
+model: gpt-5.1
+
+================================================================================

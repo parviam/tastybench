@@ -7,7 +7,7 @@ from tqdm import tqdm
 import asyncio
 
 class PaperDataset():
-    def __init__(self, name: str, paper_ids: List[str], model: str, client: ollama.Client|None=None, extract_prompt: str='model-elicitation/prompts/extract_idea.md', tldr: bool=False):
+    def __init__(self, name: str, paper_ids: List[str], model: str, client: ollama.Client|None=None, extract_prompt: str='model-elicitation/prompts/extract_idea.md', method: str|tuple=None):
         """
         Initialize a PaperDataset for extracting and storing paper ideas.
 
@@ -24,8 +24,11 @@ class PaperDataset():
         extract_prompt : str, optional
             Path to the prompt template file for idea extraction
             (default is 'model-elicitation/prompts/extract_idea.md').
-        tldr : bool, optional
-            If True, use TL;DR summaries instead of abstracts (default is False).
+        method : str | tuple, optional
+            Method for obtaining paper content. Options:
+            - None: Fetch abstracts and extract ideas (default)
+            - 'tldr': Use TL;DR summaries as abstracts
+            - ('intro_and_methods', json_path): Load intro/methods text from JSON file
         """
         self.model: str = model
         self.name: str = name
@@ -33,19 +36,24 @@ class PaperDataset():
         self.paper_data: Dict[str, List[str]] = {
             'paper_id' : paper_ids,
         }
-        self.tldr = tldr
-        if not tldr:
+        self.method = method
+        if not method:
             self.get_abstracts()
             self.extract_ideas(extract_prompt=extract_prompt)
-        else:
+        elif method == 'tldr':
             self.get_tldrs_as_abstracts()
+        elif isinstance(method, tuple) and len(method) == 2 and method[0] == 'intro_and_methods':
+            # method should be a tuple: ('intro_and_methods', json_path)
+            self.get_intro_and_methods(method[1])
+        else:
+            raise ValueError("method must be None, 'tldr', or ('intro_and_methods', json_path)")
 
     def get_tldrs_as_abstracts(self) -> None:
         """
         Fetch TL;DR summaries from Semantic Scholar API and use them as abstracts.
 
-        Updates the paper_data dictionary with paper_id, abstract (from TL;DR),
-        idea (same as TL;DR), and title for papers that have TL;DR summaries.
+        Updates the paper_data dictionary with paper_id, title, abstract (from TL;DR),
+        and idea (same as TL;DR) for papers that have TL;DR summaries.
 
         Raises
         ------
@@ -72,13 +80,14 @@ class PaperDataset():
         self.paper_data['idea'] = abstracts  # Use tldr as idea directly
         self.paper_data['title'] = titles
     
-    def get_intro_and_methods(self, json: str=json) -> None:
+    def get_intro_and_methods(self, json_path: str) -> None:
         """
         Load intro and methods text from a JSON file and use it as abstracts.
 
-        The JSON file must be keyed by paperId and have entries of the form:
+        The JSON file must contain a list of entries with the form:
             {
             "paperId": "...",
+            "title": "...",
             "intro_and_methods": "<extracted text>",
             "success": true/false,
             "error": "<message if any>",
@@ -91,31 +100,35 @@ class PaperDataset():
         
         Parameters
         ----------
-        json : str
+        json_path : str
             Path to the JSON file.
         """
-        with open(json, "r") as f:
-            data = json.load(f)
+        import json as json_module
+        with open(json_path, "r") as f:
+            data = json_module.load(f)
+
+        # Create a mapping from paperId to entry
+        data_map = {entry["paperId"]: entry for entry in data if "paperId" in entry}
 
         new_paper_ids: List[str] = []
         abstracts: List[str] = []
         titles: List[str] = []
 
         for pid in self.paper_data["paper_id"]:
-            entry = data.get(pid)
+            entry = data_map.get(pid)
             if (
-            entry is None
-            or not entry.get("success", False)
-            or not entry.get("intro_and_methods")
+                entry is None
+                or not entry.get("success", False)
+                or not entry.get("intro_and_methods")
             ):
-            continue
+                continue
             new_paper_ids.append(pid)
-            abstracts.append(entry["intro_and_methods"].strip())
-            # no titles in the JSON schema, so keep a placeholder
-            titles.append("")
+            abstracts.append(entry["intro_and_methods"].strip()[:30000]) # Truncate to 30,000 chars
+            titles.append(entry.get("title", "").strip())
 
         self.paper_data["paper_id"] = new_paper_ids
         self.paper_data["abstract"] = abstracts
+        self.paper_data["idea"] = abstracts  # Use full intro_and_methods as ideas directly
         self.paper_data["title"] = titles
 
     def get_abstracts(self) -> None:
@@ -546,7 +559,7 @@ async def main():
     paper_ids = pd.read_csv(rl_csv)
     paper_ids = paper_ids['paperId'].to_list()
 
-    llm_rl_curated = PaperDataset(paper_ids=paper_ids, name='llm-rl-yix-curate', model='openai/gpt-oss-120b', extract_prompt='model-elicitation/prompts/curated/extract_idea.md', tldr=False)
+    llm_rl_curated = PaperDataset(paper_ids=paper_ids, name='llm-rl-yix-curate', model='openai/gpt-oss-120b', extract_prompt='model-elicitation/prompts/curated/extract_idea.md', method=None)
     llm_rl_curated.export_to_csv('model-elicitation/data/llm_rl_yix_curate_with_ideas.csv')
 
     models = [
@@ -586,5 +599,38 @@ async def main():
         for experiment in experiments:
             tg.create_task(experiment.run(tg)) 
 
+
+async def intro_and_methods_exp():
+    rl_csv = 'model-elicitation/data/llm_rl_yix_curate.csv'
+    paper_ids = pd.read_csv(rl_csv)
+    paper_ids = paper_ids['paperId'].to_list()
+
+    llm_rl_intro_methods = PaperDataset(
+        paper_ids=paper_ids,
+        name='llm-rl-yix-curate-intro-methods',
+        model='openai/gpt-oss-120b',
+        extract_prompt='model-elicitation/prompts/curated/extract_idea.md',
+        method=('intro_and_methods', 'model-elicitation/data/llm_rl_yix_curate_intro_methods.json')
+    )
+    llm_rl_intro_methods.export_to_csv('model-elicitation/data/llm_rl_yix_curate_intro_methods_with_ideas.csv')
+
+    models = [
+        ('claude-sonnet-4-5-20250929', 'claude-sonnet-4-5'),
+        ('gpt-5.1', 'gpt-5-1'),
+        ('gemini-2.5-pro', 'gemini-2-5-pro'),
+    ]
+    epochs = [50]
+
+    intro_methods_experiment = Experiment(
+        name='intro-methods-curated',
+        paper_dataset=llm_rl_intro_methods,
+        models=models,
+        epochs=epochs,
+        ranking_prompt='model-elicitation/prompts/judge_intro_methods.md'
+    )
+
+    async with asyncio.TaskGroup() as tg:
+        await intro_methods_experiment.run(tg)
+
 if __name__ == "__main__":
-    asyncio.run(main())
+    asyncio.run(intro_and_methods_exp())

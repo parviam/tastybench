@@ -10,6 +10,7 @@ Output:
   A JSON file keyed by paperId with:
     {
       "paperId": "...",
+      "title": "...",
       "intro_and_methods": "<extracted text>",
       "success": true/false,
       "error": "<message if any>",
@@ -159,6 +160,7 @@ def process_csv(
     output_path: str,
     id_column: Optional[str],
     arxiv_column: str,
+    title_column: str = "title",
     verbose: bool = False,
 ):
     with open(input_path, newline="", encoding="utf-8") as infile:
@@ -174,9 +176,11 @@ def process_csv(
     for row in tqdm(rows, desc="Extracting intro/methods"):
         paper_id = row.get(id_col, "").strip()
         url = row.get(arxiv_column, "").strip()
+        title = row.get(title_column, "").strip()
 
         record = {
             "paperId": paper_id,
+            "title": title,
             "intro_and_methods": "",
             "success": False,
             "error": None,
@@ -246,6 +250,11 @@ def parse_args() -> argparse.Namespace:
         help="Column name that stores arXiv HTML links (default: arxiv_html).",
     )
     parser.add_argument(
+        "--title-column",
+        default="title",
+        help="Column name that stores paper titles (default: title).",
+    )
+    parser.add_argument(
         "--verbose",
         action="store_true",
         help="Print verbose progress alongside tqdm.",
@@ -262,6 +271,7 @@ def main():
             output_path=output_path,
             id_column=args.id_column,
             arxiv_column=args.arxiv_column,
+            title_column=args.title_column,
             verbose=args.verbose,
         )
         if args.verbose:

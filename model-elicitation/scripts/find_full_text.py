@@ -25,7 +25,7 @@ from tqdm.auto import tqdm
 API_URL = "https://api.semanticscholar.org/graph/v1/paper/"
 # Default delay per request. Semantic Scholar free tier allows ~100 requests / 5 minutes (~3s/request).
 DEFAULT_DELAY = 3.0
-DEFAULT_FIELDS = "externalIds"
+DEFAULT_FIELDS = "externalIds,title"
 
 
 def fetch_arxiv_link(
@@ -33,8 +33,8 @@ def fetch_arxiv_link(
     session: requests.Session,
     retries: int = 3,
     backoff: float = 1.0,
-) -> Optional[str]:
-    """Return arXiv HTML link for a paperId, or None if not found."""
+) -> tuple[Optional[str], Optional[str]]:
+    """Return (arXiv HTML link, title) for a paperId, or (None, None) if not found."""
     for attempt in range(retries):
         try:
             resp = session.get(
@@ -48,24 +48,25 @@ def fetch_arxiv_link(
                 backoff *= 2
                 continue
             if resp.status_code == 404:
-                return None
+                return None, None
             resp.raise_for_status()
 
             data: Dict = resp.json() or {}
+            title = data.get("title")
             external = data.get("externalIds") or {}
             # Key varies in capitalization; check a few common variants.
             for key in ("ArXiv", "arXiv", "ARXIV", "arxiv"):
                 arxiv_id = external.get(key)
                 if arxiv_id:
-                    return f"https://arxiv.org/html/{arxiv_id}"
-            return None
+                    return f"https://arxiv.org/html/{arxiv_id}", title
+            return None, title
         except requests.RequestException as exc:  # Network issues, timeouts, 5xx, etc.
             if attempt == retries - 1:
                 print(f"[warn] {paper_id}: {exc}", file=sys.stderr)
-                return None
+                return None, None
             time.sleep(backoff)
             backoff *= 2
-    return None
+    return None, None
 
 
 def process_csv(
@@ -84,6 +85,8 @@ def process_csv(
         fieldnames = list(reader.fieldnames)
         if column_name not in fieldnames:
             fieldnames.append(column_name)
+        if "title" not in fieldnames:
+            fieldnames.append("title")
 
         rows = list(reader)
 
@@ -93,14 +96,16 @@ def process_csv(
         paper_id = row.get(id_col, "").strip()
         if not paper_id:
             row[column_name] = ""
+            row["title"] = ""
             continue
 
         # Skip fetch if already present.
-        if row.get(column_name):
+        if row.get(column_name) and row.get("title"):
             continue
 
-        link = fetch_arxiv_link(paper_id, session=session)
+        link, title = fetch_arxiv_link(paper_id, session=session)
         row[column_name] = link or ""
+        row["title"] = title or ""
 
         # Rate limiting
         if idx < len(rows):
