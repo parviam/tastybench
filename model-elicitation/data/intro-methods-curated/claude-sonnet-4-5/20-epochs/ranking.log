@@ -1,0 +1,412 @@
+Epoch 1, Comparison 1:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+Based on the excerpts provided, I predict that **Project 1** had the higher citation velocity.
+
+## Key Reasoning:
+
+### Project 1 Indicators of High Impact:
+1. **Recency and State-of-the-Art References**: Project 1 cites very recent work (2024-2025), including references like "Shao et al., 2024", "Guo et al., 2025", "Wu et al., 2024", "Snell et al., 2024". This suggests the paper is from 2024-2025 and is engaging with the most current research frontier.
+
+2. **Timely and Critical Problem**: Addresses diversity loss in RL post-training, which has become a recognized issue in the rapidly evolving LLM reasoning field. The paper identifies an emerging problem ("growing body of evidence") that the community is actively concerned about.
+
+3. **Practical Relevance**: Focuses on test-time scaling and pass@k metrics, which are highly relevant to current deployment practices and align with industry priorities (test-time compute).
+
+4. **Strong Experimental Setup**: Uses very recent, popular models (Llama-3.1-8B-Instruct, Qwen-2.5-7B) and current benchmarks (AIME2024/2025), making it immediately relevant to practitioners.
+
+### Project 2 Indicators of Lower Citation Velocity:
+1. **Earlier Timeframe**: References primarily span 2017-2023, with the paper likely published in 2023 or early 2024, giving it less time to accumulate citations.
+
+2. **More Incremental Contribution**: While RLMEC introduces token-level rewards through a generative reward model, this is a refinement of existing PPO methods rather than addressing a fundamental emerging problem.
+
+3. **Broader but Less Urgent Problem**: Fine-grained supervision is valuable but not as time-critical as the diversity degradation issue that affects current large-scale deployments.
+
+4. **Older Model Base**: Uses 7B and 13B models without specifying the most current versions, suggesting slightly older experimental infrastructure.
+
+**Prediction: Project 1 has higher citation velocity** due to its timing at the research frontier, addressing an urgent emerging problem in LLM training, and its immediate applicability to current state-of-the-art models and deployment scenarios.
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: claude-sonnet-4-5-20250929
+
+================================================================================
+Epoch 3, Comparison 1:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+# Analysis of Citation Velocity
+
+Based on the provided excerpts, I predict that **Project 2 (Nemotron-Research-Reasoning-Qwen-1.5B / ProRL)** had the higher citation velocity.
+
+## Key Factors Supporting This Prediction:
+
+### 1. **Stronger Scientific Contribution**
+Project 2 addresses a fundamental research question actively debated in the community: "Does RL truly unlock new reasoning capabilities or merely optimize sampling efficiency?" This is a more foundational contribution that would attract citations from researchers investigating the theoretical underpinnings of RL for reasoning.
+
+### 2. **Broader Applicability**
+- **Project 2**: Develops a general methodology (ProRL) applicable across diverse domains (math, code, STEM, logic puzzles, instruction following)
+- **Project 1**: Focuses specifically on financial domain applications (Fin-R1), which has a narrower audience
+
+### 3. **Institutional Prestige**
+Project 2 is from **NVIDIA** with well-known researchers including Yejin Choi, while Project 1 is from Shanghai University of Finance and Economics. NVIDIA papers typically receive higher visibility in the AI community.
+
+### 4. **Novel Insights**
+Project 2 challenges existing assumptions in the field by demonstrating:
+- RL can discover genuinely new solution pathways absent in base models
+- Prolonged training (2k+ steps) continues improving performance
+- Quantification of novelty using "Creativity Index"
+
+This counter-narrative to recent skepticism about RL would generate significant discussion and citations.
+
+### 5. **Methodological Innovation**
+Project 2 introduces multiple novel techniques:
+- ProRL recipe for extended training
+- Reference policy reset strategy
+- KL regularization approach
+- Comprehensive analysis across pass@k metrics
+
+Project 1 appears more incremental, applying existing techniques (GRPO, SFT) to a new domain.
+
+### 6. **Release Strategy**
+Both released code/models, but Project 2's claim of "world's best 1.5B reasoning model" and broader benchmark superiority would attract more attention.
+
+**Prediction: Project 2 (ProRL/Nemotron) had significantly higher citation velocity.**
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: claude-sonnet-4-5-20250929
+
+================================================================================
+Epoch 5, Comparison 1:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+Based on the provided excerpts, I predict that **Project 1 (ProRL/Nemotron-Research-Reasoning-Qwen-1.5B)** likely had the higher citation velocity.
+
+## Key Reasoning:
+
+### Project 1 Advantages:
+
+1. **Broader Scope and Impact**: Project 1 addresses a fundamental, highly-debated question in the AI community: "Does RL truly unlock new reasoning capabilities or merely optimize sampling efficiency?" This is a core theoretical question relevant to the entire field of LLM reasoning.
+
+2. **Diverse Task Coverage**: The work demonstrates improvements across mathematics, coding, STEM, logic puzzles, and instruction-following—appealing to multiple research communities simultaneously, which typically drives higher citation rates.
+
+3. **Strong Empirical Claims**: The paper makes bold claims about discovering "genuinely new solution pathways entirely absent in base models" and challenges prevailing assumptions in the field. Such controversial yet well-supported claims tend to generate significant discussion and citations.
+
+4. **Accessibility**: They released "the world's best 1.5B reasoning model," which is highly accessible to researchers with limited compute resources, encouraging adoption and follow-up work.
+
+5. **Timing and Positioning**: The work directly engages with hot topics (DeepSeek-R1, OpenAI-O1) and positions itself as challenging recent influential papers, which tends to attract attention.
+
+### Project 2 Limitations:
+
+1. **Narrower Domain**: Project 2 (SWE-RL) focuses specifically on software engineering tasks, particularly SWE-bench, which is a more specialized domain with a smaller research community.
+
+2. **Less Accessible Model**: Their 70B parameter model is less accessible than Project 1's 1.5B model, potentially limiting reproduction and follow-up research.
+
+3. **More Incremental Framing**: While innovative, the work is framed more as applying RL to a specific domain (SE tasks) rather than addressing fundamental questions about RL's capabilities.
+
+**Prediction: Project 1 had higher citation velocity** due to its broader appeal, fundamental research questions, and accessibility to a wider research community.
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: claude-sonnet-4-5-20250929
+
+================================================================================
+Epoch 7, Comparison 1:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+Based on these excerpts, I predict that **Project 2** likely had the higher citation velocity.
+
+Here are my key reasons:
+
+## Reasons favoring Project 2:
+
+1. **Addresses a fundamental, widely-recognized problem**: Project 2 tackles diversity loss in RL-trained LLMs, which is described as having "a growing body of evidence" and being cited by multiple recent works (Song et al., 2024; Dang et al., 2025; Yue et al., 2025; Zhao et al., 2025; Wu et al., 2025). This suggests it's addressing a timely problem that the community is actively concerned about.
+
+2. **Clearer practical impact**: The pass@k metric degradation problem has direct implications for real-world deployments and test-time scaling, making the work immediately relevant to practitioners.
+
+3. **Novel theoretical framework**: Project 2 introduces "outcome-based exploration" and "outcome-based bandits" - a new conceptual framework that bridges classical RL exploration with LLM reasoning. Novel frameworks tend to attract citations as others build upon them.
+
+4. **Broader applicability**: The exploration bonus approach can be "easily incorporated into standard RL for LLMs reasoning training, agnostic to the training algorithm," suggesting wider potential adoption.
+
+5. **Multiple algorithmic contributions**: Project 2 presents several variants (UCB-Mean, UCB-Con, Batch) addressing different aspects of the problem, giving researchers multiple entry points for citations.
+
+## Reasons against Project 1:
+
+1. **More incremental approach**: While Project 1's entropy-based advantage shaping is elegant and simple ("one line of code"), it's somewhat more incremental - modifying existing RL algorithms rather than introducing a new conceptual framework.
+
+2. **Narrower scope**: The approach is specifically about using entropy to encourage exploratory reasoning, which is a more focused contribution compared to Project 2's broader exploration framework.
+
+3. **Implementation limitations noted**: Project 1 explicitly mentions that Llama models "abandoned intermediate reasoning chains" and "likely require pre-training on reasoning traces," suggesting more limited applicability.
+
+**Prediction: Project 2 had higher citation velocity** due to its broader conceptual contribution, clearer motivation addressing a recognized community problem, and more general applicability across different training setups.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: claude-sonnet-4-5-20250929
+
+================================================================================
+Epoch 9, Comparison 1:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+Based on the provided excerpts, I predict that **Project 1** will have higher citation velocity.
+
+## Key Reasons:
+
+### 1. **Methodological Innovation and Generalizability**
+Project 1 introduces a novel, generalizable technique (entropy-based advantage shaping) that can be integrated into existing RL frameworks with "only one line of code." This simplicity and broad applicability across different RL algorithms (PPO, GRPO) makes it highly attractive for researchers to adopt and cite. The method addresses a fundamental problem in RL for LLMs that extends beyond any specific domain.
+
+### 2. **Broader Research Appeal**
+Project 1 tackles general LLM reasoning across math and coding tasks, which has wider relevance to the ML/AI community. Project 2 is domain-specific (financial reasoning), limiting its audience to researchers working at the intersection of AI and finance—a substantially smaller community.
+
+### 3. **Theoretical Contributions**
+Project 1 provides deeper theoretical insights:
+- Systematic investigation of entropy-exploratory reasoning correlations
+- Novel theoretical framework distinguishing their approach from entropy regularization
+- Self-regulating mechanism preventing reward hacking
+
+Project 2 is more application-focused, primarily describing a pipeline for building a domain-specific model.
+
+### 4. **Reproducibility and Adoption Potential**
+Project 1's minimal implementation requirements (one-line code change) dramatically lowers the barrier for other researchers to experiment with and build upon their work. Project 2 requires domain-specific datasets and infrastructure (Fin-R1-Data, financial benchmarks) that are less accessible.
+
+### 5. **Citation Patterns in ML**
+Methods papers with broad applicability typically receive higher citation velocity than domain-specific application papers, especially when they offer simple yet effective improvements to established algorithms.
+
+**Prediction: Project 1 will have significantly higher citation velocity.**
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: claude-sonnet-4-5-20250929
+
+================================================================================
+Epoch 11, Comparison 1:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+Based on the provided excerpts, I predict that **Project 1 (ArCHer)** will have the **higher citation velocity**.
+
+## Key Reasoning:
+
+### Methodological Novelty and Generality
+**Project 1 (ArCHer)** introduces a **general framework** for multi-turn RL in LLMs that can be applied across diverse domains (web navigation, tool use, human interaction, code writing). This broad applicability makes it relevant to a wider research community, likely driving more citations.
+
+**Project 2 (Fin-R1)** is a **domain-specific application** focused exclusively on financial reasoning. While valuable, domain-specific work typically attracts citations primarily within that vertical, limiting overall citation velocity.
+
+### Fundamental vs. Applied Contribution
+- **ArCHer** addresses a **fundamental algorithmic challenge** in RL for LLMs: how to efficiently train multi-turn agents. It proposes a novel hierarchical actor-critic framework that solves theoretical problems (credit assignment, sample efficiency, long horizons).
+  
+- **Fin-R1** is primarily an **engineering application** that combines existing techniques (distillation from DeepSeek-R1, GRPO algorithm, standard SFT+RL pipeline) for a specific use case. While well-executed, it's more incremental.
+
+### Sample Efficiency Claims
+ArCHer claims **"100x more sample efficient than on-policy methods"** - a striking result that would attract significant attention from the broader ML community working on efficient training methods.
+
+### Publication Venue Indicators
+The author affiliations suggest different research contexts:
+- **ArCHer**: UC Berkeley + Google DeepMind (top-tier ML institutions)
+- **Fin-R1**: Shanghai University of Finance and Economics + FinStep (domain-focused)
+
+ArCHer's institutional backing and general-purpose framework position it for higher-impact venue publication, which typically correlates with citation velocity.
+
+### Community Size
+The general LLM/RL research community is substantially larger than the financial AI community, providing a larger potential citation pool for ArCHer.
+
+**Prediction: Project 1 (ArCHer) will have higher citation velocity.**
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: claude-sonnet-4-5-20250929
+
+================================================================================
+Epoch 13, Comparison 1:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+Looking at these two papers, I need to analyze their core contributions, timing, and likely impact on the research community.
+
+## Project 1: VeriFree
+- **Core contribution**: A verifier-free approach to RL training for LLMs that eliminates the need for rule-based or model-based verifiers
+- **Key innovation**: Uses the likelihood of the reference answer conditioned on the reasoning trace as a reward signal, providing lower variance gradients
+- **Scope**: Extends R1-Zero-style training to general reasoning tasks where verification is difficult
+- **Technical novelty**: Theoretical variance reduction proof (Theorem 1) and equivalence to verifier-based objectives
+
+## Project 2: General-Reasoner
+- **Core contribution**: A model-based verifier and diverse dataset (WebInstruct-verified) for training across multiple domains
+- **Key innovation**: 1.5B parameter generative verifier model trained on 230K diverse reasoning questions
+- **Scope**: Extends RL training beyond math to multiple domains (physics, chemistry, social sciences, finance)
+- **Practical focus**: Comprehensive benchmarking and released models
+
+## Citation Velocity Analysis
+
+**Project 2 (General-Reasoner) likely has higher citation velocity** for several reasons:
+
+1. **Broader Practical Impact**: General-Reasoner provides concrete resources (dataset + verifier model) that other researchers can immediately use, whereas VeriFree is primarily a methodological contribution requiring implementation from scratch.
+
+2. **Addresses a More Widely Recognized Problem**: The need to extend RL reasoning beyond math/coding is explicitly acknowledged by many researchers. General-Reasoner provides a direct solution, while VeriFree solves the more abstract problem of eliminating verifiers.
+
+3. **Comprehensive Benchmarking**: General-Reasoner includes extensive evaluations across 12+ benchmarks with multiple model sizes, providing valuable reference points for the community.
+
+4. **Released Artifacts**: The paper promises released datasets and models, which typically drive higher citations as researchers build upon these resources.
+
+5. **More Accessible Innovation**: Training a verifier model is conceptually straightforward and implementable, while VeriFree's theoretical approach (using likelihood as reward) may be harder for practitioners to adopt initially.
+
+6. **Timing Advantage**: General-Reasoner appears to be positioned as a more complete system paper with immediate applicability, which tends to attract more citations faster.
+
+**Prediction: Project 2 (General-Reasoner) will have higher citation velocity**, particularly in the first 6-12 months post-publication, due to its practical resources, comprehensive benchmarking, and immediate applicability to the widely-recognized problem of general-domain reasoning.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: claude-sonnet-4-5-20250929
+
+================================================================================
+Epoch 15, Comparison 1:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+Based on the excerpts provided, I predict that **Project 1** (General-Reasoner) had the higher citation velocity.
+
+## Key reasoning:
+
+### Project 1 strengths indicating higher citation potential:
+
+1. **Broader scope and applicability**: Project 1 addresses reasoning across "diverse, non-mathematical domains" (physics, chemistry, social sciences, finance) rather than focusing narrowly on math. This broader applicability makes it more useful to a wider research audience.
+
+2. **Released artifacts**: Project 1 explicitly states they "construct and release" their WebInstruct-verified dataset and General-Verifier model. Released resources dramatically increase citation rates as other researchers use and cite these tools.
+
+3. **Strong empirical results**: The paper claims their best model "matches or beats GPT-4o" on various benchmarks, which is a headline result that attracts attention and citations.
+
+4. **Addresses a critical limitation**: The paper identifies and solves the problem that math-focused RL models (like DeepSeek-R1) "degrade performance on MMLU-Pro by 4-6%", presenting a clear improvement over existing methods.
+
+5. **Practical efficiency**: They explicitly note avoiding "overthinking" with responses around 1,000 tokens vs 32k tokens in competitors, making their method more practical for adoption.
+
+### Project 2 relative weaknesses:
+
+1. **More theoretical/methodological focus**: Project 2 focuses on the specific problem of diversity loss during RL training - a more narrow technical contribution that appeals to a smaller, more specialized audience.
+
+2. **No mention of released artifacts**: No explicit statement about releasing code, models, or datasets.
+
+3. **Incremental improvement**: While addressing an important issue, the contribution is more about improving existing RL training dynamics rather than enabling new capabilities.
+
+The combination of broader scope, released resources, and strong benchmark results typically drives higher citation velocity in the fast-moving LLM field.
+</transcript>
+Response:
+PROJECT 1
+================================================================================
+model: claude-sonnet-4-5-20250929
+
+================================================================================
+Epoch 17, Comparison 1:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+Based on the excerpts provided, I predict that **Project 2 (SWE-RL)** had the higher citation velocity.
+
+Here are the key reasons for this prediction:
+
+## Evidence favoring Project 2:
+
+1. **More practical and accessible impact**: Project 2 addresses real-world software engineering tasks (GitHub issue resolution) that are highly relevant to the broader ML/AI community and industry practitioners. The practical application to SWE-bench, a widely-used benchmark, makes it more immediately useful and citable.
+
+2. **Stronger baseline comparisons**: Project 2 claims to achieve "41.0% on SWE-bench Verified" and be "comparable to leading proprietary models like GPT-4o" while being the "best performance among medium-sized language models (<100B)". These are concrete, competitive results on a popular benchmark that would attract citations.
+
+3. **Novel contribution to an active area**: Project 2 explicitly states it is "the first RL method to improve LLMs on SE tasks by directly using rule-based rewards," giving it a "first-mover" advantage in an emerging research direction combining RL with software engineering.
+
+4. **Broader generalization claims**: Project 2 demonstrates that their RL approach improves not just on the target task but also on out-of-domain tasks (math, code generation, general understanding), making it relevant to multiple research communities.
+
+5. **More accessible model**: At 70B parameters, Project 2's model is more practically usable by researchers than very large models, potentially leading to more follow-up work and citations.
+
+## Project 1's limitations:
+
+While Project 1 addresses an important theoretical problem (diversity loss in RL), it:
+- Focuses on a more specific technical issue within RL training
+- Uses smaller models (8B, 7B) on mathematical reasoning tasks
+- Has a more specialized, academic contribution that may appeal to a narrower audience
+- Lacks the "state-of-the-art" benchmark claims that drive rapid citations
+
+**Prediction: Project 2 (SWE-RL) likely had higher citation velocity.**
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: claude-sonnet-4-5-20250929
+
+================================================================================
+Epoch 19, Comparison 1:
+Prompt:
+<instructions>
+Below is a transcript of someone deliberating between two projects. Your task is to identify which project they ended up reccomending. If they ended up reccomending Project 1, end your response with "PROJECT 1" and if they ended up reccomending Project 2, end your reponse with "PROJECT 2". If you don't know what project they reccomended, or it is otherwise unclear, write "UNCLEAR" and nothing else.
+</instructions>
+
+<transcript>
+Based on the analysis of these two paper excerpts, I predict that **Project 2 (SRPO - Self-Reflection enhanced reasoning)** likely had the higher citation velocity.
+
+## Key Reasoning:
+
+### Project 2's Advantages:
+
+1. **Stronger Problem Novelty**: Project 2 addresses multimodal reasoning with self-reflection, combining vision and language reasoning—a more novel and rapidly growing research area. The introduction specifically highlights limitations in current approaches (e.g., GPT-o1's shortcomings on MathVista) and offers a principled solution.
+
+2. **Broader Impact Scope**: Multimodal reasoning with RL is at the intersection of multiple hot topics (vision-language models, reasoning, RL), likely attracting citations from diverse research communities (computer vision, NLP, ML).
+
+3. **More Generalizable Framework**: The two-stage training framework (reflection-oriented SFT + reflection-aware RL) is more broadly applicable and adaptable to various multimodal reasoning tasks, making it more likely to be cited as a methodological contribution.
+
+4. **Timely Research Direction**: Self-reflection in LLMs is a particularly hot topic, and Project 2's explicit focus on this with multimodal models positions it well for rapid adoption.
+
+### Project 1's Limitations:
+
+1. **Narrower Technical Focus**: Project 1 focuses specifically on model merging for long-to-short reasoning—a more specialized technique that appeals to a narrower audience interested in efficiency optimization.
+
+2. **Less Novel Problem**: The "overthinking problem" and long-to-short reasoning are important but somewhat incremental concerns compared to the fundamental challenge of multimodal reasoning quality.
+
+3. **Empirical Study Nature**: Project 1 explicitly describes itself as a "systematic empirical analysis" of existing merging methods, which typically garners fewer citations than novel methodological contributions.
+
+**Prediction: Project 2 (SRPO) had higher citation velocity** due to its broader applicability, novel multimodal focus, and fundamental contribution to self-reflection mechanisms in reasoning models.
+</transcript>
+Response:
+PROJECT 2
+================================================================================
+model: claude-sonnet-4-5-20250929
+
+================================================================================
+Collected 500 total comparisons before completion/failure.
+================================================================================
+model: claude-sonnet-4-5-20250929
+
+================================================================================

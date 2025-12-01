@@ -1,34 +1,93 @@
-from elicit_elo import PaperDataset, RankingDataset, get_elo_rankings
-import pandas as pd
+"""
+Compare ELO rankings between model-elicited scores and ground truth data.
+
+This script discovers all elo.csv files within a specified experiment directory
+and computes Pearson correlation against a ground truth CSV file.
+
+Usage:
+    python compare.py <experiment_dir> [--ground-truth PATH] [--data-dir PATH]
+
+Example:
+    python compare.py curated
+    python compare.py goodhart-curated --ground-truth model-elicitation/data/llm_rl.csv
+"""
+
+import argparse
+import os
+from pathlib import Path
+
 import json
+import pandas as pd
 from scipy import stats
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 
-def compare_ranking_correlation(df1, df2, label1, target1, label2, target2, output_dir, title):
+
+def discover_elo_files(experiment_dir: str) -> list[str]:
+    """
+    Recursively discover all elo.csv files within an experiment directory.
+
+    Parameters
+    ----------
+    experiment_dir : str
+        Path to the top-level experiment directory to search.
+
+    Returns
+    -------
+    list[str]
+        List of absolute paths to discovered elo.csv files.
+    """
+    elo_files = []
+    for root, dirs, files in os.walk(experiment_dir):
+        if 'elo.csv' in files:
+            elo_files.append(os.path.join(root, 'elo.csv'))
+    return sorted(elo_files)
+
+
+def compare_ranking_correlation(
+    df1: pd.DataFrame,
+    df2: pd.DataFrame,
+    label1: str,
+    target1: str,
+    label2: str,
+    target2: str,
+    output_dir: str,
+    title: str
+) -> dict:
     """
     Compare rankings between two dataframes and calculate Pearson correlation.
-    
-    Parameters:
-    -----------
+
+    This function ranks items in both dataframes by their respective target columns
+    (in descending order), merges them on the label columns, and computes the
+    Pearson correlation coefficient between the resulting ranks.
+
+    Parameters
+    ----------
     df1 : pd.DataFrame
-        First dataframe
+        First dataframe containing model-elicited ELO ratings.
     df2 : pd.DataFrame
-        Second dataframe
+        Second dataframe containing ground truth scores.
     label1 : str
-        Column name in df1 to use for correlation (must be present in both dataframes)
+        Column name in df1 to use as the join key.
     target1 : str
-        Column name in df1 to sort by (descending order)
+        Column name in df1 to sort by (descending order) for ranking.
     label2 : str
-        Column name in df2 to use for correlation (must be present in both dataframes)
+        Column name in df2 to use as the join key.
     target2 : str
-        Column name in df2 to sort by (descending order)
+        Column name in df2 to sort by (descending order) for ranking.
     output_dir : str
-        Path to save the JSON results
-        
-    Returns:
-    --------
-    dict : Dictionary containing correlation coefficient and p-value
+        Directory path where results (JSON and plot) will be saved.
+    title : str
+        Title to display on the correlation scatter plot.
+
+    Returns
+    -------
+    dict
+        Dictionary containing:
+        - correlation: Pearson correlation coefficient
+        - p_value: Statistical p-value
+        - n_samples: Number of matched samples
+        - label1, label2, target1, target2: Input parameter values
     """
     # Sort dataframes by target columns in descending order
     df1_sorted = df1.sort_values(by=target1, ascending=False).reset_index(drop=True)
@@ -88,27 +147,94 @@ def compare_ranking_correlation(df1, df2, label1, target1, label2, target2, outp
     
     return results
 
-if __name__ == "__main__":
 
-    model_dirs = [
-        'model-elicitation/data/curated/claude-sonnet-4-5/20-epochs',
-        'model-elicitation/data/goodhart-curated/claude-sonnet-4-5/20-epochs',
-        'model-elicitation/data/max-goodhart-curated/claude-sonnet-4-5/20-epochs',
-        'model-elicitation/data/curated/gemini-2-5-pro/20-epochs',
-        'model-elicitation/data/goodhart-curated/gemini-2-5-pro/20-epochs',
-        'model-elicitation/data/max-goodhart-curated/gemini-2-5-pro/20-epochs',
-        'model-elicitation/data/curated/gpt-5-1/20-epochs',
-        'model-elicitation/data/goodhart-curated/gpt-5-1/20-epochs',
-        'model-elicitation/data/max-goodhart-curated/gpt-5-1/20-epochs',
-    ]
-    for model_dir in tqdm(model_dirs):
+def parse_args() -> argparse.Namespace:
+    """
+    Parse command line arguments.
+
+    Returns
+    -------
+    argparse.Namespace
+        Parsed arguments with experiment_dir, ground_truth, and data_dir.
+    """
+    parser = argparse.ArgumentParser(
+        description='Compare ELO rankings from model elicitation against ground truth data.',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+    python compare.py curated
+    python compare.py goodhart-curated --ground-truth model-elicitation/data/llm_rl.csv
+    python compare.py intro-methods-curated --data-dir model-elicitation/data
+        """
+    )
+    parser.add_argument(
+        'experiment_dir',
+        type=str,
+        help='Name of the experiment directory within data_dir (e.g., "curated", "goodhart-curated")'
+    )
+    parser.add_argument(
+        '--ground-truth',
+        type=str,
+        default='model-elicitation/data/llm_rl_yix_curate.csv',
+        help='Path to the ground truth CSV file (default: model-elicitation/data/llm_rl_yix_curate.csv)'
+    )
+    parser.add_argument(
+        '--data-dir',
+        type=str,
+        default='model-elicitation/data',
+        help='Base data directory containing experiment folders (default: model-elicitation/data)'
+    )
+    return parser.parse_args()
+
+
+def main() -> None:
+    """
+    Main entry point for the compare script.
+
+    Discovers all elo.csv files in the specified experiment directory and
+    computes ranking correlations against the ground truth data.
+    """
+    args = parse_args()
+
+    # Construct full path to experiment directory
+    experiment_path = os.path.join(args.data_dir, args.experiment_dir)
+
+    if not os.path.isdir(experiment_path):
+        raise FileNotFoundError(f"Experiment directory not found: {experiment_path}")
+
+    # Load ground truth data
+    if not os.path.isfile(args.ground_truth):
+        raise FileNotFoundError(f"Ground truth file not found: {args.ground_truth}")
+
+    ground_truth_df = pd.read_csv(args.ground_truth)
+    print(f"Loaded ground truth from: {args.ground_truth}")
+
+    # Discover all elo.csv files
+    elo_files = discover_elo_files(experiment_path)
+
+    if not elo_files:
+        raise FileNotFoundError(f"No elo.csv files found in: {experiment_path}")
+
+    print(f"Found {len(elo_files)} elo.csv files in {experiment_path}")
+
+    # Process each elo.csv file
+    for elo_file in tqdm(elo_files, desc="Processing models"):
+        elo_dir = os.path.dirname(elo_file)
+        # Extract a meaningful title from the path (model name + epochs)
+        rel_path = os.path.relpath(elo_dir, experiment_path)
+        title = rel_path.replace(os.sep, '/')
+
         compare_ranking_correlation(
-            df1=pd.read_csv(model_dir + '/elo.csv'),
-            df2=pd.read_csv('model-elicitation/data/llm_rl_yix_curate.csv'),
+            df1=pd.read_csv(elo_file),
+            df2=ground_truth_df,
             label1='paper_id',
             target1='elo_rating',
             label2='paperId',
             target2='b',
-            title=model_dir.split('/')[-2],
-            output_dir=model_dir + '/'
+            title=title,
+            output_dir=elo_dir + '/'
         )
+
+
+if __name__ == "__main__":
+    main()
