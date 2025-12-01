@@ -6,7 +6,7 @@
         "gemini-2.5-pro"
     ],
     "epochs": [
-        20
+        50
     ],
     "paper_dataset": "llm-rl-yix-curate-intro-methods",
     "ranking_prompt": "model-elicitation/prompts/judge_intro_methods.md",

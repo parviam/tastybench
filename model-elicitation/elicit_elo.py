@@ -29,6 +29,8 @@ class PaperDataset():
             - None: Fetch abstracts and extract ideas (default)
             - 'tldr': Use TL;DR summaries as abstracts
             - ('intro_and_methods', json_path): Load intro/methods text from JSON file
+            - 'llm_summary': Fetch full text from arXiv HTML and generate LLM summaries
+            - 'skip': Skip all processing (used internally for load_from_csv)
         """
         self.model: str = model
         self.name: str = name
@@ -45,8 +47,102 @@ class PaperDataset():
         elif isinstance(method, tuple) and len(method) == 2 and method[0] == 'intro_and_methods':
             # method should be a tuple: ('intro_and_methods', json_path)
             self.get_intro_and_methods(method[1])
+        elif method == 'llm_summary':
+            self.get_summaries_as_abstracts()
+        elif method == 'skip':
+            pass  # Used for load_from_csv to skip all processing
         else:
-            raise ValueError("method must be None, 'tldr', or ('intro_and_methods', json_path)")
+            raise ValueError("method must be None, 'tldr', 'llm_summary', 'skip', or ('intro_and_methods', json_path)")
+    
+    def get_summaries_as_abstracts(self) -> None:
+        """
+        Fetch full text HTML from arXiv and use LLM to generate summaries as abstracts.
+
+        For each paper, this method:
+        1. Fetches paper info from Semantic Scholar API to get arXiv ID
+        2. Constructs arXiv HTML URL and fetches the full text
+        3. Uses LLM inference with summarize_paper.md prompt to create a summary
+        4. Uses the LLM summary as the abstract field
+
+        Updates the paper_data dictionary with paper_id, title, abstract (from LLM summary),
+        and idea (same as abstract) for papers that have arXiv full text available.
+        """
+        # First, fetch paper info from Semantic Scholar to get arXiv IDs and titles
+        r = requests.post(
+            'https://api.semanticscholar.org/graph/v1/paper/batch',
+            params={'fields': 'externalIds,title'},
+            json={"ids": self.paper_data["paper_id"]}
+        ).json()
+
+        # Load the summarize prompt template
+        prompt_template = extract_str('model-elicitation/prompts/summarize_paper.md')
+
+        new_paper_ids: List[str] = []
+        abstracts: List[str] = []
+        titles: List[str] = []
+
+        for paper in tqdm(r, desc="Fetching full text and generating summaries"):
+            if paper is None or 'paperId' not in paper:
+                continue
+            
+            paper_id = paper['paperId']
+            title = paper.get('title', '').strip()
+            external_ids = paper.get('externalIds') or {}
+            
+            # Get arXiv ID (check common capitalizations)
+            arxiv_id = None
+            for key in ('ArXiv', 'arXiv', 'ARXIV', 'arxiv'):
+                arxiv_id = external_ids.get(key)
+                if arxiv_id:
+                    break
+            
+            if not arxiv_id:
+                continue  # Skip papers without arXiv
+            
+            # Fetch full text HTML from arXiv
+            arxiv_html_url = f"https://arxiv.org/html/{arxiv_id}"
+            try:
+                resp = requests.get(arxiv_html_url, timeout=15)
+                if resp.status_code != 200:
+                    continue
+                content_type = resp.headers.get("content-type", "")
+                if "html" not in content_type:
+                    continue
+                full_text_html = resp.text
+            except requests.RequestException:
+                continue
+            
+            # Extract text from HTML (simple approach - get visible text)
+            try:
+                from bs4 import BeautifulSoup
+                soup = BeautifulSoup(full_text_html, "html.parser")
+                # Remove script and style elements
+                for script in soup(["script", "style"]):
+                    script.decompose()
+                full_text = soup.get_text(separator=" ", strip=True)
+                # Truncate to reasonable length for LLM context
+                full_text = full_text[:50000]
+            except Exception:
+                continue
+            
+            # Generate LLM summary using the prompt template
+            prompt = prompt_template.replace('[FULLTEXT]', full_text)
+            try:
+                __, response = inference(prompt, model=self.model, client=self.client)
+                # Extract summary from response using <summary> tags
+                summary_match = re.search(r'<summary>(.*?)</summary>', response, re.DOTALL)
+                summary = summary_match.group(1).strip() if summary_match else response.strip()
+            except Exception:
+                continue
+            
+            new_paper_ids.append(paper_id)
+            abstracts.append(summary)
+            titles.append(title)
+
+        self.paper_data['paper_id'] = new_paper_ids
+        self.paper_data['abstract'] = abstracts
+        self.paper_data['idea'] = abstracts
+        self.paper_data['title'] = titles
 
     def get_tldrs_as_abstracts(self) -> None:
         """
@@ -216,7 +312,8 @@ class PaperDataset():
             paper_ids = df['paper_id'].tolist(),
             model = model,
             client = client,
-            name = filename.split('/')[-1].replace('.csv', '')
+            name = filename.split('/')[-1].replace('.csv', ''),
+            method = 'skip'  # Skip processing since we're loading pre-computed data
         )
         dataset.paper_data = {
             'paper_id': df['paper_id'].tolist(),
@@ -632,5 +729,39 @@ async def intro_and_methods_exp():
     async with asyncio.TaskGroup() as tg:
         await intro_methods_experiment.run(tg)
 
+async def llm_summary_exp():
+    rl_csv = 'model-elicitation/data/llm_rl_yix_curate.csv'
+    paper_ids = pd.read_csv(rl_csv)
+    paper_ids = paper_ids['paperId'].to_list()
+
+    llm_rl_llm_summary = PaperDataset(
+        paper_ids=paper_ids,
+        name='llm-rl-yix-curate-llm-summary',
+        model='claude-sonnet-4-5-20250929',
+        extract_prompt='model-elicitation/prompts/curated/extract_idea.md',
+        method='llm_summary'
+    )
+    llm_rl_llm_summary.export_to_csv('model-elicitation/data/llm_rl_yix_curate_llm_summary.csv')
+
+    print("LLM Summary Paper Dataset Length: ", len(llm_rl_llm_summary.paper_data['paper_id']))
+
+    models = [
+        ('claude-sonnet-4-5-20250929', 'claude-sonnet-4-5'),
+        ('gpt-5.1', 'gpt-5-1'),
+        ('gemini-2.5-pro', 'gemini-2-5-pro'),
+    ]
+    epochs = [50]
+
+    llm_summary_experiment = Experiment(
+        name='llm-summary-curated',
+        paper_dataset=llm_rl_llm_summary,
+        models=models,
+        epochs=epochs,
+        ranking_prompt='model-elicitation/prompts/judge_llm_summary.md'
+    )
+
+    async with asyncio.TaskGroup() as tg:
+        await llm_summary_experiment.run(tg)
+
 if __name__ == "__main__":
-    asyncio.run(intro_and_methods_exp())
+    asyncio.run(llm_summary_exp())
