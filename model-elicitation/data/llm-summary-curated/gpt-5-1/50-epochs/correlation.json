@@ -1,6 +1,6 @@
 {
-  "correlation": 0.2835290186495555,
-  "p_value": 0.1604333837398373,
+  "correlation": 0.2581196581196581,
+  "p_value": 0.2029709752911904,
   "n_samples": 26,
   "label1": "paper_id",
   "label2": "paperId",
