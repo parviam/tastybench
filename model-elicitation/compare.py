@@ -142,7 +142,7 @@ def compare_ranking_correlation(
     plt.tight_layout()
     
     # Save the plot
-    plt.savefig(output_dir + 'correlation_plot.png', dpi=300, bbox_inches='tight')
+    plt.savefig(output_dir + 'correlation_plot.png', dpi=1000, bbox_inches='tight')
     plt.close()
     
     return results
